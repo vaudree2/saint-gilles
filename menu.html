@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu – Le Vaudrée 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold: #d4af37;
+  --gold-light: #ffd700;
+  --text-dark: #222;
+  --bg-dark: #0a0a0a;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg-dark);
+  color: #fff;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  margin-bottom: 20px;
+  font-size: 2.4rem;
+}
+
+p {
+  color: #fff;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+/* Bouton doré */
+a.download-btn {
+  display: inline-block;
+  margin-top: 20px;
+  background: var(--gold);
+  color: var(--text-dark);
+  padding: 14px 24px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+a.download-btn:hover {
+  background: var(--gold-light);
+}
+
+/* iframe pour PDF */
+iframe {
+  width: 90%;
+  height: 80vh;
+  border: 2px solid var(--gold);
+  margin-top: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+}
+
+/* Lien retour */
+a.back-link {
+  display: block;
+  margin-top: 40px;
+  color: var(--gold);
+  text-decoration: underline;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+a.back-link:hover {
+  color: var(--gold-light);
+}
+
+/* Responsive */
+@media (max-width: 600px){
+  h1 { font-size: 1.8rem; }
+  iframe { height: 60vh; }
+}
+</style>
+</head>
+<body>
+
+<h1>🍽 Menu Le Vaudrée 2</h1>
+<p>Découvrez ou téléchargez notre menu en version PDF ci-dessous.</p>
+
+<!-- Bouton téléchargement -->
+<a href="docs/menu_vaudree2.pdf" download class="download-btn">Télécharger le menu (PDF)</a>
+
+<!-- PDF intégré -->
+<iframe src="docs/menu_vaudree2.pdf"></iframe>
+
+<!-- Lien retour -->
+<a href="index.html" class="back-link">⬅ Retour à l'accueil</a>
+
+</body>
+</html>
