@@ -1,0 +1,102 @@
+<!-- RUBRIQUE ÉVÉNEMENTS -->
+<section id="evenements" data-aos="fade-up" aria-labelledby="evenements-title" style="padding:60px 20px;background:#1a1a1a;color:#fff;">
+  <h2 id="evenements-title" style="text-align:center;font-family:'Playfair Display', serif;color:#f2a63d;font-size:2.5rem;margin-bottom:40px;">Événements à venir</h2>
+  
+  <p style="text-align:center;max-width:800px;margin:0 auto 40px;font-size:1.1rem;">
+    Découvrez nos soirées thématiques et réservez votre place pour profiter de moments uniques, dans une ambiance conviviale et raffinée.
+  </p>
+  
+  <!-- Grid des soirées -->
+  <div class="event-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;margin-bottom:50px;">
+    
+    <!-- Soirée Couscous Oriental -->
+    <div class="event-card" style="background:#2b2b2b;border:2px solid #f2a63d;border-radius:16px;padding:24px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,0.3);transition:all 0.3s ease;">
+      <h3 style="color:#f2a63d;font-size:1.5rem;margin-bottom:12px;">Soirée Couscous Oriental</h3>
+      <p>Avec danseuse orientale et animations traditionnelles.</p>
+      <button class="reserve-btn" data-soiree="couscous" style="margin-top:12px;background:#f2a63d;color:#1a1a1a;padding:10px 20px;border:none;border-radius:25px;cursor:pointer;font-weight:bold;transition:all 0.3s;">Réserver</button>
+    </div>
+    
+    <!-- Soirée Italienne -->
+    <div class="event-card" style="background:#2b2b2b;border:2px solid #f2a63d;border-radius:16px;padding:24px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,0.3);transition:all 0.3s ease;">
+      <h3 style="color:#f2a63d;font-size:1.5rem;margin-bottom:12px;">Soirée Italienne</h3>
+      <p>Chanteur à la Ramazotti et cuisine italienne gourmande.</p>
+      <button class="reserve-btn" data-soiree="italienne" style="margin-top:12px;background:#f2a63d;color:#1a1a1a;padding:10px 20px;border:none;border-radius:25px;cursor:pointer;font-weight:bold;transition:all 0.3s;">Réserver</button>
+    </div>
+    
+    <!-- Soirée Espagnole -->
+    <div class="event-card" style="background:#2b2b2b;border:2px solid #f2a63d;border-radius:16px;padding:24px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,0.3);transition:all 0.3s ease;">
+      <h3 style="color:#f2a63d;font-size:1.5rem;margin-bottom:12px;">Soirée Espagnole</h3>
+      <p>Chanteur espagnol et ambiance flamenco.</p>
+      <button class="reserve-btn" data-soiree="espagnole" style="margin-top:12px;background:#f2a63d;color:#1a1a1a;padding:10px 20px;border:none;border-radius:25px;cursor:pointer;font-weight:bold;transition:all 0.3s;">Réserver</button>
+    </div>
+    
+    <!-- Soirée Piano / Jazz -->
+    <div class="event-card" style="background:#2b2b2b;border:2px solid #f2a63d;border-radius:16px;padding:24px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,0.3);transition:all 0.3s ease;">
+      <h3 style="color:#f2a63d;font-size:1.5rem;margin-bottom:12px;">Soirée Piano / Jazz</h3>
+      <p>Ambiance piano jazz pour une soirée élégante et détendue.</p>
+      <button class="reserve-btn" data-soiree="piano_jazz" style="margin-top:12px;background:#f2a63d;color:#1a1a1a;padding:10px 20px;border:none;border-radius:25px;cursor:pointer;font-weight:bold;transition:all 0.3s;">Réserver</button>
+    </div>
+    
+  </div>
+  
+  <!-- Formulaire de réservation -->
+  <div style="max-width:600px;margin:0 auto;">
+    <h3 style="text-align:center;color:#f2a63d;font-size:1.8rem;margin-bottom:20px;">Réservez votre soirée</h3>
+    <form id="reservationForm" action="https://formspree.io/f/xnngbpgd" method="POST" class="contact-form" aria-label="Formulaire Événements" style="display:flex;flex-direction:column;gap:16px;">
+      
+      <input type="text" name="name" placeholder="Nom" required style="padding:14px;border-radius:30px;border:1px solid #f2a63d;font-size:1rem;background:#1a1a1a;color:#fff;">
+      <input type="email" name="email" placeholder="Email" required style="padding:14px;border-radius:30px;border:1px solid #f2a63d;font-size:1rem;background:#1a1a1a;color:#fff;">
+      <input type="tel" name="phone" placeholder="Numéro de GSM" required style="padding:14px;border-radius:30px;border:1px solid #f2a63d;font-size:1rem;background:#1a1a1a;color:#fff;">
+      <input type="number" name="people" placeholder="Nombre de personnes" min="1" required style="padding:14px;border-radius:30px;border:1px solid #f2a63d;font-size:1rem;background:#1a1a1a;color:#fff;">
+      
+      <select id="soireeSelect" name="soiree" required style="padding:14px;border-radius:30px;border:1px solid #f2a63d;font-size:1rem;background:#1a1a1a;color:#fff;">
+        <option value="">Sélectionnez la soirée</option>
+        <option value="couscous">Soirée Couscous Oriental</option>
+        <option value="italienne">Soirée Italienne</option>
+        <option value="espagnole">Soirée Espagnole</option>
+        <option value="piano_jazz">Soirée Piano / Jazz</option>
+      </select>
+      
+      <textarea name="message" placeholder="Message / détails supplémentaires" required style="padding:14px;border-radius:30px;border:1px solid #f2a63d;font-size:1rem;min-height:100px;background:#1a1a1a;color:#fff;"></textarea>
+      
+      <button type="submit" style="background:#f2a63d;color:#1a1a1a;padding:14px;border:none;border-radius:30px;font-size:1.05rem;cursor:pointer;transition:transform 0.25s, background 0.25s;">
+        Envoyer ma réservation
+      </button>
+      
+      <div id="evenementsMessage" style="display:none;margin-top:12px;padding:12px;border-radius:12px;background:#eef;color:#024;font-size:0.95rem;"></div>
+      
+    </form>
+  </div>
+</section>
+
+<!-- CSS pour hover -->
+<style>
+  .event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.5);
+  }
+  .event-card:hover h3 {
+    color: #ffd27f;
+  }
+  .reserve-btn:hover {
+    background:#ffd27f;
+    color:#1a1a1a;
+    transform: translateY(-3px);
+  }
+</style>
+
+<!-- JS pour ouvrir formulaire et sélectionner la soirée -->
+<script>
+  const reserveButtons = document.querySelectorAll('.reserve-btn');
+  const soireeSelect = document.getElementById('soireeSelect');
+  const formSection = document.getElementById('reservationForm');
+
+  reserveButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const soiree = btn.getAttribute('data-soiree');
+      soireeSelect.value = soiree;
+      formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      soireeSelect.focus();
+    });
+  });
+</script>

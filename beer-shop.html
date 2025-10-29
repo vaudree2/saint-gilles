@@ -1,0 +1,168 @@
+<!-- RUBRIQUE BEER SHOP -->
+<section id="beer-shop" data-aos="fade-up" aria-labelledby="beer-shop-title"
+  style="position:relative; padding:80px 20px; background:#111; border-radius:16px; margin:40px 0; max-width:1100px; margin-left:auto; margin-right:auto; box-shadow:0 6px 20px rgba(0,0,0,0.5); overflow:hidden;
+         background: url('images/logo_vaudree2.png') center center / cover no-repeat;">
+  
+  <!-- Voile sombre -->
+  <div style="position:absolute; inset:0; background:rgba(0,0,0,0.6); z-index:0;"></div>
+
+  <div style="position:relative; z-index:1;">
+    <h2 id="beer-shop-title" class="golden-title">
+      Beer Shop’E by Le Vaudrée2
+    </h2>
+
+    <p style="text-align:center; max-width:800px; margin:0 auto 25px auto; font-size:1.15rem; color:#eee; line-height:1.6;">
+      Commandez nos produits directement depuis <strong style="color:#d4af37;">Beer Shop’E by Le Vaudrée2</strong> !  
+      Que ce soit pour offrir ou simplement pour vous faire plaisir, composez votre commande personnalisée en quelques clics.
+    </p>
+
+    <p style="text-align:center; max-width:800px; margin:0 auto 50px auto; font-size:1.1rem; color:#ddd; line-height:1.6;">
+      Une <strong style="color:#d4af37;">livraison</strong> est possible selon votre adresse et le type de commande.  
+      Après la <strong style="color:#d4af37;">confirmation</strong> de votre demande, vous recevrez toutes les 
+      <strong style="color:#d4af37;">informations nécessaires pour le paiement</strong> ainsi que les détails liés à la 
+      <strong style="color:#d4af37;">préparation ou à la livraison</strong>, avec la signature du service raffiné et de l’art de recevoir votre propre commande by <em>Le Vaudrée2</em>.
+    </p>
+
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:40px; align-items:flex-start;">
+      <form action="https://formspree.io/f/xnngbpgd" method="POST" aria-label="Formulaire Beer Shop"
+        style="flex:1; min-width:280px; max-width:500px; display:flex; flex-direction:column; gap:14px; background:#1c1c1c; padding:20px; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,0.6); color:#eee;">
+
+        <input type="text" name="name" placeholder="Nom complet" required style="padding:14px; border-radius:30px; border:1px solid #555; background:#111; color:#fff;">
+        <input type="email" name="email" placeholder="Adresse email" required style="padding:14px; border-radius:30px; border:1px solid #555; background:#111; color:#fff;">
+        <input type="tel" name="phone" placeholder="Numéro de GSM" required style="padding:14px; border-radius:30px; border:1px solid #555; background:#111; color:#fff;">
+
+        <select name="type_commande" required style="padding:14px; border-radius:30px; border:1px solid #555; background:#111; color:#fff;">
+          <option value="">Type de commande</option>
+          <option value="bon_cadeau">Bon cadeau</option>
+          <option value="verres">Verres</option>
+          <option value="bieres">Bières</option>
+          <option value="alcools">Alcools</option>
+          <option value="panier_cadeau">Panier cadeau</option>
+        </select>
+
+        <select name="type_biere" style="padding:14px; border-radius:30px; border:1px solid #555; background:#111; color:#fff;">
+          <option value="">Type de bière (si applicable)</option>
+          <option value="assortiment">Assortiment de bières</option>
+          <option value="blonde">Blonde</option>
+          <option value="brune">Brune</option>
+          <option value="ambree">Ambrée</option>
+          <option value="stout">Stout</option>
+          <option value="ipa">IPA</option>
+          <option value="fruitee">Fruitée</option>
+        </select>
+
+        <textarea name="message" placeholder="Détails de la commande (quantité, préférences, message cadeau…)" required style="padding:14px; border-radius:16px; border:1px solid #555; background:#111; color:#fff; min-height:120px;"></textarea>
+
+        <button type="submit" class="golden-btn">
+          Envoyer ma commande
+        </button>
+
+        <p style="text-align:center; margin-top:10px; font-size:0.95rem; color:#d4af37; font-style:italic;">
+          ✨ Nous vous recontacterons sous 24 h pour confirmer votre commande et finaliser les détails de livraison.
+        </p>
+
+        <!-- Ligne dorée animée + 3 icônes -->
+        <div class="gold-line">
+          <div class="gold-shine"></div>
+          <div class="gold-icons">
+            <img src="https://cdn-icons-png.flaticon.com/512/3225/3225545.png" alt="Chope" class="gold-icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/992/992703.png" alt="Cadeau" class="gold-icon" style="width:26px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/1404/1404945.png" alt="Chopes" class="gold-icon">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- STYLES -->
+<style>
+  /* Titre doré avec reflet */
+  .golden-title {
+    text-align:center;
+    font-family:'Playfair Display', serif;
+    color:#d4af37;
+    font-size:2.5rem;
+    margin-bottom:20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .golden-title::after {
+    content:'';
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:50%;
+    height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+    animation:shine 5s infinite;
+  }
+
+  /* Ligne dorée animée */
+  .gold-line {
+    position:relative;
+    width:100%;
+    margin-top:30px;
+    text-align:center;
+  }
+  .gold-line::before {
+    content:'';
+    display:block;
+    height:2px;
+    background:linear-gradient(90deg, transparent, #d4af37, transparent);
+  }
+  .gold-shine {
+    position:absolute;
+    top:0;
+    left:-20%;
+    width:40%;
+    height:2px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    animation:shine-line 6s infinite;
+  }
+  .gold-icons {
+    position:absolute;
+    top:-18px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    background:#1c1c1c;
+    padding:0 10px;
+  }
+  .gold-icon {
+    width:28px;
+    height:28px;
+    filter:invert(78%) sepia(42%) saturate(629%) hue-rotate(14deg) brightness(95%) contrast(90%);
+  }
+
+  /* Animation reflets */
+  @keyframes shine {
+    0% { left:-100%; }
+    50% { left:120%; }
+    100% { left:120%; }
+  }
+  @keyframes shine-line {
+    0% { left:-30%; }
+    50% { left:130%; }
+    100% { left:130%; }
+  }
+
+  /* Bouton effet doré */
+  .golden-btn {
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(90deg, #d4af37, #c19225);
+    color:#111;
+    font-size:1.05rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:transform 0.25s ease, background 0.25s ease;
+  }
+  .golden-btn:hover {
+    background:linear-gradient(90deg, #b8860b, #d4af37);
+    transform:scale(1.05);
+  }
+</style>

@@ -1,0 +1,62 @@
+<!-- RUBRIQUE GROUPE -->
+<section id="groupe" data-aos="fade-up" aria-labelledby="groupe-title" 
+         style="position:relative; padding:80px 20px; background:#fdf6f0; border-radius:16px; margin:40px 0; max-width:1100px; margin-left:auto; margin-right:auto; box-shadow:0 6px 20px rgba(0,0,0,0.08); overflow:hidden;
+                background: url('images/logo_vaudree2.png') center center / cover no-repeat; opacity:1;">
+  
+  <!-- Fond semi-transparent pour lisibilité -->
+  <div style="position:absolute; inset:0; background:rgba(253,246,240,0.85); z-index:0;"></div>
+
+  <!-- Contenu -->
+  <div style="position:relative; z-index:1;">
+    <h2 id="groupe-title" style="text-align:center; font-family:'Playfair Display', serif; color:#d4af37; font-size:2.5rem; margin-bottom:20px;">Repas de Groupe</h2>
+    <p style="text-align:center; max-width:750px; margin:0 auto 30px auto; font-size:1.1rem; color:#222;">
+      Que vous organisiez un séminaire, un repas d'affaires ou une réunion de famille, nous vous proposons des formules sur mesure adaptées à vos besoins.
+    </p>
+    <p style="text-align:center; max-width:750px; margin:0 auto 40px auto; font-size:1.05rem; color:#333;">
+      Notre établissement peut accueillir jusqu'à 100 personnes dans une ambiance conviviale et chaleureuse.
+    </p>
+    <p style="text-align:center; max-width:750px; margin:0 auto 50px auto; font-size:1.05rem; color:#333;">
+      Pour plus d'informations ou pour réserver, veuillez remplir le formulaire ci-dessous ou nous contacter directement.
+    </p>
+
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:40px; align-items:flex-start;">
+      <!-- Formulaire -->
+      <form action="https://formspree.io/f/xnngbpgd" method="POST" class="contact-form" aria-label="Formulaire Groupe" 
+            style="flex:1; min-width:280px; max-width:450px; display:flex; flex-direction:column; gap:14px; background:#fff; padding:20px; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,0.08);">
+        
+        <input type="text" name="name" placeholder="Nom" required style="padding:14px; border-radius:30px; border:1px solid #ccc; font-size:1rem; color:#222;">
+        <input type="email" name="email" placeholder="Email" required style="padding:14px; border-radius:30px; border:1px solid #ccc; font-size:1rem; color:#222;">
+        <input type="number" name="people" placeholder="Nombre de personnes" min="1" required style="padding:14px; border-radius:30px; border:1px solid #ccc; font-size:1rem; color:#222;">
+
+        <!-- Type d'événement -->
+        <select name="event_type" required style="padding:14px; border-radius:30px; border:1px solid #ccc; font-size:1rem; color:#222;">
+          <option value="">Type d'événement</option>
+          <option value="mariage">Mariage</option>
+          <option value="anniversaire">Anniversaire</option>
+          <option value="team_building">Team Building</option>
+          <option value="repas_affaire">Repas d'affaires</option>
+          <option value="reunion_famille">Réunion de famille</option>
+          <option value="autre">Autre</option>
+        </select>
+
+        <textarea name="message" placeholder="Message / détails de l'événement" required style="padding:14px; border-radius:16px; border:1px solid #ccc; font-size:1rem; min-height:120px; color:#222;"></textarea>
+        
+        <!-- Bouton avec effet hover -->
+        <button type="submit" 
+                style="padding:14px; border:none; border-radius:30px; background:#b22222; color:#fff; font-size:1.05rem; cursor:pointer; transition:transform 0.25s ease, background 0.25s ease;">
+          Envoyer
+        </button>
+
+        <div id="groupeMessage" style="display:none; margin-top:12px; padding:10px; border-radius:10px; background:#eef; color:#024;"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Effet hover -->
+<style>
+  #groupe button:hover {
+    background: linear-gradient(90deg, #d4af37, #c19225);
+    transform: scale(1.05);
+  }
+</style>
