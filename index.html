@@ -2,17 +2,20 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <meta name="description" content="Le Vaudrée 2 – Brasserie-restaurant à Liège. Réservations, commande rapide et galerie.">
   <title>Le Vaudrée 2 – Saint-Gilles</title>
+  
   <!-- Fonts (preconnect + load) -->
-  < <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
- <!-- AOS -->
+  
+  <!-- AOS -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-
+  
   <style>
- 
+
+   
  /* ========== RESET & BASE ========== */
   :root { 
     --brand: #d4af37; /* doré */
@@ -243,6 +246,69 @@
       footer .footer-container{grid-template-columns:1fr}
     }
   
+/* --- Styles pour mobile --- */
+@media (max-width: 768px) {
+  nav a {
+    display: block;
+    margin: 8px 0;
+    text-align: center;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .form-box {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+/* ===== MENU RESPONSIVE ===== */
+.nav-toggle {
+  display: none;
+  background: var(--accent, #b22222);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  font-size: 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background: var(--brand, #d4af37);
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    border-radius: 0 0 12px 12px;
+    z-index: 1000;
+  }
+
+  .nav-links a {
+    color: #fff;
+    text-align: center;
+    padding: 12px 0;
+    border-radius: 8px;
+  }
+
+  .nav-links a:hover {
+    background: #a52a2a;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+}
 
 </style>
 </head>
@@ -258,12 +324,15 @@
 <!-- ========== NAV ========== -->
 <nav data-aos="fade-down" aria-label="Navigation principale">
   <a href="menu.html"> Menu</a>
-  <a href="#reservation"> Réservation</a>
   <a href="#commande"> Commande rapide</a>
-  <a href="#gallery"> Galerie</a>
-  <a href="#avis-google"> Avis</a>
+  <a href="groupe.html"> Groupe</a>
+  <a href="beer-shop.html"> Beer Shop’E</a>
+  <a href="evenement.html"> Événements</a>
+  <a href="bon-cadeau.html">Bon Cadeau</a>
   <a href="#contact"> Contact</a>
 </nav>
+
+
 <main>
   <!-- MENU -->
   <!-- RESERVATION -->
@@ -672,70 +741,93 @@ nav {
     })();
   </script>
 
- <script>
-    (function(){
-      const popup = document.getElementById('suggestion-popup');
-      const closeBtn = document.getElementById('close-popup');
-      const title = document.getElementById('popup-title');
-      const text = document.getElementById('popup-text');
-      const shownKey = 'vaudree_popup_shown';
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const popup = document.getElementById('suggestion-popup');
+  const closeBtn = document.getElementById('close-popup');
+  const title = document.getElementById('popup-title');
+  const text = document.getElementById('popup-text');
+  const shownKey = 'vaudree_popup_shown';
 
-     
-      const suggestions = [
-        { title: "Suggestion du Chef", text: "Découvrez notre <strong>carbonnade à la bière de Liège</strong>, accompagnée de frites maison !" },
-        { title: "Plat du Jour", text: "Essayez notre <strong>hamburger liégeois</strong> avec une bière artisanale fraîche !" }
-      ];
-      const s = suggestions[Math.floor(Math.random()*suggestions.length)];
-      title.innerHTML = s.title;
-      text.innerHTML = s.text;
+  // Suggestions
+  const suggestions = [
+    { title: "Suggestion du Chef", text: "Découvrez notre <strong>carbonnade à la bière de Liège</strong>, accompagnée de frites maison !" },
+    { title: "Plat du Jour", text: "Essayez notre <strong>hamburger liégeois</strong> avec une bière artisanale fraîche !" }
+  ];
 
-      setTimeout(() => {
-        popup.style.display = 'flex';
-        popup.setAttribute('aria-hidden','false');
-        sessionStorage.setItem(shownKey,'1');
-      }, 1200);
+  const s = suggestions[Math.floor(Math.random()*suggestions.length)];
+  title.innerHTML = s.title;
+  text.innerHTML = s.text;
 
-      closeBtn.addEventListener('click', () => {
-        popup.style.display = 'none';
-        popup.setAttribute('aria-hidden','true');
-      });
-      popup.addEventListener('click', (e) => {
-        if(e.target === popup) {
-          popup.style.display = 'none';
-          popup.setAttribute('aria-hidden','true');
-        }
-      });
-    })();
-  </script>
+  // Affiche le popup si pas déjà montré dans la session
+  if (!sessionStorage.getItem(shownKey)) {
+    setTimeout(() => {
+      popup.style.display = 'flex';
+      popup.setAttribute('aria-hidden','false');
+      sessionStorage.setItem(shownKey,'1');
+    }, 1200);
+  }
+
+  // Fermer le popup
+  closeBtn.addEventListener('click', () => {
+    popup.style.display = 'none';
+    popup.setAttribute('aria-hidden','true');
+  });
+
+  popup.addEventListener('click', (e) => {
+    if (e.target === popup) {
+      popup.style.display = 'none';
+      popup.setAttribute('aria-hidden','true');
+    }
+  });
+});
+</script>
+
+
 
   
   <script>
- window.initMap = function(){
-  const location = {lat:50.63827, lng:5.56365};
+window.initMap = function() {
+  const location = { lat: 50.63827, lng: 5.56365 };
   const mapEl = document.getElementById('map');
-  if(!mapEl || !window.google) return;
+  if (!mapEl || !window.google) return;
 
   const map = new google.maps.Map(mapEl, {
     zoom: 16,
     center: location
   });
 
-  // Marker moderne recommandé
-  new google.maps.marker.AdvancedMarkerElement({
-    position: location,
-    map: map,
-    title: 'Le Vaudrée 2 - Saint-Gilles'
-  });
+  // ✅ Vérifie si la librairie "marker" est chargée
+  if (google.maps.marker && google.maps.marker.AdvancedMarkerElement) {
+    // Marqueur moderne (si la lib est dispo)
+    new google.maps.marker.AdvancedMarkerElement({
+      position: location,
+      map: map,
+      title: 'Le Vaudrée 2 - Saint-Gilles'
+    });
+  } else {
+    // 🩹 Marqueur classique (fallback pour éviter l'erreur)
+    new google.maps.Marker({
+      position: location,
+      map: map,
+      title: 'Le Vaudrée 2 - Saint-Gilles'
+    });
+  }
 };
-    setTimeout(() => {
-      const mapEl = document.getElementById('map');
-      if(mapEl && mapEl.children.length === 0){
-        mapEl.innerHTML = '<p style="padding:18px;text-align:center;color:var(--muted)">La carte n’a pas pu être chargée. Veuillez vérifier la clé API Google Maps.</p>';
-      }
-    }, 5000);
+
+// Message si la carte ne charge pas
+setTimeout(() => {
+  const mapEl = document.getElementById('map');
+  if (mapEl && mapEl.children.length === 0) {
+    mapEl.innerHTML = '<p style="padding:18px;text-align:center;color:var(--muted)">La carte n’a pas pu être chargée. Veuillez vérifier la clé API Google Maps.</p>';
+  }
+}, 5000);
+
   </script>
 
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQGdZIvj6_mcZ8m1sCZaWjQZHsV4R0lCU&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQGdZIvj6_mcZ8m1sCZaWjQZHsV4R0lCU&callback=initMap"></script>
+
+
 
   <noscript>
     <style>
@@ -746,7 +838,16 @@ nav {
       JavaScript désactivé — certaines fonctionnalités (animations, carte) sont limitées.
     </div>
   </noscript>
+<script>
+  const toggle = document.querySelector('.nav-toggle');
+  const links = document.querySelector('.nav-links');
+  toggle.addEventListener('click', () => {
+    links.classList.toggle('show');
+  });
+</script>
 
 
 </body>
 </html>
+
+
