@@ -323,13 +323,24 @@
 </header>
 <!-- ========== NAV ========== -->
 <nav data-aos="fade-down" aria-label="Navigation principale">
-  <a href="menu.html"> Menu</a>
-  <a href="#commande"> Commande rapide</a>
-  <a href="groupe.html"> Groupe</a>
-  <a href="beer-shop.html"> Beer Shop’E</a>
-  <a href="evenement.html"> Événements</a>
-  <a href="bon-cadeau.html">Bon Cadeau</a>
-  <a href="#contact"> Contact</a>
+  <button class="nav-toggle" aria-label="Menu mobile">☰</button>
+  <div class="nav-links">
+    <a href="menu.html">Menu</a>
+    <a href="#reservation">Réservation</a>
+    <a href="#commande">Commande rapide</a>
+    <a href="groupe.html">Groupe</a>
+    <a href="team-building.html">Team Building</a>
+    <a href="beer-shop.html">Beer Shop’E</a>
+    <a href="evenement.html">Événements</a>
+    <a href="#contact">Contact</a>
+    <!-- 🌍 Sélecteur de langue -->
+    <select id="lang-switch" aria-label="Changer la langue" style="
+      margin-top:10px;padding:8px;border-radius:8px;border:none;font-weight:600;background:#fff;color:#222;">
+      <option value="fr" selected>🇫🇷 Français</option>
+      <option value="en">🇬🇧 English</option>
+      <option value="nl">🇳🇱 Nederlands</option>
+    </select>
+  </div>
 </nav>
 
 
@@ -886,6 +897,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
