@@ -166,3 +166,41 @@
     transform:scale(1.05);
   }
 </style>
+<audio id="musique" autoplay loop muted>
+  <source src="audio/audiomusique.mp3" type="audio/mpeg">
+</audio>
+
+<button id="son" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #222;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 26px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 9999;
+">🔇</button>
+
+<script>
+  const musique = document.getElementById('musique');
+  const btn = document.getElementById('son');
+  musique.volume = 0.4;
+
+  // Permet d’activer le son après un premier clic sur la page
+  document.addEventListener('click', () => {
+    musique.muted = false;
+    musique.play();
+    btn.textContent = '🔊';
+  }, { once: true });
+
+  // Bouton pour activer / couper le son
+  btn.addEventListener('click', () => {
+    musique.muted = !musique.muted;
+    btn.textContent = musique.muted ? '🔇' : '🔊';
+  });
+</script>
