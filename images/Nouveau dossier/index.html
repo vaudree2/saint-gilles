@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="description" content="Le Vaudrée 2 – Brasserie-restaurant à Liège. Réservations, commande rapide et galerie.">
+  <title>Le Vaudrée 2 – Saint-Gilles</title>
+  <!-- Fonts (preconnect + load) -->
+  < <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+ <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+  <style>
+
+   
+ /* ========== RESET & BASE ========== */
+  :root { 
+    --brand: #d4af37; /* doré */
+    --accent: #b22222; /* rouge foncé */
+    --gold: #d4af37; /* doré */
+    --bg: #ffffff;
+    --fg: #222222;
+    --muted: #888;
+    --radius: 12px;
+    --transition: 0.25s;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box }
+  html, body { height: 100% }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    background: var(--bg);
+    color: var(--fg);
+    scroll-behavior: smooth;
+    transition: background var(--transition), color var(--transition);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--brand);
+    transition: color var(--transition);
+  }
+
+  a { color: var(--brand); text-decoration: none; transition: color var(--transition) }
+  a:hover { color: var(--gold) }
+
+  /* ========== DARK MODE ========== */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0a0a0a;
+      --fg: #f5f5f5;
+    }
+  }
+
+  body.dark {
+    --bg: #0a0a0a;
+    --fg: #f5f5f5;
+  }
+
+  body.dark nav { background: #111 }
+  body.dark .contact-form input,
+  body.dark .contact-form textarea { background: #222; color: #fff; border: 1px solid #555 }
+  body.dark footer { background: #111; color: #f5f5f5 }
+
+  
+
+    /* ========== LAYOUT ========== */
+    header{
+      position:relative;
+      min-height:48vh;
+      padding:40px 20px;
+      background:linear-gradient(rgba(0,0,0,0.28),rgba(0,0,0,0.58)),
+                   url('images/fond_header.jpg') center/cover no-repeat;
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+    header .logo{width:120px;margin-bottom:15px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))}
+    header h1{font-size:2.6rem;line-height:1}
+    header p{max-width:780px;font-size:1.05rem;margin-top:10px;color:#f5f5f5}
+    nav{
+      position:sticky;top:0;z-index:100;
+      display:flex;justify-content:center;flex-wrap:wrap;
+      background:var(--brand);
+      box-shadow:0 4px 12px rgba(0,0,0,0.12);
+      gap:8px;
+      padding:10px;
+    }
+    nav a{
+      color:#fff;padding:10px 18px;font-weight:600;border-radius:30px;display:inline-block;
+    }
+    nav a:hover{background:#a52a2a}
+    main{max-width:1100px;margin:0 auto;padding:40px 20px}
+    section{padding:60px 0}
+    section h2{text-align:center;margin-bottom:28px;position:relative}
+    section h2::after{content:"";display:block;width:70px;height:3px;background:var(--accent);margin:15px auto 0;border-radius:3px}
+    .menu-item{margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #eee;font-size:1.05rem}
+    /* ========== FORMS ========== */
+    .contact-form{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+    .contact-form input,.contact-form textarea{
+      padding:14px;border:1px solid #ccc;border-radius:30px;font-size:1rem;transition:box-shadow var(--transition),border-color var(--transition);
+      background:#fff;color:inherit;
+    }
+    .contact-form input:focus,.contact-form textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 6px 20px rgba(0,0,0,0.06)}
+    .contact-form button{
+      background:var(--accent);color:#fff;border:none;padding:14px;border-radius:30px;font-size:1.05rem;cursor:pointer;transition:transform var(--transition),background var(--transition)
+    }
+    .contact-form button:hover{background:var(--brand);transform:translateY(-3px)}
+    /* Section Commande Rapide */
+    #commande { 
+  background: #000; /* fond blanc */
+  border: 2px solid var(--gold); /* encadrement doré */
+  border-radius: 16px;
+  padding: 36px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.06);
+}
+
+    /* Texte de la section en doré */
+    #commande p {
+      color: var(--gold); /* texte doré */
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+    }
+    /* Option : inputs et boutons restent visibles et harmonieux */
+    #commande input, #commande textarea, #commande button {
+      border-radius: 30px;
+      font-size: 1.05rem;
+    }
+    /* Bouton : accent légèrement rouge pour contraste */
+    #commande button {
+      background: var(--accent); /* rouge foncé */
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.25s, background 0.25s;
+    }
+    #commande button:hover {
+      background: var(--brand); /* doré si tu veux accentuer */
+      transform: translateY(-3px);
+    }
+    #commande p{ text-align:center;margin-bottom:18px;font-size:1.05rem }
+    /* ========== GALLERY ========== */
+    .gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* disposition fluide */
+  gap: 16px; /* espace entre les images */
+  margin-top: 30px;
+}
+
+.gallery img {
+  width: 100%;
+  height: 230px; /* même hauteur pour toutes les images */
+  object-fit: cover; /* centre et découpe joliment les photos */
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery img:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+    /* ========== MAP / QR ========== */
+    .qr{text-align:center;margin-top:12px}
+    #map{width:100%;height:350px;border-radius:12px;margin-top:16px;box-shadow:0 3px 15px rgba(0,0,0,0.08)}
+    /* ========== FOOTER ========== */
+    footer{background:#222;color:#f5f5f5;text-align:center;padding:50px 20px;font-size:0.95rem}
+    footer a{color:#f5f5f5;margin:0 5px}
+    footer a:hover{color:#ffcccc}
+    /* ========== THEME BUTTON & FLOATS ========== */
+    .theme-toggle{position:fixed;bottom:24px;right:24px;width:56px;height:56px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;box-shadow:0 6px 18px rgba(0,0,0,0.18)}
+    .theme-toggle img{width:26px;height:26px;display:block}
+    .float-actions{position:fixed;bottom:100px;right:20px;display:flex;flex-direction:column;gap:12px;z-index:999}
+    .float-actions a, .float-actions button{
+      display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;
+      box-shadow:0 6px 18px rgba(0,0,0,0.12);font-size:20px;text-decoration:none;
+    }
+    .float-call{background:#28a745;color:#fff}
+    .float-res{background:#ffc107;color:#222}
+    .float-top{background:var(--gold);color:#222}
+    .float-theme{background:var(--brand);color:#fff}
+    /* ========== POPUP ========== */
+    #suggestion-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+#suggestion-popup .card {
+  background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), 
+            url('images/suggestion-bg.jpg') center top / cover no-repeat;
+
+  border-radius: 20px;
+  max-width: 700px; /* ← plus large */
+  width: 90%;
+  min-height: 400px; /* ← plus grand en hauteur */
+  text-align: center;
+  padding: 40px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  backdrop-filter: brightness(0.7);
+  animation: fadeIn 0.45s ease forwards;
+  min-height: 550px; /* ← augmente la hauteur */
+}
+
+/* Croix bien visible */
+#suggestion-popup .close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 32px; /* ← plus grande croix */
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+#suggestion-popup .close:hover {
+  color: #ffd700; /* croix dorée au survol */
+}
+    @keyframes fadeIn{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}
+    /* ========== RESPONSIVE ========== */
+    @media (max-width:700px){
+      header h1{font-size:1.6rem}
+      .contact-form{padding:0 8px}
+      .theme-toggle{right:16px;bottom:16px}
+      .float-actions{right:12px;bottom:84px}
+      footer .footer-container{grid-template-columns:1fr}
+    }
+  
+/* --- Styles pour mobile --- */
+@media (max-width: 768px) {
+  nav a {
+    display: block;
+    margin: 8px 0;
+    text-align: center;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .form-box {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+/* ===== MENU RESPONSIVE ===== */
+.nav-toggle {
+  display: none;
+  background: var(--accent, #b22222);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  font-size: 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background: var(--brand, #d4af37);
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    border-radius: 0 0 12px 12px;
+    z-index: 1000;
+  }
+
+  .nav-links a {
+    color: #fff;
+    text-align: center;
+    padding: 12px 0;
+    border-radius: 8px;
+  }
+
+  .nav-links a:hover {
+    background: #a52a2a;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+}
+
+</style>
+</head>
+<body>
+  <!-- ========== HEADER ========== -->
+  <header data-aos="fade-down" role="banner" class="hero-header">
+  <div class="hero-overlay">
+    <img src="images/logo_vaudree2.png" alt="Logo Le Vaudrée 2" class="hero-logo" loading="lazy">
+    <h1>Le Vaudrée 2 – Saint-Gilles</h1>
+    <p>Depuis 1990, notre brasserie-restaurant emblématique au cœur de Liège vous accueille dans une ambiance conviviale et gourmande.</p>
+  </div>
+</header>
+<!-- ========== NAV ========== -->
+<nav data-aos="fade-down" aria-label="Navigation principale">
+  <a href="menu.html"> Menu</a>
+  <a href="#reservation"> Réservation</a>
+  <a href="#commande"> Commande rapide</a>
+  <a href="groupe.html"> Groupe</a>
+  <a href="team-building.html"> Team Building</a>
+  <a href="beer-shop.html"> Beer Shop’E</a>
+  <a href="evenement.html"> Événements</a>
+  <a href="#contact"> Contact</a>
+</nav>
+
+
+<main>
+  <!-- MENU -->
+  <!-- RESERVATION -->
+  <section id="reservation" data-aos="fade-up" aria-labelledby="res-title">
+    <h2 id="res-title"> Réservation</h2>
+    <form action="https://formspree.io/f/xnngbpgd" method="POST" class="contact-form" id="reservationForm" aria-label="Formulaire de réservation">
+      <input type="text" name="name" placeholder="Nom" required aria-required="true" />
+      <input type="email" name="email" placeholder="Email" required aria-required="true" />
+   <style>
+nav {
+  border: 3px solid #d4af37; /* ✅ bordure dorée */
+  border-radius: 12px;
+  padding: 10px;
+  margin: 10px auto;
+  max-width: 1200px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 12px rgba(0,0,0,0.15);
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+</style>
+   <input type="date" name="date" required aria-required="true" />
+      <input type="time" name="time" required aria-required="true" />
+      <input type="number" name="people" placeholder="Nombre de personnes" min="1" required aria-required="true" />
+      <button type="submit">Réserver</button>
+      <div id="reservationMessage" aria-live="polite" style="display:none;margin-top:12px;padding:10px;border-radius:10px;background:#eef; color:#024"></div>
+    </form>
+  </section>
+  <!-- COMMANDE -->
+  <section id="commande" data-aos="fade-up" aria-labelledby="cmd-title">
+    <h2 id="cmd-title"> Commande rapide</h2>
+    <p>Commandez à l’avance et venez récupérer votre repas pendant votre pause – gagnez du temps tout en profitant de nos plats délicieux !</p>
+    <form action="https://formspree.io/f/xdkwlewd" method="POST" class="contact-form" id="commandeForm" aria-label="Formulaire de commande">
+      <input type="text" name="name" placeholder="Nom" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="tel" name="phone" placeholder="Numéro de GSM (sans espaces)" required pattern="[0-9]{8,15}" title="8 à 15 chiffres" />
+      <input type="text" name="commande" placeholder="Votre commande" required />
+      <input type="time" name="pickup_time" placeholder="Heure de retrait" required />
+      <button type="submit"> Envoyer ma commande</button>
+      <div id="formMessage" style="display:none;margin-top:12px;padding:12px;border-radius:12px;font-size:0.95rem;"></div>
+    </form>
+  </section>
+  <!-- GALLERY -->
+  <section id="gallery" data-aos="fade-up" aria-labelledby="gal-title">
+    <h2 id="gal-title"> Galerie</h2>
+    <div class="gallery" role="list">
+      <img src="images/photo1.jpg" alt="Intérieur du restaurant" loading="lazy" role="listitem">
+      <img src="images/photo2.jpg" alt="Nos plats signature" loading="lazy" role="listitem">
+      <img src="images/photo3.jpeg" alt="Assortiment de bières spéciales" loading="lazy" role="listitem">
+      <img src="images/photo4.jpg" alt="Café gourmand maison" loading="lazy" role="listitem">
+    </div>
+  </section>
+  <!-- AVIS -->
+  <!-- Section Avis Google - Le Vaudrée 2 -->
+  <section id="avis-google" class="avis-google" data-aos="fade-up">
+    <h2> Laissez-nous un avis sur Google</h2>
+    <div class="separator"></div>
+    <p>
+      Votre avis compte énormément <br>
+      Scannez le QR code ci-dessous ou cliquez sur le bouton pour nous laisser un avis.
+    </p>
+    <div class="qr-wrapper">
+      <div class="qr-glow"></div> <!-- Halo animé -->
+      <div class="qr-container">
+        <img src="images/QR_avis_vaudree2.png"
+             alt="QR code pour avis Google Le Vaudrée 2 Saint-Gilles"
+             class="qr-image">
+      </div>
+    </div>
+    <a href="https://g.page/r/Cfa4X8p25OfWEAE/review" target="_blank" class="avis-btn">
+      Laisser un avis maintenant
+    </a>
+  </section>
+  <style>
+    /* Section principale */
+    .avis-google {
+      background: radial-gradient(circle at top, #0a0a0a 0%, #000 100%);
+      color: #fff;
+      text-align: center;
+      padding: 80px 20px;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    border: 2px solid var(--gold); /* encadrement doré */
+}
+    .avis-google.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Titre doré */
+    .avis-google h2 {
+      font-family: 'Playfair Display', serif;
+      color: #d4af37;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+    .separator {
+      width: 120px;
+      height: 4px;
+      background: #b22222;
+      margin: 0 auto 40px auto;
+      border-radius: 5px;
+    }
+    .avis-google p {
+      color: #ccc;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 40px auto;
+      line-height: 1.6;
+    }
+    /* QR Code avec halo animé */
+    .qr-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .qr-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 280px;
+      height: 280px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(212,175,55,0.4) 0%, rgba(0,0,0,0) 70%);
+      border-radius: 50%;
+      filter: blur(25px);
+      animation: pulseGlow 4s infinite ease-in-out;
+      z-index: 0;
+    }
+    @keyframes pulseGlow {
+      0%, 100% {
+        opacity: 0.4;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1.2);
+      }
+    }
+    /* QR Container */
+    .qr-container {
+      position: relative;
+      z-index: 1;
+      background: #1a1a1a;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .qr-container:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+    }
+    /* QR Image */
+    .qr-image {
+      width: 220px;
+      border-radius: 15px;
+    }
+    /* Bouton */
+    .avis-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #b22222, #d40000);
+      color: #fff;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 45px;
+      box-shadow: 0 0 10px rgba(178, 34, 34, 0.6);
+      transition: all 0.3s ease;
+    }
+    .avis-btn:hover {
+      background: linear-gradient(90deg, #d40000, #ff5050);
+      box-shadow: 0 0 20px rgba(212, 64, 64, 0.8);
+      transform: scale(1.05);
+    }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .avis-google {
+        padding: 60px 15px;
+      }
+      .avis-google h2 {
+        font-size: 2rem;
+      }
+      .qr-image {
+        width: 180px;
+      }
+      .qr-glow {
+        width: 220px;
+        height: 220px;
+      }
+    }
+  </style>
+  <script>
+    // Animation d'apparition (si AOS non présent)
+    document.addEventListener("DOMContentLoaded", () => {
+      const section = document.querySelector(".avis-google");
+      const onScroll = () => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100) {
+          section.classList.add("visible");
+          window.removeEventListener("scroll", onScroll);
+        }
+      };
+      window.addEventListener("scroll", onScroll);
+      onScroll();
+    });
+  </script>
+<!-- CONTACT -->
+<section id="contact" data-aos="fade-up" aria-labelledby="contact-title">
+  <h2 id="contact-title"> Contact</h2>
+  <p style="text-align:center;line-height:1.8;">
+    Rue Saint-Gilles 149, 4000 Liège<br>
+    <a href="tel:+3242231880">+32 4 223 18 80</a><br>
+    <a href="mailto:vaudree2rs@gmail.com">vaudree2rs@gmail.com</a>
+  </p>
+  <div id="map" aria-label="Carte Google Maps">
+    <!-- Map JS injecte la carte ici -->
+  </div>
+</section>
+<!-- RECOMMANDATIONS -->
+<section id="recompenses" data-aos="fade-up" style="text-align:center">
+  <h2> Recommandé par</h2>
+  <p>Nous sommes fiers d’être reconnus par ces guides et plateformes :</p>
+  <div style="display:flex;justify-content:center;align-items:center;gap:30px;flex-wrap:wrap;margin-top:20px;">
+    <a href="https://www.petitfute.com/v68444-liege-4000/c1165-restaurants/c1031-cuisines-du-monde/c1030-cuisine-d-europe/c71-restaurant-belge/c1362-cuisine-a-la-biere/1394535-le-vaudree-ii.html" target="_blank" rel="noopener">
+      <img src="images/petitfute.png" alt="Petit Futé - Établissement recommandé" width="160" loading="lazy" style="border-radius:8px">
+    </a>
+    <a href="https://www.tripadvisor.fr/Restaurant_Review-g188655-d5449381-Reviews-Vaudree_II-Liege_Liege_Province_The_Ardennes_Wallonia.html" target="_blank" rel="noopener">
+      <img src="images/tripadvisor.png" alt="TripAdvisor" width="160" loading="lazy" style="border-radius:8px">
+    </a>
+  </div>
+</section>
+</main>
+<!-- ========== FLOATING ACTIONS ========== -->
+<div class="float-actions" aria-hidden="false">
+  <!-- Appel -->
+  <a class="float-call" href="tel:+3242231880" title="Appeler">
+    <img src="https://cdn-icons-png.flaticon.com/512/597/597177.png" alt="Téléphone" style="width:24px;height:24px;">
+  </a>
+
+  <!-- Réservation -->
+  <a class="float-res" href="#reservation" title="Réserver">
+    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" alt="Calendrier" style="width:24px;height:24px;">
+  </a>
+
+  <!-- Thème -->
+  <button class="float-theme" id="themeToggleBtn" aria-label="Basculer le thème">
+    <img src="https://cdn-icons-png.flaticon.com/512/1164/1164954.png" alt="Lune/Soleil" style="width:24px;height:24px;">
+  </button>
+
+  <!-- Remonter en haut -->
+  <a class="float-top" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" title="Remonter">
+    <img src="https://cdn-icons-png.flaticon.com/512/892/892692.png" alt="Flèche haut" style="width:24px;height:24px;">
+  </a>
+</div>
+<!-- THEME TOGGLE (isolé pour accessibilité) -->
+<button class="theme-toggle" id="themeToggle" title="Basculer mode sombre" aria-pressed="false" aria-label="Basculer mode sombre">
+    <img id="themeIcon" src="https://cdn-icons-png.flaticon.com/512/1164/1164954.png" alt="Icône thème" loading="lazy">
+</button>
+<!-- SUGGESTION POPUP -->
+<div id="suggestion-popup" aria-hidden="true" aria-modal="true" role="dialog">
+  <div class="card" role="document">
+    <button class="close" id="close-popup" aria-label="Fermer la fenêtre">&times;</button>
+
+    <h2 id="popup-title" style="font-size:1.6rem;margin-bottom:10px"></h2>
+    <p id="popup-text" style="font-size:1.05rem;line-height:1.5"></p>
+  </div>
+</div>
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="footer-container" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;max-width:1200px;margin:auto;text-align:left">
+    <!-- Informations générales -->
+    <div>
+      <h3 style="color:var(--gold)">Le Vaudrée 2</h3>
+      <p>Rue Saint-Gilles 149<br>4000 Liège – Belgique</p>
+      <p><strong>Téléphone :</strong> <a href="tel:+3242231880" style="color:var(--gold)">+32 4 223 18 80</a></p>
+      <p><strong>Email :</strong> <a href="mailto:vaudree2rs@gmail.com" style="color:var(--gold)">vaudree2rs@gmail.com</a></p>
+    </div>
+    <!-- Horaires -->
+    <div>
+      <h3 style="color:var(--gold)">Horaires</h3>
+      <p>Lundi → Dimanche : 12h00 – 00h00<br><em>cuisine ouverte jusqu’à 23h00</em></p>
+    </div>
+    <!-- Moyens de paiement -->
+    <div>
+      <h3 style="color:var(--gold)">Moyens de paiement</h3>
+      <p>VISA, Mastercard, Amex<br>Monizze, Edenred, Sodexo, Espèces</p>
+    </div>
+    <!-- Suivez-nous et recommandations -->
+    <div>
+      <!-- Suivez-nous -->
+      <h3 style="color:var(--gold)">Suivez-nous</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+        <a href="https://www.facebook.com" target="_blank" rel="noopener" title="Facebook">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg"
+               alt="Facebook" width="28" class="icon-gold">
+        </a>
+        <a href="https://www.instagram.com" target="_blank" rel="noopener" title="Instagram">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"
+               alt="Instagram" width="28" class="icon-gold">
+        </a>
+      </div>
+      <!-- Recommandé par -->
+      <h3 style="color:var(--gold)">Recommandé par</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+        <a href="https://www.tripadvisor.fr/Restaurant_Review-g188655-d5449381-Reviews-Vaudree_II-Liege_Liege_Province_The_Ardennes_Wallonia.html" target="_blank" rel="noopener">
+          <img src="images/tripadvisor.png" alt="TripAdvisor" width="90" style="border-radius:8px">
+        </a>
+        <a href="https://www.petitfute.com" target="_blank" rel="noopener">
+          <img src="images/petitfute.png" alt="Petit Futé" width="90" style="border-radius:8px">
+        </a>
+      </div>
+    </div>
+  </div>
+  <hr style="border:none;border-top:1px solid #555;margin:40px auto 24px;width:90%">
+  <p style="text-align:center;color:#ccc;font-size:0.9rem">&copy; 2025 Le Vaudrée 2 – Tous droits réservés | Créé avec à Liège</p>
+</footer>
+<!-- CSS pour icônes dorées et hover -->
+<style>
+  :root {
+    --gold: #d4af37;
+    --gold-light: #ffd700;
+  }
+  /* Icônes dorées pour Facebook et Instagram */
+  .icon-gold {
+    filter: invert(54%) sepia(92%) saturate(749%) hue-rotate(1deg) brightness(102%) contrast(101%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  .icon-gold:hover {
+    transform: scale(1.2);
+    filter: invert(57%) sepia(96%) saturate(800%) hue-rotate(1deg) brightness(105%) contrast(105%);
+  }
+  /* Responsive */
+  @media (max-width:700px){
+    .footer-container { grid-template-columns: 1fr; text-align:center; }
+  }
+</style>
+<!-- ========== SCRIPTS ========== -->
+ <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      if (window.AOS) AOS.init({ duration: 800, once: true });
+    });
+  </script>
+
+
+<script>
+(function(){
+  const body = document.body;
+  const btn = document.getElementById('themeToggle');
+  const icon = document.getElementById('themeIcon');
+  const storageKey = 'vaudree_theme';
+
+  // images
+  const sunIcon = "https://cdn-icons-png.flaticon.com/512/1164/1164954.png";
+  const moonIcon = "https://cdn-icons-png.flaticon.com/512/1163/1163661.png";
+
+  // Charger le thème depuis le stockage local
+  const saved = localStorage.getItem(storageKey);
+  if(saved === 'dark') {
+    body.classList.add('dark');
+    icon.src = moonIcon;
+  } else {
+    body.classList.remove('dark');
+    icon.src = sunIcon;
+  }
+
+  function toggleTheme() {
+    body.classList.toggle('dark');
+    const isDark = body.classList.contains('dark');
+    localStorage.setItem(storageKey, isDark ? 'dark' : 'light');
+    icon.src = isDark ? moonIcon : sunIcon; // changer l'icône
+    btn.setAttribute('aria-pressed', isDark);
+  }
+
+  btn.addEventListener('click', toggleTheme);
+})();
+</script>
+
+
+
+<script>
+    (function(){
+      function attachFormUX(formId, messageElId, sendingText, successText){
+        const form = document.getElementById(formId);
+        const messageEl = document.getElementById(messageElId);
+        if(!form || !messageEl) return;
+        form.addEventListener('submit', function(){
+          messageEl.style.display = 'block';
+          messageEl.style.background = '#eef';
+          messageEl.style.color = '#024';
+          messageEl.textContent = sendingText || 'Envoi en cours...';
+          setTimeout(() => {
+            messageEl.style.background = '#e6ffed';
+            messageEl.style.color = '#064';
+            messageEl.textContent = successText || 'Merci ! Votre formulaire est en cours de traitement.';
+          }, 1600);
+        });
+      }
+      attachFormUX('reservationForm','reservationMessage','Envoi de la réservation...','Réservation envoyée — merci !');
+      attachFormUX('commandeForm','formMessage','Envoi de la commande...','Commande envoyée — nous vous attendons !');
+    })();
+  </script>
+
+ <script>
+    (function(){
+      const popup = document.getElementById('suggestion-popup');
+      const closeBtn = document.getElementById('close-popup');
+      const title = document.getElementById('popup-title');
+      const text = document.getElementById('popup-text');
+      const shownKey = 'vaudree_popup_shown';
+
+     
+      const suggestions = [
+        { title: "Suggestion du Chef", text: "Découvrez notre <strong>carbonnade à la bière de Liège</strong>, accompagnée de frites maison !" },
+        { title: "Plat du Jour", text: "Essayez notre <strong>hamburger liégeois</strong> avec une bière artisanale fraîche !" }
+      ];
+      const s = suggestions[Math.floor(Math.random()*suggestions.length)];
+      title.innerHTML = s.title;
+      text.innerHTML = s.text;
+
+      setTimeout(() => {
+        popup.style.display = 'flex';
+        popup.setAttribute('aria-hidden','false');
+        sessionStorage.setItem(shownKey,'1');
+      }, 1200);
+
+      closeBtn.addEventListener('click', () => {
+        popup.style.display = 'none';
+        popup.setAttribute('aria-hidden','true');
+      });
+      popup.addEventListener('click', (e) => {
+        if(e.target === popup) {
+          popup.style.display = 'none';
+          popup.setAttribute('aria-hidden','true');
+        }
+      });
+    })();
+  </script>
+
+  
+  <script>
+window.initMap = function() {
+  const location = { lat: 50.63827, lng: 5.56365 };
+  const mapEl = document.getElementById('map');
+  if (!mapEl || !window.google) return;
+
+  const map = new google.maps.Map(mapEl, {
+    zoom: 16,
+    center: location
+  });
+
+  // ✅ Vérifie si la librairie "marker" est chargée
+  if (google.maps.marker && google.maps.marker.AdvancedMarkerElement) {
+    // Marqueur moderne (si la lib est dispo)
+    new google.maps.marker.AdvancedMarkerElement({
+      position: location,
+      map: map,
+      title: 'Le Vaudrée 2 - Saint-Gilles'
+    });
+  } else {
+    // 🩹 Marqueur classique (fallback pour éviter l'erreur)
+    new google.maps.Marker({
+      position: location,
+      map: map,
+      title: 'Le Vaudrée 2 - Saint-Gilles'
+    });
+  }
+};
+
+// Message si la carte ne charge pas
+setTimeout(() => {
+  const mapEl = document.getElementById('map');
+  if (mapEl && mapEl.children.length === 0) {
+    mapEl.innerHTML = '<p style="padding:18px;text-align:center;color:var(--muted)">La carte n’a pas pu être chargée. Veuillez vérifier la clé API Google Maps.</p>';
+  }
+}, 5000);
+
+  </script>
+
+ <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQGdZIvj6_mcZ8m1sCZaWjQZHsV4R0lCU&callback=initMap&libraries=marker"></script>
+
+
+
+  <noscript>
+    <style>
+      .gallery img{opacity:1;transform:none}
+      header{background:linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.45)),url('images/fond_header.jpg') center/cover no-repeat}
+    </style>
+    <div style="padding:12px;text-align:center;background:#fff3cd;color:#856404">
+      JavaScript désactivé — certaines fonctionnalités (animations, carte) sont limitées.
+    </div>
+  </noscript>
+<script>
+  const toggle = document.querySelector('.nav-toggle');
+  const links = document.querySelector('.nav-links');
+  toggle.addEventListener('click', () => {
+    links.classList.toggle('show');
+  });
+</script>
+
+
+</body>
+</html>
