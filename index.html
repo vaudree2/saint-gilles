@@ -1159,7 +1159,31 @@
       transform: scale(1.2);
       filter: invert(57%) sepia(96%) saturate(800%) hue-rotate(1deg) brightness(105%) contrast(105%);
     }
-  /* ========== ANIMATIONS MODERNES ========== */
+   /* ========== AMÉNITÉS NAVIGATION ========== */
+  .amenities-nav {
+    display: flex;
+    gap: 15px;
+    margin-left: auto;
+    padding: 0 20px;
+  }
+
+  @media (max-width: 768px) {
+    .amenities-nav span:not(:first-child) {
+      display: none;
+    }
+    
+    .amenities-nav {
+      gap: 10px;
+      padding: 0 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .amenities-nav {
+      display: none;
+    }
+  } 
+/* ========== ANIMATIONS MODERNES ========== */
 .feature-card {
   animation: float 6s ease-in-out infinite;
 }
@@ -1224,8 +1248,8 @@
 
 /* Amélioration de la navigation principale */
 nav {
-  background: rgba(212, 175, 55, 0.85) !important;
-  backdrop-filter: blur(10px);
+   background: rgba(0, 0, 0, 0.95); /* Noir à 95% d'opacité */
+  backdrop-filter: blur(10px); /* Garde l'effet glass moderne */
   -webkit-backdrop-filter: blur(10px);
 }
 
@@ -1253,9 +1277,25 @@ body.dark .nav-links {
   <!-- ========== HEADER ========== -->
   <header data-aos="fade-down" role="banner">
     <img src="images/logo_vaudree2.png" alt="Logo Le Vaudrée 2" class="logo" loading="eager">
-    <h1>Le Vaudrée 2 – Saint-Gilles</h1>
-    <p>Depuis 1990, notre brasserie-restaurant emblématique au cœur de Liège vous accueille dans une ambiance conviviale et gourmande. Découvrez une cuisine authentique et des bières artisanales dans un cadre chaleureux.</p>
-  </header>
+    <h1>Le Vaudrée 2 – 1990-2025 : L'Excellence se Renouvelle</h1>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0;">
+  <div style="text-align: center;">
+    <div style="font-size: 2rem;">📅</div>
+    <span style="color: #f5f5f5; font-weight: 600;">Depuis 1990</span>
+  </div>
+  <div style="text-align: center;">
+    <div style="font-size: 2rem;">👩‍🍳</div>
+    <span style="color: #f5f5f5; font-weight: 600;">Nouvelle Patronne 2025</span>
+  </div>
+  <div style="text-align: center;">
+    <div style="font-size: 2rem;">🍻</div>
+    <span style="color: #f5f5f5; font-weight: 600;">Record Bières</span>
+  </div>
+</div>
+
+<p>Forte de 35 ans d'histoire, notre institution entre dans une ère rafraîchissante : <strong>notre nouvelle Patronne reprend le flambeau culinaire en 2025</strong>. Son approche créative, alliée à <strong>notre expertise brassicole historique</strong>, marie innovation et tradition pour votre plus grand plaisir.</p>
+</header>
 
   <!-- ========== NAVIGATION FIXE ========== -->
   <nav data-aos="fade-down" aria-label="Navigation principale">
@@ -1264,12 +1304,23 @@ body.dark .nav-links {
       <a href="menu.html">Menu</a>
       <a href="#reservation">Réservation</a>
       <a href="#commande">Commande rapide</a>
+      <a href="livraison.html">Livraison/Emporter</a>
       <a href="groupe.html">Groupes</a> <!-- SÉPARÉ DE ÉVÉNEMENTS -->
       <a href="evenement.html">Événements</a> <!-- PAGE SÉPARÉE -->
       <a href="beer-shop.html">Beer Shop</a>
       <!-- GALERIE RETIRÉE DU MENU -->
       <a href="#contact">Contact</a>
-      
+       <!-- ICÔNES TERRASSE & WiFi À DROITE -->
+    <div class="amenities-nav" style="display: flex; gap: 15px; margin-left: auto; padding: 0 20px;">
+      <div style="display: flex; align-items: center; gap: 5px;">
+        <span style="font-size: 1.1rem;">🌞</span>
+        <span style="color: white; font-size: 0.9rem; font-weight: 600;">Terrasse</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 5px;">
+        <span style="font-size: 1.1rem;">📶</span>
+        <span style="color: white; font-size: 0.9rem; font-weight: 600;">WiFi</span>
+      </div>
+    </div>
       <!-- Sélecteur de langue -->
       <select id="lang-switch" aria-label="Changer la langue" style="
         margin-top: 10px;
@@ -1304,11 +1355,11 @@ body.dark .nav-links {
             <h3>Bières Artisanales</h3>
             <p>Large sélection de bières locales et spéciales</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">⏱️</div>
-            <h3>Service Rapide</h3>
-            <p>Commande en ligne pour un retrait sans attente</p>
-          </div>
+         <div class="feature-card">
+  <div class="feature-icon">⏱️</div>
+  <h3>Service Maîtrisé</h3>
+  <p>Pour les journées bien remplies et les soirées au spectacle</p>
+</div>
           <div class="feature-card">
             <div class="feature-icon">🎉</div>
             <h3>Événements</h3>
@@ -1364,19 +1415,19 @@ body.dark .nav-links {
 
     <!-- ========== COMMANDE RAPIDE AMÉLIORÉE ========== -->
     <section id="commande" data-aos="fade-up" aria-labelledby="cmd-title">
-      <h2 id="cmd-title">Commande rapide</h2>
-      
-      <!-- Informations importantes -->
-      <div class="commande-info">
-        <p><strong>⏰ Pour les clients pressés :</strong></p>
-        <p>• Commandez avant 11h pour le service de midi</p>
-        <p>• Commandez avant 17h pour le service du soir</p>
-        <p>• Précisez votre heure d'arrivée - nous préparons votre repas pour que vous soyez servi dans les 5 minutes</p>
-        <p>• Idéal pour les pauses déjeuner et avant les spectacles</p>
-      </div>
-      
-      <p>Commandez à l'avance et venez récupérer votre repas pendant votre pause – gagnez du temps tout en profitant de nos plats délicieux préparés avec des ingrédients frais !</p>
-      
+     <h2 id="cmd-title">Commande Rapide & Raffinée</h2>
+
+<div class="commande-info">
+  <p><strong>🎯 Votre pause gourmande optimisée</strong></p>
+  <p>📅 <strong>Planifiez</strong> : Commande avant 11h (midi) ou 17h (soir)</p>
+  <p>🕐 <strong>Programmez</strong> : Indiquez votre heure de passage</p>
+  <p>⚡ <strong>Savourez</strong> : Service immédiat à votre arrivée</p>
+  <p>🌟 <strong>Profitez</strong> : Quelques minutes seulement entre votre entrée et la dégustation</p>
+</div>
+
+<p style="text-align: center; background: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 10px; border-left: 4px solid var(--gold);">
+  La solution idéale pour les professionnels pressés et les amateurs de spectacles - Toute la qualité Vaudrée2, sans le temps d'attente.
+</p>
       <form action="https://formspree.io/f/xdkwlewd" method="POST" class="contact-form" id="commandeForm" aria-label="Formulaire de commande">
         <div class="form-group">
           <label for="cmd-name">Nom</label>
@@ -1448,14 +1499,13 @@ body.dark .nav-links {
         </div>
         
         <!-- Vidéo 2 - ESPACE RÉSERVÉ -->
-        <div class="gallery-item video">
-          <video controls poster="images/video-poster2.jpg">
-            <source src="videos/preparation-plats.mp4" type="video/mp4">
-            Votre navigateur ne supporte pas la lecture de vidéos.
-          </video>
-          <div class="play-icon">▶</div>
-          <div class="gallery-caption">Préparation des plats</div>
-        </div>
+<div class="gallery-item video">
+  <video controls playsinline poster="images/video-poster2.jpg" preload="metadata" style="width:100%;height:100%;object-fit:cover;">
+    <source src="videos/preparation-plats.mp4" type="video/mp4">
+    Votre navigateur ne supporte pas la lecture de vidéos.
+  </video>
+  <!-- Supprimer gallery-caption et play-icon pour cette vidéo -->
+</div>
         
         <!-- ESPACES POUR PHOTOS SUPPLÉMENTAIRES -->
         <div class="gallery-item">
@@ -1563,16 +1613,18 @@ body.dark .nav-links {
 <div id="suggestion-popup" aria-hidden="true" aria-modal="true" role="dialog">
   <div class="card" role="document">
     <button class="close" id="close-popup" aria-label="Fermer la fenêtre de suggestion">&times;</button>
-    
-    <!-- PHOTO DE SUGGESTION EN HAUT -->
+   
+ <!-- PHOTO DE SUGGESTION EN HAUT -->
     <div class="suggestion-image">
       <img src="images/suggestion-photo.jpg" alt="Spécialité du Vaudrée 2" loading="lazy">
     </div>
-    
-    <!-- SUGGESTION DU CHEF -->
+   
+ <!-- SUGGESTION DU CHEF MODIFIÉE -->
     <div class="suggestion-content">
-      <h2 id="popup-title" style="font-size:1.8rem; margin-bottom:15px; color:var(--gold);"></h2>
-      <p id="popup-text" style="font-size:1.1rem; line-height:1.6; margin-bottom:20px; color:var(--fg);"></p>
+      <h2 id="popup-title" style="font-size:1.8rem; margin-bottom:15px; color:var(--gold);">Suggestion du Chef</h2>
+      <p id="popup-text" style="font-size:1.1rem; line-height:1.6; margin-bottom:20px; color:var(--fg);">
+        Découvrez nos viandes de qualité supérieure, proposées en pierrade ou grillées, accompagnées de la sublime Chimay Bleu au fût. Une expérience gustative authentique !
+      </p>
     </div>
 
     <!-- SECTION MENUS DES FÊTES -->
@@ -1624,7 +1676,7 @@ body.dark .nav-links {
       </p>
     </div>
     
-    <!-- ENCADREMENT DORÉ AVEC HORAIRES -->
+    <!-- ENCADREMENT DORÉ AVEC HORAIRES MODIFIÉS -->
     <div class="hours-banner" style="
       background: linear-gradient(135deg, var(--gold), #ffd700);
       color: #222;
@@ -1636,8 +1688,8 @@ body.dark .nav-links {
       border: 2px solid var(--gold);
     ">
       <p style="font-size:1rem; font-weight:600; margin:0; line-height: 1.4;">
-        🕒 Cuisine ouverte jusqu'à 23h00<br>
-        <span style="font-size: 0.9rem;">📅 Ouvert tous les jours</span>
+        🕒 Cuisine ouverte jusqu'à 23h (mar-jeu) • 00h (ven-sam)<br>
+        <span style="font-size: 0.9rem;">📅 Fermé dimanche et lundi</span>
       </p>
     </div>
     
@@ -1761,11 +1813,23 @@ body.dark .nav-links {
       </div>
       
       <div class="footer-section">
-        <h3>Horaires d'ouverture</h3>
-        <p><strong>Lundi - Dimanche</strong><br>12h00 – 00h00</p>
-        <p><em>Cuisine ouverte jusqu'à 23h00</em></p>
-        <p>Fermé les jours fériés</p>
-      </div>
+  <h3>Horaires</h3>
+  
+  <div style="margin-bottom: 15px;">
+    <p><strong>Mardi au Jeudi</strong></p>
+    <p>11h30 - 14h45 | 17h30 - 23h00</p>
+    
+    <p><strong>Vendredi & Samedi</strong></p>
+    <p>11h30 - 15h00 | 17h00 - 00h00</p>
+    
+    <p><strong>Dimanche & Lundi</strong></p>
+    <p style="color: #ff6b6b;">● Fermé toute la journée</p>
+  </div>
+  
+  <p style="background: rgba(212, 175, 55, 0.15); padding: 10px; border-radius: 5px; font-size: 0.9rem;">
+    🎊 <strong>Jours fériés :</strong> Ouverts (sauf s'ils tombent un dimanche ou lundi)
+  </p>
+</div>
       
       <div class="footer-section">
         <h3>Moyens de paiement</h3>
@@ -2001,21 +2065,21 @@ body.dark .nav-links {
       const text = document.getElementById('popup-text');
       const shownKey = 'vaudree_popup_shown';
 
-      // Suggestions variées
-      const suggestions = [
-        { 
-          title: "Suggestion du Chef", 
-          text: "Découvrez notre <strong>carbonnade à la bière de Liège</strong>, mijotée pendant des heures et accompagnée de nos frites maison croustillantes !" 
-        },
-        { 
-          title: "Plat du Jour", 
-          text: "Essayez notre <strong>hamburger liégeois</strong> avec fromage de Herve, oignons caramélisés et une sauce spéciale, servi avec une bière artisanale fraîche !" 
-        },
-        { 
-          title: "Nouveauté", 
-          text: "Notre <strong>waterzooi de volaille</strong> revisité avec des légumes de saison et une touche de crème fraîche. Un plat réconfortant par excellence !" 
-        }
-      ];
+      // Suggestions variées - TOUTES AVEC LA NOUVELLE SUGGESTION
+const suggestions = [
+  { 
+    title: "Suggestion du Chef", 
+    text: "Découvrez nos viandes de qualité supérieure, proposées en pierrade ou grillées, accompagnées de la sublime Chimay Bleu au fût. Une expérience gustative authentique !" 
+  },
+  { 
+    title: "Spécialité Maison", 
+    text: "Découvrez nos viandes de qualité supérieure, proposées en pierrade ou grillées, accompagnées de la sublime Chimay Bleu au fût. Une expérience gustative authentique !" 
+  },
+  { 
+    title: "Notre Expertise", 
+    text: "Découvrez nos viandes de qualité supérieure, proposées en pierrade ou grillées, accompagnées de la sublime Chimay Bleu au fût. Une expérience gustative authentique !" 
+  }
+];
 
       const s = suggestions[Math.floor(Math.random() * suggestions.length)];
       title.innerHTML = s.title;
@@ -2210,7 +2274,3 @@ function fermerPopup() {
   </noscript>
 </body>
 </html>
-
-
-
-
