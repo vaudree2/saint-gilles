@@ -680,45 +680,47 @@
             const messageDiv = document.getElementById('groupeMessage');
             
             if (groupeForm) {
-                groupeForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // Validation basique
-                    const requiredFields = groupeForm.querySelectorAll('[required]');
-                    let isValid = true;
-                    
-                    requiredFields.forEach(field => {
-                        if (!field.value.trim()) {
-                            field.style.borderColor = 'red';
-                            isValid = false;
-                        } else {
-                            field.style.borderColor = '#e0e0e0';
-                        }
-                    });
-                    
-                    if (isValid) {
-                        // Simulation d'envoi réussi
-                        messageDiv.style.display = 'block';
-                        messageDiv.textContent = '✅ Votre demande a été envoyée avec succès ! Nous vous contacterons dans les plus brefs délais.';
-                        messageDiv.style.background = '#e8f5e8';
-                        messageDiv.style.color = '#2d5016';
-                        
-                        // Réinitialiser le formulaire après 3 secondes
-                        setTimeout(() => {
-                            groupeForm.reset();
-                            setTimeout(() => {
-                                messageDiv.style.display = 'none';
-                            }, 5000);
-                        }, 3000);
-                    } else {
-                        messageDiv.style.display = 'block';
-                        messageDiv.textContent = '❌ Veuillez remplir tous les champs obligatoires.';
-                        messageDiv.style.background = '#ffe6e6';
-                        messageDiv.style.color = '#d00';
-                    }
-                });
-            }
-
+               groupeForm.addEventListener('submit', function(e) {
+    // Validation avant envoi
+    const requiredFields = groupeForm.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.style.borderColor = 'red';
+            isValid = false;
+        } else {
+            field.style.borderColor = '#e0e0e0';
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        messageDiv.style.display = 'block';
+        messageDiv.textContent = '❌ Veuillez remplir tous les champs obligatoires.';
+        messageDiv.style.background = '#ffe6e6';
+        messageDiv.style.color = '#d00';
+    } else {
+        // Si validation OK, laisser Formspree gérer l'envoi
+        messageDiv.style.display = 'block';
+        messageDiv.textContent = '🔄 Envoi en cours...';
+        messageDiv.style.background = '#e6f3ff';
+        messageDiv.style.color = '#0066cc';
+        
+        // Réinitialiser après envoi (avec délai pour laisser Formspree travailler)
+        setTimeout(() => {
+            messageDiv.textContent = '✅ Demande envoyée ! Nous vous contacterons bientôt.';
+            messageDiv.style.background = '#e8f5e8';
+            messageDiv.style.color = '#2d5016';
+            
+            // Réinitialiser le formulaire après quelques secondes
+            setTimeout(() => {
+                groupeForm.reset();
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }, 2000);
+    }
+});
             // Date minimum pour le champ date
             const dateInput = document.querySelector('input[type="date"]');
             if (dateInput) {
@@ -766,4 +768,5 @@
     </script>
 </body>
 </html>
+
 
