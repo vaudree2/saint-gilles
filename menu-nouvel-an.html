@@ -3,117 +3,565 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="description" content="Menu Réveillon du Vaudrée 2 - Découvrez notre menu exceptionnel pour les fêtes de fin d'année">
+  <meta name="keywords" content="menu réveillon, restaurant Liège, fêtes, fin d'année, réveillon, menu spécial">
+  <meta name="author" content="Le Vaudrée 2">
+  
   <title>Menu Réveillon - Le Vaudrée 2</title>
+  
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
     body { 
       font-family: 'Arial', sans-serif; 
       background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
       color: white;
       min-height: 100vh;
       padding: 40px 20px;
+      position: relative;
+      overflow-x: hidden;
     }
+    
+    /* Effet de particules dorées */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
     .container {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
+    
     .logo {
-      width: 120px;
-      margin-bottom: 20px;
+      width: 150px;
+      margin-bottom: 25px;
+      filter: drop-shadow(0 4px 8px rgba(212, 175, 55, 0.3));
+      transition: transform 0.3s ease;
     }
+    
+    .logo:hover {
+      transform: scale(1.05);
+    }
+    
     h1 {
       color: #d4af37;
-      font-size: 2.5rem;
-      margin-bottom: 10px;
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      background: linear-gradient(90deg, #d4af37, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
+    
     .subtitle {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
+      font-size: 1.3rem;
+      margin-bottom: 40px;
       opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
     }
+    
+    /* Conteneur PDF amélioré */
+    .pdf-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 40px 0;
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      backdrop-filter: blur(10px);
+    }
+    
     .pdf-container {
       background: white;
       border-radius: 15px;
-      padding: 20px;
-      margin: 30px 0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      min-height: 800px;
     }
+    
     .pdf-container iframe {
       width: 100%;
       height: 800px;
       border: none;
-      border-radius: 10px;
+      display: block;
     }
+    
+    /* Fallback si le PDF ne charge pas */
+    .pdf-fallback {
+      display: none;
+      padding: 60px 40px;
+      text-align: center;
+      background: #f8f9fa;
+      border-radius: 15px;
+      color: #333;
+    }
+    
+    .pdf-fallback h3 {
+      color: #d4af37;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+    
+    /* Boutons améliorés */
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
+    
     .btn {
-      display: inline-block;
-      background: #d4af37;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #d4af37, #b8860b);
       color: #222;
-      padding: 15px 30px;
-      border-radius: 30px;
+      padding: 18px 35px;
+      border-radius: 50px;
       text-decoration: none;
       font-weight: bold;
-      margin: 10px;
+      font-size: 1.1rem;
       transition: all 0.3s ease;
-      border: 2px solid #d4af37;
+      border: 2px solid transparent;
+      min-width: 220px;
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .btn:hover::before {
+      left: 100%;
+    }
+    
     .btn:hover {
-      background: transparent;
-      color: #d4af37;
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5);
+      background: linear-gradient(135deg, #ffd700, #d4af37);
     }
+    
     .btn-secondary {
       background: transparent;
       color: #d4af37;
       border: 2px solid #d4af37;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
     }
+    
     .btn-secondary:hover {
       background: #d4af37;
       color: #222;
     }
-    .info {
-      margin-top: 30px;
-      padding: 20px;
+    
+    /* Section info améliorée */
+    .info-card {
+      margin-top: 40px;
+      padding: 30px;
       background: rgba(212, 175, 55, 0.1);
-      border-radius: 10px;
+      border-radius: 15px;
       border-left: 4px solid #d4af37;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      backdrop-filter: blur(5px);
     }
+    
+    .info-card h3 {
+      color: #d4af37;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .info-card p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      font-size: 1.1rem;
+    }
+    
+    .info-card a {
+      color: #d4af37;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    
+    .info-card a:hover {
+      color: #ffd700;
+      text-decoration: underline;
+    }
+    
+    /* Animation de chargement */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 40px;
+      color: #d4af37;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(212, 175, 55, 0.3);
+      border-radius: 50%;
+      border-top-color: #d4af37;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      .pdf-container iframe {
+        height: 700px;
+      }
+    }
+    
     @media (max-width: 768px) {
+      body {
+        padding: 30px 15px;
+      }
+      
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      .subtitle {
+        font-size: 1.1rem;
+      }
+      
       .pdf-container iframe {
         height: 500px;
       }
-      h1 {
-        font-size: 2rem;
+      
+      .pdf-section {
+        padding: 20px;
       }
+      
+      .button-group {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .info-card {
+        padding: 20px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .pdf-container iframe {
+        height: 400px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .btn {
+        padding: 15px 25px;
+        font-size: 1rem;
+      }
+    }
+    
+    /* Message d'erreur */
+    .error-message {
+      display: none;
+      background: rgba(178, 34, 34, 0.1);
+      border: 1px solid #b22222;
+      color: #ff6b6b;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="images/logo_vaudree2.png" alt="Le Vaudrée 2" class="logo">
-   <!-- Même structure mais avec -->
-<h1>🎇 Menu Nouvel An</h1>
-<p class="subtitle">Célébrez la nouvelle année avec notre menu festif</p>
-<div class="pdf-container">
-<iframe src="../menus/menu-nouvel-an.pdf" type="application/pdf">
-        Votre navigateur ne supporte pas l'affichage des PDF. 
-        <a href="../menus/menu-reveillon.pdf" download>Téléchargez le menu</a>
-      </iframe>
+    <!-- Logo -->
+    <img src="../images/logo_vaudree2.png" alt="Le Vaudrée 2" class="logo">
+    
+    <!-- Titre -->
+    <h1>🎄 Menu nouvel-an</h1>
+    <p class="subtitle">
+      Plongez dans la magie des fêtes avec notre menu exclusif concocté par notre chef. 
+      Une expérience gastronomique unique pour célébrer la fin d'année en beauté.
+    </p>
+    
+    <!-- Section PDF -->
+    <div class="pdf-section">
+      <!-- Message de chargement -->
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Chargement du menu en cours...</p>
+      </div>
+      
+      <!-- Message d'erreur -->
+      <div class="error-message" id="errorMessage">
+        <strong>⚠️ Impossible de charger le menu PDF</strong>
+        <p>Le fichier ne peut pas être affiché directement. Utilisez le bouton de téléchargement ci-dessous.</p>
+      </div>
+      
+      <!-- Conteneur PDF -->
+      <div class="pdf-container" id="pdfContainer">
+        <iframe 
+          src="menu-reveillon.pdf#view=FitH" 
+          id="pdfViewer"
+          title="Menu Réveillon du Vaudrée 2"
+          onload="pdfLoaded()"
+          onerror="pdfError()">
+          
+          <!-- Fallback pour navigateurs sans support PDF -->
+          <div class="pdf-fallback" id="pdfFallback">
+            <h3>📄 Menu Réveillon</h3>
+            <p>Votre navigateur ne supporte pas l'affichage direct des PDF.</p>
+            <p>Téléchargez le menu pour le consulter :</p>
+            <a href="menu-reveillon.pdf" download class="btn" style="margin-top: 20px;">
+              📥 Télécharger le PDF
+            </a>
+          </div>
+        </iframe>
+      </div>
     </div>
-
-    <div>
-      <a href="../menus/menu-reveillon.pdf" download class="btn">
-        📥 Télécharger le PDF
+    
+    <!-- Boutons d'action -->
+    <div class="button-group">
+      <a href="menu-reveillon.pdf" download class="btn">
+        <span>📥</span> Télécharger le PDF
       </a>
+      
+      <a href="tel:+3242231880" class="btn">
+        <span>📞</span> Réserver par téléphone
+      </a>
+      
+      <!-- MODIFIÉ : lien vers l'index avec ancres pour la réservation -->
+      <a href="../index.html#reservation" class="btn btn-secondary">
+        <span>📅</span> Réserver en ligne
+      </a>
+    </div>
+    
+    <!-- Informations importantes -->
+    <div class="info-card">
+      <h3><span>📋</span> Informations importantes</h3>
+      <p><strong>📅 Dates :</strong> 24 et 31 décembre 2025</p>
+      <p><strong>🕒 Service :</strong> À partir de 17h30</p>
+      <p><strong>💰 Prix :</strong> Menu complet Min 65€ par personne (hors boissons)</p>
+      <p><strong>🎁 Spécial :</strong> Champagne offert à minuit pour le Nouvel An</p>
+      <p><strong>📞 Réservation obligatoire :</strong> 
+        <a href="tel:+3242231880">+32 4 223 18 80</a>
+      </p>
+      <p><strong>📍 Adresse :</strong> Le Vaudrée 2 - Rue Saint-Gilles 149, 4000 Liège</p>
+    </div>
+    
+    <!-- Bouton retour -->
+    <div style="margin-top: 40px;">
       <a href="../index.html" class="btn btn-secondary">
-        🏠 Retour au site
+        <span>🏠</span> Retour au site principal
       </a>
-    </div>
-
-    <div class="info">
-      <p><strong>📞 Réservation conseillée :</strong> <a href="tel:+3242231880" style="color: #d4af37;">+32 4 223 18 80</a></p>
-      <p><strong>📍 Le Vaudrée 2</strong> - Rue Saint-Gilles 149, 4000 Liège</p>
     </div>
   </div>
+
+  <script>
+    // ========== GESTION DU PDF ==========
+    document.addEventListener('DOMContentLoaded', function() {
+      const pdfViewer = document.getElementById('pdfViewer');
+      const pdfFallback = document.getElementById('pdfFallback');
+      const loading = document.getElementById('loading');
+      const errorMessage = document.getElementById('errorMessage');
+      const pdfContainer = document.getElementById('pdfContainer');
+      
+      // Afficher le loader
+      loading.style.display = 'block';
+      
+      // Vérifier si le PDF existe et est accessible
+      checkPDFAccessibility();
+      
+      // Vérifier la compatibilité navigateur
+      if (!isPdfSupported()) {
+        showFallback();
+      }
+      
+      // Auto-hide le loader après 5 secondes max
+      setTimeout(() => {
+        loading.style.display = 'none';
+      }, 5000);
+    });
+    
+    function checkPDFAccessibility() {
+      const pdfUrl = 'menu-reveillon.pdf';
+      
+      fetch(pdfUrl, { method: 'HEAD' })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('PDF non trouvé');
+          }
+          console.log('PDF accessible avec statut:', response.status);
+        })
+        .catch(error => {
+          console.error('Erreur d\'accès au PDF:', error);
+          showPDFError();
+        });
+    }
+    
+    function isPdfSupported() {
+      // Vérifier si le navigateur supporte l'affichage PDF inline
+      const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      const isEdge = /Edge/.test(navigator.userAgent);
+      const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+      
+      // Chrome et Edge supportent bien les PDF inline
+      // Safari et Firefox ont des limitations
+      return isChrome || isEdge;
+    }
+    
+    function pdfLoaded() {
+      console.log('PDF chargé avec succès');
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('pdfContainer').style.display = 'block';
+    }
+    
+    function pdfError() {
+      console.log('Erreur de chargement du PDF');
+      showFallback();
+    }
+    
+    function showFallback() {
+      const pdfViewer = document.getElementById('pdfViewer');
+      const pdfFallback = document.getElementById('pdfFallback');
+      const loading = document.getElementById('loading');
+      
+      loading.style.display = 'none';
+      pdfViewer.style.display = 'none';
+      
+      // Créer le fallback si non existant
+      if (!pdfFallback) {
+        const container = document.getElementById('pdfContainer');
+        const fallbackHTML = `
+          <div class="pdf-fallback">
+            <h3>📄 Menu Réveillon</h3>
+            <p>Pour une meilleure expérience, téléchargez le menu PDF :</p>
+            <a href="menu-reveillon.pdf" download class="btn" style="margin-top: 20px;">
+              📥 Télécharger le PDF
+            </a>
+          </div>
+        `;
+        container.innerHTML = fallbackHTML;
+      } else {
+        pdfFallback.style.display = 'block';
+      }
+    }
+    
+    function showPDFError() {
+      const errorMessage = document.getElementById('errorMessage');
+      const loading = document.getElementById('loading');
+      
+      loading.style.display = 'none';
+      errorMessage.style.display = 'block';
+    }
+    
+    // ========== TÉLÉCHARGEMENT AUTOMATIQUE APRES DELAI ==========
+    // Optionnel: Proposer le téléchargement après 10 secondes
+    setTimeout(() => {
+      const hasInteracted = sessionStorage.getItem('pdf_interacted');
+      if (!hasInteracted) {
+        const shouldDownload = confirm('Voulez-vous télécharger le menu PDF pour une consultation hors ligne?');
+        if (shouldDownload) {
+          window.open('menu-reveillon.pdf', '_blank');
+          sessionStorage.setItem('pdf_interacted', 'true');
+        }
+      }
+    }, 10000);
+    
+    // ========== IMPRESSION ==========
+    function printPDF() {
+      const printWindow = window.open('menu-reveillon.pdf', '_blank');
+      printWindow.onload = function() {
+        printWindow.print();
+      };
+    }
+    
+    // ========== AJOUTER UN BOUTON IMPRIMER ==========
+    function addPrintButton() {
+      const buttonGroup = document.querySelector('.button-group');
+      if (buttonGroup) {
+        const printBtn = document.createElement('a');
+        printBtn.href = '#';
+        printBtn.className = 'btn btn-secondary';
+        printBtn.innerHTML = '<span>🖨️</span> Imprimer le menu';
+        printBtn.onclick = function(e) {
+          e.preventDefault();
+          printPDF();
+        };
+        buttonGroup.appendChild(printBtn);
+      }
+    }
+    
+    // Ajouter le bouton imprimer après chargement
+    setTimeout(addPrintButton, 1000);
+    
+    // ========== FALLBACK SI LE LIEN INDEX.HTML NE FONCTIONNE PAS ==========
+    // Si l'utilisateur clique sur retour et que le fichier n'existe pas
+    document.querySelectorAll('a[href*="index.html"]').forEach(link => {
+      link.addEventListener('click', function(e) {
+        // Vérifier si le fichier existe
+        fetch(this.href, { method: 'HEAD' })
+          .then(response => {
+            if (!response.ok) {
+              e.preventDefault();
+              alert('La page principale n\'a pas été trouvée. Veuillez contacter l\'administrateur du site.');
+            }
+          })
+          .catch(error => {
+            e.preventDefault();
+            alert('La page principale n\'a pas été trouvée. Veuillez contacter l\'administrateur du site.');
+          });
+      });
+    });
+  </script>
 </body>
 </html>
