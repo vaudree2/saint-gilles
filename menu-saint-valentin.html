@@ -3,69 +3,410 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Menu Réveillon - Le Vaudrée 2</title>
+  <title>Menu Saint-Valentin - Le Vaudrée 2</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { 
-      font-family: 'Arial', sans-serif; 
-      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-      color: white;
+      font-family: 'Georgia', 'Times New Roman', serif; 
+      background: linear-gradient(135deg, #2c0b0e 0%, #1a0a14 100%);
+      color: #fff;
       min-height: 100vh;
       padding: 40px 20px;
+      position: relative;
+      overflow-x: hidden;
     }
+    
+    /* Cœurs flottants */
+    .heart {
+      position: absolute;
+      color: rgba(255, 105, 180, 0.3);
+      font-size: 20px;
+      animation: float 6s ease-in-out infinite;
+      z-index: 0;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+    
     .container {
       max-width: 800px;
       margin: 0 auto;
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
+    
     .logo {
       width: 120px;
       margin-bottom: 20px;
+      filter: drop-shadow(0 0 10px rgba(255, 20, 147, 0.5));
     }
+    
     h1 {
-      color: #d4af37;
-      font-size: 2.5rem;
+      color: #ff6b9d;
+      font-size: 3rem;
       margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+      position: relative;
+      display: inline-block;
     }
+    
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #ff6b9d, transparent);
+    }
+    
     .subtitle {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       margin-bottom: 30px;
       opacity: 0.9;
+      color: #ffd1dc;
+      font-style: italic;
     }
+    
     .pdf-container {
-      background: white;
-      border-radius: 15px;
-      padding: 20px;
-      margin: 30px 0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 40px 0;
+      box-shadow: 
+        0 10px 40px rgba(255, 20, 147, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 107, 157, 0.2);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .pdf-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #ff6b9d, #ff1493, #ff6b9d);
+    }
+    
     .pdf-container iframe {
       width: 100%;
       height: 800px;
       border: none;
       border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
+    
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
+    
     .btn {
-      display: inline-block;
-      background: #d4af37;
-      color: #222;
-      padding: 15px 30px;
-      border-radius: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #ff6b9d, #ff1493);
+      color: white;
+      padding: 15px 35px;
+      border-radius: 50px;
       text-decoration: none;
       font-weight: bold;
-      margin: 10px;
       transition: all 0.3s ease;
-      border: 2px solid #d4af37;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      box-shadow: 0 5px 15px rgba(255, 20, 147, 0.3);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
     }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+      z-index: -1;
+    }
+    
+    .btn:hover::before {
+      left: 100%;
+    }
+    
     .btn:hover {
-      background: transparent;
-      color: #d4af37;
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
     }
+    
     .btn-secondary {
       background: transparent;
-      color: #d4af37;
-      border: 2px solid #d4af37;
+      border: 2px solid #ff6b9d;
+      box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 107, 157, 0.1);
+    }
+    
+    .info {
+      margin-top: 40px;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      border-left: 4px solid #ff6b9d;
+      text-align: left;
+      backdrop-filter: blur(5px);
+    }
+    
+    .info p {
+      margin: 10px 0;
+      font-size: 1.1rem;
+    }
+    
+    .info strong {
+      color: #ff6b9d;
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .info a {
+      color: #ffd1dc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .info a:hover {
+      color: #ff6b9d;
+      text-decoration: underline;
+    }
+    
+    .heart-counter {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #ffd1dc;
+    }
+    
+    .counter {
+      color: #ff6b9d;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+    
+    /* Animation spéciale */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .pdf-container iframe {
+        height: 500px;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
+      .btn-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .btn {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 20px 10px;
+      }
+      .pdf-container {
+        padding: 15px;
+      }
+      .pdf-container iframe {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Cœurs flottants -->
+  <div id="hearts-container"></div>
+  
+  <div class="container">
+    <img src="images/logo_vaudree2.png" alt="Le Vaudrée 2" class="logo">
+    <h1>💝 Menu Saint-Valentin</h1>
+    <p class="subtitle">Un dîner romantique aux chandelles pour célébrer l'amour</p>
+    
+    <div class="heart-counter">
+      <span class="counter" id="heartCount">0</span> cœurs partagés aujourd'hui
+    </div>
+    
+    <div class="pdf-container">
+      <iframe src="menus/menu-saint-valentin.pdf" type="application/pdf">
+        Votre navigateur ne supporte pas l'affichage des PDF. 
+        <a href="menus/menu-saint-valentin.pdf" download>Téléchargez le menu</a>
+      </iframe>
+    </div>
+
+    <div class="btn-container">
+      <a href="menus/menu-saint-valentin.pdf" download class="btn pulse">
+        💖 Télécharger le Menu
+      </a>
+      <a href="tel:+3242231880" class="btn btn-secondary">
+        📞 Réserver maintenant
+      </a>
+      <a href="index.html" class="btn btn-secondary">
+        🏠 Retour au site
+      </a>
+    </div>
+
+    <div class="info">
+      <p><strong>💝 Menu Spécial Saint-Valentin</strong></p>
+      <p>Découvrez notre menu exclusif créé pour célébrer l'amour :</p>
+      <p>• Cocktail d'amour en arrivée</p>
+      <p>• Menu dégustation 5 services</p>
+      <p>• Sélection de vins romantiques</p>
+      <p>• Dessert surprise aux deux cœurs</p>
+      <br>
+      <p><strong>📅 Date :</strong> 14 février 2024</p>
+      <p><strong>🕖 Service :</strong> 19h00 - 23h00</p>
+      <p><strong>💰 Prix :</strong> 85€ par personne (vin inclus)</p>
+      <br>
+      <p><strong>📞 Réservation obligatoire :</strong> <a href="tel:+3242231880">+32 4 223 18 80</a></p>
+      <p><strong>📍 Le Vaudrée 2</strong> - Rue Saint-Gilles 149, 4000 Liège</p>
+      <p><strong>🎁 Offert :</strong> Une rose pour chaque dame et une photo souvenir</p>
+    </div>
+  </div>
+
+  <script>
+    // Création des cœurs flottants
+    function createHearts() {
+      const container = document.getElementById('hearts-container');
+      const hearts = ['💖', '💝', '💕', '💗', '💓', '💞', '💘'];
+      
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+        
+        // Position aléatoire
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.top = Math.random() * 100 + 'vh';
+        
+        // Animation différente pour chaque cœur
+        heart.style.animationDelay = Math.random() * 5 + 's';
+        heart.style.fontSize = (15 + Math.random() * 20) + 'px';
+        heart.style.opacity = 0.2 + Math.random() * 0.3;
+        
+        container.appendChild(heart);
+      }
+    }
+    
+    // Compteur de cœurs (simulation)
+    let heartCount = 0;
+    function updateHeartCounter() {
+      // Simule l'augmentation du compteur
+      heartCount = Math.floor(Math.random() * 50) + 25;
+      document.getElementById('heartCount').textContent = heartCount;
+    }
+    
+    // Effet de clic sur les boutons
+    document.querySelectorAll('.btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        // Créer un effet de particules
+        for(let i = 0; i < 10; i++) {
+          setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.innerHTML = '💖';
+            heart.style.position = 'fixed';
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            heart.style.fontSize = '20px';
+            heart.style.zIndex = '9999';
+            heart.style.pointerEvents = 'none';
+            heart.style.animation = `floatUp 1s ease-out forwards`;
+            
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+              heart.remove();
+            }, 1000);
+          }, i * 100);
+        }
+        
+        // Mettre à jour le compteur si c'est le bouton de téléchargement
+        if(this.href.includes('download')) {
+          heartCount++;
+          document.getElementById('heartCount').textContent = heartCount;
+        }
+      });
+    });
+    
+    // Ajouter l'animation floatUp
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes floatUp {
+        0% {
+          transform: translate(0, 0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(${Math.random() * 100 - 50}px, -100px) scale(0);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Initialiser
+    document.addEventListener('DOMContentLoaded', function() {
+      createHearts();
+      updateHeartCounter();
+      
+      // Changer le compteur toutes les 30 secondes
+      setInterval(updateHeartCounter, 30000);
+      
+      // Message romantique aléatoire
+      const messages = [
+        "L'amour ne compte pas les années, il compte les moments.",
+        "Le plus grand bonheur de la vie est d'aimer et d'être aimé.",
+        "L'amour est la seule chose qui double chaque fois qu'on la partage.",
+        "À deux, même la pluie a un goût de champagne."
+      ];
+      
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+      const messageElement = document.createElement('p');
+      messageElement.className = 'subtitle';
+      messageElement.style.marginTop = '10px';
+      messageElement.style.fontSize = '1.1rem';
+      messageElement.textContent = `"${randomMessage}"`;
+      document.querySelector('.subtitle').insertAdjacentElement('afterend', messageElement);
+    });
+  </script>
+</body>
+</html>      border: 2px solid #d4af37;
     }
     .btn-secondary:hover {
       background: #d4af37;
@@ -117,3 +458,4 @@
 </body>
 
 </html>
+
