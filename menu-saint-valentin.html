@@ -164,6 +164,15 @@
       background: rgba(255, 107, 157, 0.1);
     }
     
+    .btn-call {
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+    
+    .btn-call:hover {
+      box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+    }
+    
     .info {
       margin-top: 40px;
       padding: 25px;
@@ -208,6 +217,49 @@
       font-size: 1.5rem;
     }
     
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background: linear-gradient(135deg, #2c0b0e 0%, #1a0a14 100%);
+      padding: 40px;
+      border-radius: 20px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      border: 2px solid #ff6b9d;
+      box-shadow: 0 0 50px rgba(255, 107, 157, 0.5);
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+    }
+    
     /* Animation spéciale */
     @keyframes pulse {
       0% { transform: scale(1); }
@@ -235,6 +287,9 @@
         width: 100%;
         max-width: 300px;
       }
+      .modal-buttons {
+        flex-direction: column;
+      }
     }
     
     @media (max-width: 480px) {
@@ -254,6 +309,34 @@
   <!-- Cœurs flottants -->
   <div id="hearts-container"></div>
   
+  <!-- Modal de réservation -->
+  <div id="reservationModal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()">×</button>
+      <h2 style="color: #ff6b9d; margin-bottom: 20px;">💝 Réservation Saint-Valentin</h2>
+      <p style="margin-bottom: 20px;">Choisissez votre méthode de réservation :</p>
+      
+      <div class="modal-buttons">
+        <a href="tel:+3242231880" class="btn btn-call" style="text-decoration: none;">
+          📞 Appeler maintenant
+        </a>
+        <a href="mailto:reservation@levaudree2.be?subject=Réservation Saint-Valentin&body=Bonjour, je souhaite réserver pour la Saint-Valentin le 14 février.%0D%0A%0D%0ANombre de personnes: %0D%0AHeure souhaitée: %0D%0ANom: %0D%0ATéléphone:" 
+           class="btn" style="text-decoration: none;">
+          ✉️ Réserver par email
+        </a>
+        <button onclick="closeModal()" class="btn btn-secondary" style="text-decoration: none;">
+          Annuler
+        </button>
+      </div>
+      
+      <div style="margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+        <p><strong>📅 Date :</strong> 14 février 2024 uniquement</p>
+        <p><strong>👫 Capacité limitée :</strong> Réservation obligatoire</p>
+        <p><strong>💳 Acompte :</strong> 25€ par personne à la réservation</p>
+      </div>
+    </div>
+  </div>
+  
   <div class="container">
     <img src="images/logo_vaudree2.png" alt="Le Vaudrée 2" class="logo">
     <h1>💝 Menu Saint-Valentin</h1>
@@ -272,11 +355,11 @@
 
     <div class="btn-container">
       <a href="menus/menu-saint-valentin.pdf" download class="btn pulse">
-        💖 Télécharger le Menu
+        💾 Télécharger le Menu
       </a>
-      <a href="tel:+3242231880" class="btn btn-secondary">
-        📞 Réserver maintenant
-      </a>
+      <button onclick="openReservationModal()" class="btn btn-call">
+        💝 Réserver maintenant
+      </button>
       <a href="index.html" class="btn btn-secondary">
         🏠 Retour au site
       </a>
@@ -285,22 +368,52 @@
     <div class="info">
       <p><strong>💝 Menu Spécial Saint-Valentin</strong></p>
       <p>Découvrez notre menu exclusif créé pour célébrer l'amour :</p>
-      <p>• Des Cocktails d'amour à la carte </p>
+      <p>• Des Cocktails d'amour à la carte</p>
       <p>• Menu dégustation 3 services</p>
-      <p>• Sélection de vins/Bieres romantiques</p>
+      <p>• Sélection de vins/biers romantiques</p>
       <p>• Dessert surprise aux deux cœurs</p>
       <br>
       <p><strong>📅 Date :</strong> 14 février 2024</p>
       <p><strong>🕖 Service :</strong> 19h00 - 23h00</p>
-      <p><strong>💰 Prix :</strong> 55€ par personne </p>
+      <p><strong>💰 Prix :</strong> 55€ par personne (vin inclus)</p>
       <br>
-      <p><strong>📞 Réservation obligatoire :</strong> <a href="tel:+3242231880">+32 4 223 18 80</a></p>
+      <p><strong>📞 Réservation obligatoire :</strong> 
+        <a href="tel:+3242231880" style="color:#ff6b9d; font-weight:bold;">+32 4 223 18 80</a>
+      </p>
+      <p><strong>✉️ Email :</strong> 
+        <a href="mailto:reservation@levaudree2.be" style="color:#ff6b9d;">vaudree2rs@gmail.com</a>
+      </p>
       <p><strong>📍 Le Vaudrée 2</strong> - Rue Saint-Gilles 149, 4000 Liège</p>
       
     </div>
   </div>
 
   <script>
+    // Fonctions pour le modal
+    function openReservationModal() {
+      document.getElementById('reservationModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // Empêche le défilement
+    }
+    
+    function closeModal() {
+      document.getElementById('reservationModal').style.display = 'none';
+      document.body.style.overflow = 'auto'; // Rétablit le défilement
+    }
+    
+    // Fermer le modal en cliquant à l'extérieur
+    document.getElementById('reservationModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+    
+    // Fermer le modal avec la touche Échap
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+    
     // Création des cœurs flottants
     function createHearts() {
       const container = document.getElementById('hearts-container');
@@ -335,31 +448,39 @@
     // Effet de clic sur les boutons
     document.querySelectorAll('.btn').forEach(button => {
       button.addEventListener('click', function(e) {
-        // Créer un effet de particules
-        for(let i = 0; i < 10; i++) {
-          setTimeout(() => {
-            const heart = document.createElement('div');
-            heart.innerHTML = '💖';
-            heart.style.position = 'fixed';
-            heart.style.left = e.clientX + 'px';
-            heart.style.top = e.clientY + 'px';
-            heart.style.fontSize = '20px';
-            heart.style.zIndex = '9999';
-            heart.style.pointerEvents = 'none';
-            heart.style.animation = `floatUp 1s ease-out forwards`;
-            
-            document.body.appendChild(heart);
-            
+        // Effet visuel pour tous les boutons sauf "Retour au site"
+        if (!this.href || !this.href.includes('index.html')) {
+          // Créer un effet de particules
+          for(let i = 0; i < 8; i++) {
             setTimeout(() => {
-              heart.remove();
-            }, 1000);
-          }, i * 100);
+              const heart = document.createElement('div');
+              heart.innerHTML = '💖';
+              heart.style.position = 'fixed';
+              heart.style.left = e.clientX + 'px';
+              heart.style.top = e.clientY + 'px';
+              heart.style.fontSize = '20px';
+              heart.style.zIndex = '9999';
+              heart.style.pointerEvents = 'none';
+              heart.style.animation = `floatUp 1s ease-out forwards`;
+              
+              document.body.appendChild(heart);
+              
+              setTimeout(() => {
+                heart.remove();
+              }, 1000);
+            }, i * 100);
+          }
         }
         
         // Mettre à jour le compteur si c'est le bouton de téléchargement
-        if(this.href.includes('download')) {
+        if(this.href && this.href.includes('download')) {
           heartCount++;
           document.getElementById('heartCount').textContent = heartCount;
+          
+          // Message de confirmation
+          setTimeout(() => {
+            alert('💝 Menu téléchargé ! Merci et bon appétit !');
+          }, 500);
         }
       });
     });
@@ -403,10 +524,28 @@
       messageElement.style.fontSize = '1.1rem';
       messageElement.textContent = `"${randomMessage}"`;
       document.querySelector('.subtitle').insertAdjacentElement('afterend', messageElement);
+      
+      // Vérifier le PDF
+      checkPDF();
     });
+    
+    // Vérification du PDF
+    function checkPDF() {
+      const pdfPath = '../menus/menu-saint-valentin.pdf';
+      const iframe = document.querySelector('.pdf-container iframe');
+      
+      // Test de l'existence du fichier
+      fetch(pdfPath, { method: 'HEAD' })
+        .then(response => {
+          if (!response.ok) {
+            console.warn('⚠️ PDF non trouvé à :', pdfPath);
+            // Optionnel : afficher un message d'erreur
+          }
+        })
+        .catch(error => {
+          console.error('❌ Erreur avec le PDF:', error);
+        });
+    }
   </script>
 </body>
 </html>
-
-
-
