@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Réserver & précommander | Vaudrée 2</title>
+<meta name="description" content="Réservez votre table et préparez votre commande au Vaudrée 2, rue Saint-Gilles à Liège.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#101010">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍺%3C/text%3E%3C/svg%3E">
+<style>
+:root{--gold:#d6b36a;--gold-light:#f1dba5;--black:#101010;--panel:#1b1b1b;--muted:#bcbcbc;--border:#49402d;--err:#ff9b8c;--ok:#6fcf8e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--black);color:#f5f5f5;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5}
+header{text-align:center;padding:30px 16px 24px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#242019,#101010)}
+.brand{font-size:clamp(30px,6vw,46px);font-weight:800;color:var(--gold);letter-spacing:2px}
+header p{margin:5px 0;color:#ddd}
+header a,.back{color:var(--gold-light);text-decoration-color:var(--gold);text-underline-offset:4px}
+.container{width:min(1100px,94%);margin:24px auto 50px}
+.intro,.notice,.form-section,.category{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:18px}
+.category.sugg{border-color:var(--gold);background:#211c11}
+h1,h2{color:var(--gold)}
+h1{font-size:clamp(24px,4vw,34px);margin:0 0 10px}
+h2{font-size:22px;margin:0 0 16px}
+p{margin-top:6px}
+.notice{border-left:4px solid var(--gold)}
+.notice strong{color:var(--gold-light)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}
+label{font-size:14px;color:#e5d6b4}
+input,select,textarea{width:100%;padding:12px;border:1px solid #5b513d;border-radius:7px;background:#101010;color:#fff;font:inherit}
+:is(input,select,textarea,button,a):focus-visible{outline:3px solid var(--gold-light);outline-offset:2px}
+textarea{min-height:95px;resize:vertical}
+.hint{font-size:13px;color:var(--muted);min-height:1.4em;margin:0}
+.hint.bad{color:var(--err)}
+.dish-list{display:grid;grid-template-columns:1fr;gap:10px}
+.dish{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px;border:1px solid #39342a;border-radius:9px;background:#151515}
+.dish.on{border-color:var(--gold);background:#1e1a12}
+.dish-name{font-weight:700}
+.dish-desc{font-size:13px;color:var(--muted);margin-top:4px}
+.dish-price{font-weight:700;color:var(--gold-light);margin-top:5px}
+.qty{display:flex;align-items:center;gap:4px}
+.qty input{width:52px;padding:10px 4px;text-align:center;-moz-appearance:textfield}
+.qty input::-webkit-inner-spin-button{display:none}
+.step{width:40px;height:40px;padding:0;font-size:20px;line-height:1;background:#2a2518;color:var(--gold-light);border:1px solid var(--border)}
+.step:hover{background:var(--gold);color:#17130b}
+.small{font-size:13px;color:var(--muted)}
+.sub{color:var(--gold-light);font-size:16px;margin:16px 0 8px}
+.category-intro{font-size:13px;color:var(--muted);margin:-8px 0 14px}
+.totalbox{position:sticky;bottom:0;background:#111f;border:1px solid var(--gold);border-radius:12px;padding:15px 15px calc(15px + env(safe-area-inset-bottom));margin:20px 0;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.total-label{color:#ddd;font-size:14px}
+.total{font-size:25px;font-weight:800;color:var(--gold-light)}
+button{background:var(--gold);color:#17130b;border:0;border-radius:8px;padding:14px 20px;font-size:16px;font-weight:800;cursor:pointer}
+button:hover{background:var(--gold-light)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.checkline{display:flex;align-items:flex-start;gap:10px;margin:14px 0;color:#ddd;font-size:14px}
+.checkline input{width:auto;margin-top:5px}
+.msg{border-radius:10px;padding:14px 16px;margin:14px 0;border:1px solid}
+.msg.err{border-color:var(--err);color:var(--err);background:#2a1512}
+.msg.ok{border-color:var(--ok);background:#12231a;color:#e6f7ec}
+[hidden]{display:none!important}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+footer{text-align:center;color:var(--muted);padding:25px 12px;border-top:1px solid var(--border)}
+footer a{color:var(--gold-light)}
+@media(min-width:760px){.dish-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.intro,.notice,.form-section,.category{padding:15px}.dish{padding:10px}.total{font-size:22px}.totalbox button{padding:12px;font-size:14px}}
+@media(forced-colors:active){.dish,.totalbox,.msg{border:2px solid CanvasText}}
+@media print{body{background:#fff;color:#000}.totalbox,.step,button{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">VAUDRÉE 2</div>
+  <p>Brasserie · Restaurant · Liège</p>
+  <p>Rue Saint-Gilles 149, 4000 Liège</p>
+  <p><a href="tel:+32422318880">04 223 18 80</a></p>
+</header>
+
+<main class="container">
+  <a class="back" href="index.html">← Retour à l'accueil</a> · <a class="back" href="menu.html">Découvrir notre carte</a>
+
+  <section class="intro">
+    <h1>Réserver & précommander</h1>
+    <p>Choisissez votre date et votre heure, puis les plats que vous souhaitez déguster à table.</p>
+    <p class="small">Les prix affichés sont ceux de la carte. Le total est indicatif et sera vérifié par notre équipe.</p>
+  </section>
+
+  <section class="notice">
+    <strong>Votre demande n'est pas encore confirmée.</strong>
+    <p>Nous devons vérifier la disponibilité de la table et de vos plats. Attendez notre confirmation avant de considérer votre réservation comme acceptée.</p>
+  </section>
+
+  <div class="msg ok" id="success" role="status" tabindex="-1" hidden>
+    <strong>Demande envoyée.</strong>
+    <p>Merci ! Notre équipe vous recontacte pour confirmer. Votre réservation n'est acceptée qu'après cette confirmation.</p>
+    <p class="small" id="recap" style="white-space:pre-line"></p>
+  </div>
+
+  <form id="orderForm" action="https://formspree.io/f/xdkwlewd" method="POST">
+    <input type="hidden" name="_subject" value="Nouvelle demande de réservation et précommande - Vaudrée 2">
+    <input type="hidden" name="Résumé de commande" id="orderSummary">
+    <input type="hidden" name="Total indicatif" id="orderTotal">
+    <input type="hidden" name="Service" id="service">
+    <div class="hp" aria-hidden="true"><label>Ne pas remplir <input name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
+
+    <section class="form-section">
+      <h2>Informations de réservation</h2>
+      <div class="grid">
+        <div class="field">
+          <label for="date">Date souhaitée *</label>
+          <input type="date" id="date" name="Date souhaitée" required>
+        </div>
+        <div class="field">
+          <label for="time">Heure souhaitée *</label>
+          <select id="time" name="Heure souhaitée" required><option value="">Choisissez d'abord une date</option></select>
+        </div>
+      </div>
+      <p class="hint" id="dateHint" aria-live="polite"></p>
+      <div class="grid" style="margin-top:12px">
+        <div class="field">
+          <label for="guests">Nombre de personnes *</label>
+          <select id="guests" name="Nombre de personnes" required><option value="">Choisir</option></select>
+        </div>
+        <div class="field">
+          <label for="name">Nom et prénom *</label>
+          <input id="name" name="Nom et prénom" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="phone">Téléphone *</label>
+          <input type="tel" id="phone" name="Téléphone" autocomplete="tel" inputmode="tel" pattern="[0-9+()./ \-]{8,20}" title="Numéro de téléphone (8 à 20 chiffres)" required>
+        </div>
+        <div class="field">
+          <label for="email">Adresse e-mail (facultatif)</label>
+          <input type="email" id="email" name="email" autocomplete="email">
+        </div>
+      </div>
+    </section>
+
+    <div id="suggSection"></div>
+    <div id="menuSections"></div>
+
+    <section class="form-section">
+      <h2>Allergies et remarques</h2>
+      <div class="field">
+        <label for="allergies">Allergies ou intolérances</label>
+        <textarea id="allergies" name="Allergies ou intolérances" placeholder="Merci de préciser les allergies de chaque personne concernée."></textarea>
+      </div>
+      <div class="field">
+        <label for="notes">Demandes particulières</label>
+        <textarea id="notes" name="Demandes particulières" placeholder="Ex. : accompagnements souhaités (frites, pommes sautées, croquettes ou pâtes), information utile…"></textarea>
+      </div>
+      <label class="checkline">
+        <input type="checkbox" id="consent" required>
+        <span>J'accepte que les informations saisies soient utilisées pour traiter ma demande de réservation et de précommande. *</span>
+      </label>
+      <p class="small">Ne communiquez ici que les informations nécessaires au traitement de votre demande.</p>
+    </section>
+
+    <div class="msg err" id="formError" role="alert" tabindex="-1" hidden></div>
+
+    <div class="totalbox">
+      <div>
+        <div class="total-label" id="countLabel">Total indicatif de la précommande</div>
+        <div class="total" id="totalDisplay">0,00 €</div>
+      </div>
+      <button type="submit" id="submitButton">Envoyer la demande</button>
+    </div>
+    <p class="small">L'envoi de ce formulaire ne constitue pas une confirmation de réservation. Notre équipe vous recontactera.</p>
+  </form>
+  <noscript><p class="msg err">JavaScript est nécessaire pour composer la commande. Appelez-nous au <a href="tel:+32422318880">04 223 18 80</a>.</p></noscript>
+</main>
+
+<footer>
+  <p><strong>Vaudrée 2</strong> · Rue Saint-Gilles 149, 4000 Liège</p>
+  <p><a href="tel:+32422318880">04 223 18 80</a> · <a href="menu.html">Découvrir notre carte</a></p>
+  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 23/10 (23h40)</p>
+</footer>
+
+<script>
+/* ======== horaires.js ======== */
+/* ===== Vaudrée 2 : horaires + outils partagés (source unique) =====
+   0 = dimanche … 6 = samedi. [] = fermé. Fermeture après minuit gérée ("01:00").
+   Modifiez UNIQUEMENT ici : accueil, carte, suggestions et précommande suivent. */
+(function (w) {
+  const CFG = {
+    HORAIRES: {
+      0: [["11:30", "22:00"]],            // À VÉRIFIER : dimanche ouvert ? Mettre [] si fermé
+      1: [],
+      2: [["11:30", "14:30"], ["18:00", "23:00"]],
+      3: [["11:30", "14:30"], ["18:00", "23:00"]],
+      4: [["11:30", "14:30"], ["18:00", "23:00"]],
+      5: [["11:30", "14:30"], ["18:00", "01:00"]],
+      6: [["11:30", "15:00"], ["18:00", "01:00"]]
+    },
+    /* "MM-JJ" = chaque année · "AAAA-MM-JJ" = date précise · [] = fermé */
+    EXCEPTIONS: { "12-25": [], "01-01": [], "12-31": [["18:00", "02:00"]] },
+    TZ: "Europe/Brussels",
+    PHONE: "04 223 18 80",
+    TEL: "+32422318880",
+    MIDI_UNTIL: 16 * 60, // avant 16h00 = service du midi
+    JOURS: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
+  };
+
+  const pad = n => String(n).padStart(2, "0");
+  const toMin = s => { const [h, m] = s.split(":").map(Number); return h * 60 + m; };
+  const hh = m => { m = ((m % 1440) + 1440) % 1440; return pad(Math.floor(m / 60)) + "h" + pad(m % 60); };
+  const euro = v => Number(v).toLocaleString("fr-BE", { style: "currency", currency: "EUR" });
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const shiftDate = (ds, n) => { const [y, m, d] = ds.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10); };
+  const dowOf = ds => new Date(ds + "T12:00:00Z").getUTCDay();
+  const longDate = ds => new Date(ds + "T12:00:00Z").toLocaleDateString("fr-BE", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+
+  function bxl() { // date + minute actuelles à Liège, quel que soit le fuseau du visiteur
+    const p = new Intl.DateTimeFormat("en-CA", { timeZone: CFG.TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+    const g = t => p.find(x => x.type === t).value;
+    const date = g("year") + "-" + g("month") + "-" + g("day");
+    return { date, dow: dowOf(date), min: (Number(g("hour")) % 24) * 60 + Number(g("minute")) };
+  }
+  function servicesFor(ds) {
+    if (ds in CFG.EXCEPTIONS) return CFG.EXCEPTIONS[ds];
+    const y = ds.slice(5);
+    if (y in CFG.EXCEPTIONS) return CFG.EXCEPTIONS[y];
+    return CFG.HORAIRES[dowOf(ds)] || [];
+  }
+  function creneaux(today) { // créneaux absolus en minutes depuis today 00:00 (hier → +8 jours)
+    const out = [];
+    for (let off = -1; off <= 8; off++) {
+      servicesFor(shiftDate(today, off)).forEach(([a, b]) => {
+        const s = toMin(a); let e = toMin(b); if (e <= s) e += 1440;
+        out.push({ start: off * 1440 + s, end: off * 1440 + e });
+      });
+    }
+    return out.sort((x, y) => x.start - y.start);
+  }
+  /* Suggestions valides pour une date (et un service "midi"/"soir" facultatif) */
+  function suggestionsFor(ds, svc) {
+    return (w.SUGGESTIONS || []).map((s, i) => Object.assign({ id: "s-" + i }, s)).filter(s =>
+      (!s.du || ds >= s.du) && (!s.au || ds <= s.au) &&
+      (!svc || !s.service || s.service === "tous" || s.service === svc));
+  }
+
+  /* Regroupe les suggestions en Entrée / Plat / Dessert (type: "entree" | "plat" | "dessert") */
+  const TYPES = [["entree", "Entrées"], ["plat", "Plats"], ["dessert", "Desserts"]];
+  function groupSuggestions(list) {
+    const out = TYPES.map(([k, label]) => ({ key: k, label, items: list.filter(s => s.type === k) }));
+    const autres = list.filter(s => !TYPES.some(([k]) => k === s.type));
+    if (autres.length) out.push({ key: "autre", label: "Suggestions", items: autres });
+    return out.filter(g => g.items.length);
+  }
+
+  w.V = Object.assign(CFG, { pad, toMin, hh, euro, esc, shiftDate, dowOf, longDate, bxl, servicesFor, creneaux, suggestionsFor, groupSuggestions });
+})(window);
+
+</script>
+<script>
+/* ======== menu-data.js ======== */
+/* ===== Carte du Vaudrée 2 (source unique : carte + précommande) =====
+   Format d'un plat : ["Nom", prix, "Description"]  — modifiez un prix ICI uniquement.
+   Un plat à 0 € est caché (utile pour préparer des plats à l'avance). */
+window.MENU = [
+{title:"Menu du midi",midi:true,items:[
+["Croque Monsieur",10,"Gouda / Jambon à l'os / Salade / Crudités / Ketchup"],
+["Croque Madame",11.5,"Gouda / Jambon à l'os / Œuf au plat / Salade / Crudités / Ketchup"]]},
+{title:"À partager & grignoter",items:[
+["Apéro Mixte",13,"Assortiments fritures mixtes"],
+["Planche de Fromages",16,"5 variétés de fromages / Salade / Roquette / Confiture / Fruits secs"],
+["Planche Italienne",16,"Charcuterie italienne / Salade / Roquette / Légumes"],
+["Planche Vaudrée 2",22,"Fromages et charcuterie italienne / Salade / Fruits secs / Confiture"],
+["Planche Signature",26,"4 mini boulettes / 4 mini croquettes / 4 mini loumpia / 4 scampis / 4 calamars / Sauces / Salade"],
+["Frites",6,"Sauces au choix : Mayo / Tartare / Vaudrée 2 / Ketchup / Mayo Truffe / Andalouse"],
+["Arrosticini",15,"6 mini brochettes d'agneau rôties à l'ail / Salade"],
+["Camembert Rôti",15,"Rôti au miel et romarin / Pain grillé / Salade"]]},
+{title:"Entrées froides",items:[
+["Burrata",15,"Burrata crémeuse / Garniture du moment"],
+["Carpaccio Angus Beef",17,"Bœuf Angus / Roquette / Parmesan / Champignons / Balsamique / Tomates cerises"],
+["Carpaccio de Saumon",16.5,"Saumon norvégien / Pickles d'oignons rouges / Concombre / Citron / Pain"]]},
+{title:"Entrées chaudes",items:[
+["Croquettes de Fromage",16,"2 pièces / Salade / Crudités (Maison)"],
+["Croquettes de Crevettes",19,"2 pièces / Salade / Crudités (Maison)"],
+["Duo Croquettes",18,"1 fromage + 1 crevette / Salade / Crudités"],
+["Cuisses de Grenouilles",18,"Crème à l'ail ou beurre d'ail / Persil"],
+["Calamars Frits Maison",17,"Salade / Crudités / Sauce tartare maison"],
+["Scampis Vaudrée 2",17,"Sauce crème tomate / Petits légumes / Ail"]]},
+{title:"Salades",items:[
+["Poulet Croquant",18,"Poulet pané maison / Salade / Crudités / Citron / Tartare"],
+["Frisée aux Lardons",17,"Salade / Crudités / Lardons / Oignons / Crème / Œuf / Croûtons"],
+["Chèvre",18,"Salade / Crudités / Chèvre / Miel / Lardons / Pain toasté"],
+["Signature",19,"Salade / Crudités / Camembert rôti / Oignons confits / Pain croustillant"],
+["Burrata",18,"Salade / Roquette / Aubergines / Courgettes / Poivrons / Tomates cerises / Burrata / Balsamique"],
+["Vaudrée 2",22,"Gambas / Scampis / Calamars frits / Tartare maison / Citron"]]},
+{title:"Pâtes fraîches",items:[
+["Carbonara",18,"Lardons / Œuf / Légèrement crémeux / Grana Padano"],
+["All'Amatriciana",18,"Lardons / Ail / Vin blanc / Tomate / Grana Padano / Basilic"],
+["4 Fromages",18,"4 fromages / Crème / Parmesan Grana Padano"],
+["Méditerranéenne",18,"Aubergines / Poivrons / Courgettes / Ail / Tomate / Basilic / Parmesan"],
+["Cannelloni Florentin",18,"Ricotta / Épinards / Crème tomate / Mozzarella / Parmesan / Gratinée"],
+["Polpetta",18,"Boulette italienne / Ail / Tomate / Basilic / Parmesan"],
+["Scampis du Chef",18,"6 scampis / Ail / Sauce crème tomate du chef"],
+["Gratinés",18,"Jambon à l'os / Crème / Fromage / Parmesan"],
+["Ravioles alla Tartufata",20,"Ricotta et truffe / Crème / Tapenade de truffe / Roquette"]]},
+{title:"Poissons & crustacés",items:[
+["Cassolette Vaudrée 2",24,"7 scampis / Petits légumes / Ail / Sauce crème tomate / Salade"],
+["Darne de Saumon",26,"Saumon rôti / Poêlée de légumes / Sauce béarnaise"],
+["Épée de Gambas",26,"8 pièces / Poêlée de légumes / Flambée au Pastis (supplément +3 €)"],
+["Trio de la Mer",26,"Gambas / Scampis / Calamars frits / Salade / Tartare"]]},
+{title:"Moules (selon saison)",description:"Toutes les moules sont servies avec frites et mayonnaise maison.",items:[
+["Marinière",24,"Moules jumbo / Carottes / Céleri / Oignons"],
+["Crème Ail",25,"Moules jumbo / Carottes / Céleri / Oignons / Crème / Ail"],
+["Vin Blanc",25,"Moules jumbo / Légumes / Vin blanc"],
+["Provençale",26,"Moules jumbo / Légumes / Sauce provençale"],
+["Vaudrée 2",29,"Moules jumbo / Légumes / Crème / Scampis / Curry / Ail"]]},
+{title:"Burgers",description:"Tous les burgers sont servis avec frites.",items:[
+["Chicken",19,"Pain brioché / Poulet pané maison / Cheddar / Tartare / Oignons pickles / Salade"],
+["Effiloché",21,"Porc basse température / Sauce BBQ / Lard / Cheddar / Oignons caramélisés"],
+["Vaudrée 2",21,"Bœuf / Sauce Vaudrée 2 / Cheddar / Bacon / Oignons caramélisés / Œuf"],
+["Signature",22,"Steak de bœuf / Mayo truffe / Mozzarella / Roquette / Parmesan / Oignons"],
+["Végétarien",18,"Burger végétarien / Cheddar / Tartare / Légumes grillés / Oignons caramélisés"]]},
+{title:"Viandes & steaks",description:"Nos pierrades sont servies avec accompagnement, 3 sauces froides maison et salade.",items:[
+["Bavette d'Aloyau 250 g",26,""],["Pavé de Bœuf Irlandais 300 g",29,""],["Cube Roll Irlandais 350 g",37,""],
+["Entrecôte Limousine 350 g",36,""],["Côte à l'Os Irlandaise 600 g (à partager)",54,""]]},
+{title:"Brochettes & épées",items:[
+["Brochette Bœuf d'Aloyau 300 g",27,""],["Brochette Bœuf Irlandais 300 g",33,""],
+["Épée Bœuf d'Aloyau 450 g",30,""],["Épée Bœuf Irlandais 450 g",40,""]]},
+{title:"Les incontournables",items:[
+["Boulet à la Liégeoise — 1 personne",15.5,""],["Boulet à la Liégeoise — 2 personnes",18.5,""],
+["Boulet Tomate — 1 personne",15.5,""],["Boulet Tomate — 2 personnes",18.5,""],
+["Boulet Provençal — 1 personne",15.5,""],["Boulet Provençal — 2 personnes",18.5,""],
+["Carbonnade Flamande",24,"Bière Vaudrée Brune (spécialité)"],["Américain Minute",20,""],["Vol-au-Vent comme Mamy",19,""],
+["Spare Ribs Caramélisés",26,"Cuisson basse température"],["Escalope de Veau Milanaise",24,""],
+["Escalope de Veau Parmigiana",24,"Aubergines / Parmesan / Mozza"],["Jambonneau à la Moutarde",25,""],
+["Jambonneau à la Béarnaise",24,""],["Rognons à la Liégeoise",24,"Lardons / Peket / Crème"],
+["Rognons à la Moutarde",24,""],["Souris d'Agneau",30,"Sauce au miel et romarin"]]},
+{title:"Desserts",description:"Exemples à modifier : changez le nom, le prix ou la description. Un dessert à 0 € est caché.",items:[
+["Tiramisu maison",8,"Mascarpone / Café / Cacao"],
+["Moelleux au chocolat",8.5,"Cœur coulant / Glace vanille"],
+["Crème brûlée",7.5,"Vanille de Madagascar"],
+["Dame blanche",8,"Glace vanille / Sauce chocolat chaud / Chantilly"],
+["Café gourmand",9.5,"Café / Assortiment de 3 mignardises"],
+["Tarte du jour",7.5,"Selon l'inspiration du chef"],
+["Mousse au chocolat",6.5,"Chocolat noir / Chantilly"],
+["Panna cotta",7,"Coulis de fruits rouges"],
+["Profiteroles",8.5,"Choux / Glace vanille / Sauce chocolat chaud"],
+["Gaufre de Liège",7.5,"Chantilly / Sauce chocolat"],
+["Salade de fruits frais",7,"Fruits de saison"],
+["Sorbet citron",7,"2 boules / Zestes de citron"]]},
+{title:"Les petits plus",description:"Suppléments, accompagnements et douceurs pour personnaliser votre plat ou votre dessert. Rien n'est ajouté automatiquement : choisissez uniquement ce que vous souhaitez.",items:[
+["Supplément Burrata — Planche Italienne",3.5,""],["Flambée au Pastis — Épée de Gambas",3,""],
+["Supplément viande double — Burger",14,""],["Pain sans gluten — Burger",1.5,""],
+["Supplément gratin",5,"Accompagnement"],["Supplément légumes — viandes & steaks",4,"Accompagnement"],
+["Supplément sauce chaude",3.5,"Accompagnement"],["Supplément légumes — incontournables",5,"Accompagnement"],
+["Supplément frites — incontournables",3,"Accompagnement"],
+["Boule de glace — vanille",3,""],["Boule de glace — chocolat",3,""],["Boule de glace — fraise",3,""],
+["Supplément chantilly",1.5,""]]}
+];
+
+</script>
+<script>
+/* ======== suggestions-data.js ======== */
+/* ===== Nos suggestions gourmandes (source unique) =====
+   Chaque suggestion a un TYPE : "entree", "plat" ou "dessert", et son PRIX.
+   Le client peut choisir uniquement l'entrée et le dessert, par exemple.
+   Elle apparaît automatiquement entre "du" et "au" (inclus) sur la page Suggestions,
+   dans la carte et dans la précommande. service : "midi", "soir" ou "tous". Dates : AAAA-MM-JJ.
+
+   Modèle à copier-coller :
+   { type: "plat", nom: "Nom du plat", prix: 22, desc: "Description courte", du: "2026-11-02", au: "2026-11-08", service: "tous" },
+*/
+window.SUGGESTIONS = [
+  // EXEMPLES À MODIFIER (valables jusqu'au 31/10, puis ils disparaissent tout seuls)
+  { type: "entree",  nom: "Velouté de potimarron",           prix: 9.5, desc: "Crème, éclats de noisettes",        du: "2026-10-23", au: "2026-10-31", service: "tous" },
+  { type: "plat",    nom: "Joue de porc braisée",            prix: 22,  desc: "Purée maison / Jus réduit",          du: "2026-10-23", au: "2026-10-31", service: "tous" },
+  { type: "dessert", nom: "Tiramisu maison",                 prix: 8,   desc: "Mascarpone / Café / Cacao",          du: "2026-10-23", au: "2026-10-31", service: "tous" }
+];
+
+</script>
+<script>
+/* Réglages propres à cette page (horaires, carte et suggestions viennent des fichiers partagés) */
+const SLOT_STEP=15, LEAD_MIN=60, LAST_BEFORE_CLOSE=60, MAX_DAYS=120, MAX_GUESTS=12, REQUIRE_ORDER=false;
+const { pad, toMin, hh, euro, esc, shiftDate:addDays, longDate, bxl, servicesFor, PHONE, MIDI_UNTIL } = V;
+
+const $=id=>document.getElementById(id);
+
+function slotsFor(ds){
+  const n=bxl(),out=[];
+  servicesFor(ds).forEach(([a,b])=>{
+    const s=toMin(a);let e=toMin(b);if(e<=s)e+=1440;
+    const last=Math.min(e-LAST_BEFORE_CLOSE,1440-SLOT_STEP);
+    for(let t=s;t<=last;t+=SLOT_STEP){ if(ds===n.date&&t<n.min+LEAD_MIN)continue; out.push(t); }
+  });
+  return out;
+}
+function nextAvailable(ds){for(let i=1;i<=21;i++){const d=addDays(ds,i);if(slotsFor(d).length)return d}return null}
+
+/* ---------- Construction des plats ---------- */
+const dish=(n,p,d,id)=>`<div class="dish"><div><div class="dish-name">${esc(n)}</div>${d?`<div class="dish-desc">${esc(d)}</div>`:""}<div class="dish-price">${euro(p)}</div></div>
+<div class="qty"><button type="button" class="step" data-for="${id}" data-d="-1" aria-label="Retirer : ${esc(n)}">−</button>
+<input id="${id}" type="number" min="0" max="99" step="1" value="0" inputmode="numeric" data-name="${esc(n)}" data-price="${p}" aria-label="Quantité : ${esc(n)}">
+<button type="button" class="step" data-for="${id}" data-d="1" aria-label="Ajouter : ${esc(n)}">+</button></div></div>`;
+
+MENU.forEach((s,i)=>{
+  if(!s.items.some(it=>it[1]>0))return;
+  const el=document.createElement("section");
+  el.className="category"; if(s.midi)el.dataset.midi="1";
+  el.innerHTML=`<h2>${esc(s.title)}</h2>${s.description?`<p class="category-intro">${esc(s.description)}</p>`:""}<div class="dish-list">${s.items.map((it,j)=>it[1]>0?dish(it[0],it[1],it[2],`d-${i}-${j}`):"").join("")}</div>`;
+  $("menuSections").appendChild(el);
+});
+for(let g=1;g<=MAX_GUESTS;g++)$("guests").add(new Option(g,g));
+$("guests").add(new Option(`Plus de ${MAX_GUESTS} (à préciser en remarque)`,`Plus de ${MAX_GUESTS}`));
+
+/* ---------- Suggestions : affichées selon la date (et le service) choisis ---------- */
+function renderSuggestions(){
+  const chosen=dateEl.value, ds=chosen||bxl().date, svc=timeEl.value?(toMin(timeEl.value)<MIDI_UNTIL?"midi":"soir"):"";
+  const keep={};
+  document.querySelectorAll("#suggSection [data-price]").forEach(i=>{if(Number(i.value)>0)keep[i.id]=i.value});
+  const box=$("suggSection"), list=V.suggestionsFor(ds,svc);
+  const head=`<h2>✨ Nos suggestions gourmandes</h2>`;
+  if(!list.length){box.innerHTML=`<section class="category sugg">${head}<p class="category-intro">Aucune suggestion prévue ${chosen?"le "+esc(longDate(ds)):"aujourd'hui"}. Retrouvez toute la carte ci-dessous.</p></section>`;return}
+  const note=chosen?`Valables pour le ${esc(longDate(ds))}.`:`Valables aujourd'hui. Choisissez une date pour voir celles d'un autre jour.`;
+  box.innerHTML=`<section class="category sugg">${head}<p class="category-intro">${note} Choisissez ce que vous voulez : une entrée, un plat, un dessert, ou les trois.</p>`+
+    V.groupSuggestions(list).map(g=>`<h3 class="sub">${esc(g.label)}</h3><div class="dish-list">${g.items.map(s=>dish(s.nom,s.prix,s.desc||"",s.id)).join("")}</div>`).join("")+`</section>`;
+  Object.entries(keep).forEach(([id,v])=>{const el=$(id);if(el)el.value=v});
+}
+
+/* ---------- Dates, créneaux, service ---------- */
+const dateEl=$("date"),timeEl=$("time"),hint=$("dateHint");
+function initDates(){const t=bxl().date;dateEl.min=t;dateEl.max=addDays(t,MAX_DAYS)}
+function renderSlots(){
+  const ds=dateEl.value,prev=timeEl.value;
+  hint.className="hint";timeEl.innerHTML="";
+  if(!ds){timeEl.add(new Option("Choisissez d'abord une date",""));hint.textContent="";return}
+  if(ds<dateEl.min||ds>dateEl.max){timeEl.add(new Option("Date indisponible",""));hint.className="hint bad";hint.textContent=`Choisissez une date entre aujourd'hui et ${longDate(dateEl.max)}.`;return}
+  const sv=servicesFor(ds),slots=slotsFor(ds);
+  const hrs=sv.length?"Ouvert : "+sv.map(([a,b])=>`${a.replace(":","h")}–${b.replace(":","h")}`).join(" · "):"";
+  if(!slots.length){
+    timeEl.add(new Option("Aucune heure disponible",""));
+    const nx=nextAvailable(ds);hint.className="hint bad";
+    hint.textContent=(sv.length?"Plus d'heure disponible ce jour-là en ligne. ":"Nous sommes fermés ce jour-là. ")+(nx?`Prochaine date possible : ${longDate(nx)}. `:"")+`Pour toute urgence : ${PHONE}.`;
+    return;
+  }
+  timeEl.add(new Option("Choisir une heure",""));
+  slots.forEach(t=>timeEl.add(new Option(hh(t),`${pad(Math.floor(t/60))}:${pad(t%60)}`)));
+  if([...timeEl.options].some(o=>o.value===prev))timeEl.value=prev;
+  hint.textContent=hrs+" · dernière arrivée "+hh(slots[slots.length-1]);
+}
+function applyService(){
+  const t=timeEl.value,svc=t?(toMin(t)<MIDI_UNTIL?"Midi":"Soir"):"";
+  $("service").value=svc;
+  document.querySelectorAll("[data-midi]").forEach(sec=>{
+    const hide=svc==="Soir";sec.hidden=hide;
+    if(hide)sec.querySelectorAll("[data-price]").forEach(i=>{i.value=0});
+  });
+}
+
+/* ---------- Total ---------- */
+function updateTotal(){
+  let total=0,count=0;
+  document.querySelectorAll("[data-price]").forEach(i=>{
+    let q=Number.parseInt(i.value,10);if(!Number.isFinite(q)||q<0)q=0;if(q>99)q=99;
+    total+=q*Number(i.dataset.price);count+=q;
+    i.closest(".dish").classList.toggle("on",q>0);
+  });
+  $("totalDisplay").textContent=euro(total);
+  $("orderTotal").value=euro(total);
+  $("countLabel").textContent=count?`Précommande · ${count} article${count>1?"s":""}`:"Total indicatif de la précommande";
+  return {total,count};
+}
+
+/* ---------- Brouillon (survit à un rechargement, effacé après envoi) ---------- */
+const KEY="vaudree2-draft",FIELDS=["date","time","guests","name","phone","email","allergies","notes"];
+function save(){try{
+  const d={f:{},q:{}};FIELDS.forEach(i=>d.f[i]=$(i).value);
+  document.querySelectorAll("[data-price]").forEach(i=>{if(Number(i.value)>0)d.q[i.id]=i.value});
+  sessionStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
+function restore(){try{
+  const d=JSON.parse(sessionStorage.getItem(KEY)||"null");if(!d)return;
+  FIELDS.forEach(i=>{if(i!=="time"&&d.f[i])$(i).value=d.f[i]});
+  if(dateEl.value&&dateEl.value<dateEl.min)dateEl.value="";
+  renderSlots();
+  if(d.f.time&&[...timeEl.options].some(o=>o.value===d.f.time))timeEl.value=d.f.time;
+  renderSuggestions();
+  Object.entries(d.q).forEach(([id,v])=>{const el=$(id);if(el)el.value=v});
+}catch(e){}}
+
+/* ---------- Événements ---------- */
+const form=$("orderForm");
+form.addEventListener("click",e=>{
+  const b=e.target.closest(".step");if(!b)return;
+  const i=$(b.dataset.for),v=Math.max(0,Math.min(99,(Number.parseInt(i.value,10)||0)+Number(b.dataset.d)));
+  i.value=v;updateTotal();save();
+});
+form.addEventListener("input",e=>{
+  if(e.target===dateEl){renderSlots();applyService();renderSuggestions();updateTotal()}
+  if(e.target===timeEl){applyService();renderSuggestions();updateTotal()}
+  if(e.target.matches("[data-price]"))updateTotal();
+  save();
+});
+
+function showError(msg){const el=$("formError");el.textContent=msg;el.hidden=false;el.focus();el.scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
+
+form.addEventListener("submit",async e=>{
+  e.preventDefault();$("formError").hidden=true;
+  const chosen=[...document.querySelectorAll("[data-price]")].filter(i=>Number(i.value)>0);
+  if(REQUIRE_ORDER&&!chosen.length)return showError("Veuillez sélectionner au moins un plat ou un supplément.");
+  if($("guests").value===`Plus de ${MAX_GUESTS}`&&!$("notes").value.trim())return showError(`Pour plus de ${MAX_GUESTS} personnes, précisez le nombre exact dans « Demandes particulières ».`);
+  if(!slotsFor(dateEl.value).includes(toMin(timeEl.value)))return showError("Cette heure n'est plus disponible. Choisissez une autre heure.");
+
+  const {total}=updateTotal();
+  const lines=chosen.map(i=>{const q=Number.parseInt(i.value,10);const sug=i.closest(".sugg")?" [SUGGESTION]":"";return `${q} × ${i.dataset.name}${sug} — ${euro(q*Number(i.dataset.price))}`});
+  const summary=chosen.length?lines.join("\n")+"\n\nTOTAL INDICATIF : "+euro(total)+"\n\nCe total est indicatif et doit être vérifié par le restaurant.":"Aucune précommande : réservation de table uniquement.";
+  $("orderSummary").value=summary;
+
+  const btn=$("submitButton");btn.disabled=true;btn.textContent="Envoi en cours…";
+  try{
+    const r=await fetch(form.action,{method:"POST",body:new FormData(form),headers:{Accept:"application/json"}});
+    if(!r.ok)throw new Error(r.status);
+    try{sessionStorage.removeItem(KEY)}catch(_){}
+    $("recap").textContent=`${longDate(dateEl.value)} à ${hh(toMin(timeEl.value))} · ${$("guests").value} pers.\n${summary}`;
+    form.hidden=true;$("success").hidden=false;$("success").focus();window.scrollTo({top:0});
+  }catch(err){
+    showError(`L'envoi a échoué. Vérifiez votre connexion et réessayez, ou appelez-nous au ${PHONE}.`);
+    btn.disabled=false;btn.textContent="Envoyer la demande";
+  }
+});
+
+try{$("year").textContent=new Date().getFullYear()}catch(e){}
+initDates();restore();renderSuggestions();applyService();updateTotal();
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){initDates();renderSlots();applyService();renderSuggestions()}});
+</script>
+</body>
+</html>

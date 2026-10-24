@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>Réservation rapide | Le Vaudrée 2</title>
+  <meta name="description" content="Découvrez les suggestions gourmandes, réservez votre table et précommandez au Vaudrée 2 à Liège.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍺%3C/text%3E%3C/svg%3E">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background:
+        radial-gradient(ellipse at top, #292219 0%, #111111 48%, #080808 100%);
+      color: #f7f3eb;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+    }
+
+    .brand {
+      color: #d8b46a;
+      font-size: clamp(30px, 8vw, 43px);
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin: 0;
+    }
+
+    .subtitle {
+      color: #d8d0c3;
+      font-size: 15px;
+      line-height: 1.6;
+      margin: 10px 0 28px;
+    }
+
+    .separator {
+      width: 70px;
+      height: 2px;
+      background: #b99750;
+      margin: 18px auto 25px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .button {
+      display: block;
+      padding: 19px 16px;
+      border: 1px solid #b99750;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #25211a, #151515);
+      color: #f0d18b;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.4;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .button span {
+      display: block;
+      margin-top: 5px;
+      color: #d2c9bb;
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .button:hover {
+      background: #382d1c;
+      transform: translateY(-2px);
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, #c9a45b, #9f7935);
+      color: #111111;
+    }
+
+    .button.primary span {
+      color: #272014;
+    }
+
+    .button.primary:hover {
+      background: linear-gradient(135deg, #d6b36a, #b08840);
+    }
+
+    a:focus-visible {
+      outline: 3px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    .address {
+      margin-top: 30px;
+      color: #bdb5a8;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .address a {
+      color: #d8b46a;
+      text-decoration: none;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 18px;
+      color: #d8b46a;
+      font-size: 13px;
+      text-decoration: underline;
+    }
+
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 22px;
+      padding: 9px 18px;
+      border: 1px solid #4a3f2b;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      font-size: 14px;
+      color: #f7f3eb;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #777; flex: none; }
+    .status.open .dot { background: #6fcf8e; box-shadow: 0 0 0 4px rgba(111,207,142,.2); }
+    .status.closed .dot { background: #e07a6b; }
+    .status.soon .dot { background: #d8b46a; }
+
+    .hours-toggle {
+      margin-top: 26px;
+      background: none;
+      border: 0;
+      color: #d8b46a;
+      font: 600 14px Arial, Helvetica, sans-serif;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    .hours-toggle:focus-visible { outline: 3px solid #ffffff; outline-offset: 3px; }
+    .hours { display: none; margin: 14px auto 0; max-width: 320px; text-align: left; }
+    .hours.show { display: block; }
+    .hours ul { list-style: none; padding: 0; margin: 0; }
+    .hours li { display: flex; justify-content: space-between; gap: 16px; padding: 7px 10px; border-radius: 6px; color: #bdb5a8; font-size: 14px; }
+    .hours li.today { background: rgba(216,180,106,.15); color: #f7f3eb; font-weight: 700; }
+
+    @media (max-width: 380px) {
+      .button {
+        font-size: 16px;
+        padding: 17px 12px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .button { transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <h1 class="brand">VAUDRÉE 2</h1>
+    <div class="separator"></div>
+
+    <div class="status" id="status" role="status" aria-live="polite"><span class="dot"></span><span id="statusText">Vérification des horaires…</span></div>
+
+    <p class="subtitle">
+      Brasserie · Restaurant · Bières belges<br>
+      Choisissez ce qui vous fait plaisir.
+    </p>
+
+    <nav class="buttons" aria-label="Découvrir et réserver">
+
+      <a class="button" href="suggestions.html">
+        Nos suggestions gourmandes
+        <span>Les suggestions du jour, de la semaine et du mois</span>
+      </a>
+
+      <a class="button primary" href="commande-table-vaudree2.html">
+        Réserver &amp; précommander
+        <span>Réservez votre table et choisissez vos plats à l’avance</span>
+      </a>
+
+      <a class="button" href="menu.html">
+        Découvrir notre carte
+        <span>Consultez notre carte complète</span>
+      </a>
+
+    </nav>
+
+    <button class="hours-toggle" id="hoursToggle" type="button" aria-expanded="false" aria-controls="hours">Voir les horaires</button>
+    <div class="hours" id="hours"><ul id="hoursList"></ul></div>
+
+    <footer class="address">
+      <a href="https://www.google.com/maps/search/?api=1&query=Rue+Saint-Gilles+149+4000+Li%C3%A8ge" target="_blank" rel="noopener">Rue Saint-Gilles 149, 4000 Liège</a><br>
+      <a href="tel:+3242231880">04 223 18 80</a>
+      <br>
+      <a class="back" href="index.html">← Retour au site principal</a>
+    </footer>
+
+  </main>
+
+  <script>
+/* ======== horaires.js ======== */
+/* ===== Vaudrée 2 : horaires + outils partagés (source unique) =====
+   0 = dimanche … 6 = samedi. [] = fermé. Fermeture après minuit gérée ("01:00").
+   Modifiez UNIQUEMENT ici : accueil, carte, suggestions et précommande suivent. */
+(function (w) {
+  const CFG = {
+    HORAIRES: {
+      0: [["11:30", "22:00"]],            // À VÉRIFIER : dimanche ouvert ? Mettre [] si fermé
+      1: [],
+      2: [["11:30", "14:30"], ["18:00", "23:00"]],
+      3: [["11:30", "14:30"], ["18:00", "23:00"]],
+      4: [["11:30", "14:30"], ["18:00", "23:00"]],
+      5: [["11:30", "14:30"], ["18:00", "01:00"]],
+      6: [["11:30", "15:00"], ["18:00", "01:00"]]
+    },
+    /* "MM-JJ" = chaque année · "AAAA-MM-JJ" = date précise · [] = fermé */
+    EXCEPTIONS: { "12-25": [], "01-01": [], "12-31": [["18:00", "02:00"]] },
+    TZ: "Europe/Brussels",
+    PHONE: "04 223 18 80",
+    TEL: "+3242231880",
+    MIDI_UNTIL: 16 * 60, // avant 16h00 = service du midi
+    JOURS: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
+  };
+
+  const pad = n => String(n).padStart(2, "0");
+  const toMin = s => { const [h, m] = s.split(":").map(Number); return h * 60 + m; };
+  const hh = m => { m = ((m % 1440) + 1440) % 1440; return pad(Math.floor(m / 60)) + "h" + pad(m % 60); };
+  const euro = v => Number(v).toLocaleString("fr-BE", { style: "currency", currency: "EUR" });
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const shiftDate = (ds, n) => { const [y, m, d] = ds.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10); };
+  const dowOf = ds => new Date(ds + "T12:00:00Z").getUTCDay();
+  const longDate = ds => new Date(ds + "T12:00:00Z").toLocaleDateString("fr-BE", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+
+  function bxl() { // date + minute actuelles à Liège, quel que soit le fuseau du visiteur
+    const p = new Intl.DateTimeFormat("en-CA", { timeZone: CFG.TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+    const g = t => p.find(x => x.type === t).value;
+    const date = g("year") + "-" + g("month") + "-" + g("day");
+    return { date, dow: dowOf(date), min: (Number(g("hour")) % 24) * 60 + Number(g("minute")) };
+  }
+  function servicesFor(ds) {
+    if (ds in CFG.EXCEPTIONS) return CFG.EXCEPTIONS[ds];
+    const y = ds.slice(5);
+    if (y in CFG.EXCEPTIONS) return CFG.EXCEPTIONS[y];
+    return CFG.HORAIRES[dowOf(ds)] || [];
+  }
+  function creneaux(today) { // créneaux absolus en minutes depuis today 00:00 (hier → +8 jours)
+    const out = [];
+    for (let off = -1; off <= 8; off++) {
+      servicesFor(shiftDate(today, off)).forEach(([a, b]) => {
+        const s = toMin(a); let e = toMin(b); if (e <= s) e += 1440;
+        out.push({ start: off * 1440 + s, end: off * 1440 + e });
+      });
+    }
+    return out.sort((x, y) => x.start - y.start);
+  }
+  /* Suggestions valides pour une date (et un service "midi"/"soir" facultatif) */
+  function suggestionsFor(ds, svc) {
+    return (w.SUGGESTIONS || []).map((s, i) => Object.assign({ id: "s-" + i }, s)).filter(s =>
+      (!s.du || ds >= s.du) && (!s.au || ds <= s.au) &&
+      (!svc || !s.service || s.service === "tous" || s.service === svc));
+  }
+
+  /* Regroupe les suggestions en Entrée / Plat / Dessert (type: "entree" | "plat" | "dessert") */
+  const TYPES = [["entree", "Entrées", "Entrée"], ["plat", "Plats", "Plat"], ["dessert", "Desserts", "Dessert"]];
+  function groupSuggestions(list) {
+    const out = TYPES.map(([k, label, one]) => ({ key: k, label, one, items: list.filter(s => s.type === k) }));
+    const autres = list.filter(s => !TYPES.some(([k]) => k === s.type));
+    if (autres.length) out.push({ key: "autre", label: "Suggestions", one: "Suggestion", items: autres });
+    return out.filter(g => g.items.length);
+  }
+
+  w.V = Object.assign(CFG, { pad, toMin, hh, euro, esc, shiftDate, dowOf, longDate, bxl, servicesFor, creneaux, suggestionsFor, groupSuggestions });
+})(window);
+
+</script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const { hh, bxl, creneaux, JOURS, HORAIRES, EXCEPTIONS } = V;
+
+    function jourRelatif(absMin, dowToday) {
+      const off = Math.floor(absMin / 1440);
+      if (off === 0) return "aujourd’hui";
+      if (off === 1) return "demain";
+      return JOURS[(dowToday + off) % 7].toLowerCase();
+    }
+
+    function majStatut() {
+      const n = bxl(), cr = creneaux(n.date), el = $("status"), txt = $("statusText");
+      const cur = cr.find(c => n.min >= c.start && n.min < c.end);
+      const next = cr.find(c => c.start > n.min);
+      el.className = "status";
+      if (cur) {
+        const reste = cur.end - n.min;
+        if (reste <= 45) { el.classList.add("soon"); txt.textContent = `Ouvert, ferme à ${hh(cur.end)} (dans ${reste} min)`; }
+        else { el.classList.add("open"); txt.textContent = `Ouvert maintenant · jusqu’à ${hh(cur.end)}`; }
+      } else if (next) {
+        const avant = next.start - n.min;
+        if (avant <= 60) { el.classList.add("soon"); txt.textContent = `Ouvre dans ${avant} min (${hh(next.start)})`; }
+        else { el.classList.add("closed"); txt.textContent = `Fermé · ouvre ${jourRelatif(next.start, n.dow)} à ${hh(next.start)}`; }
+      } else { el.classList.add("closed"); txt.textContent = "Fermé actuellement"; }
+
+      const ul = $("hoursList"); ul.innerHTML = "";
+      [1, 2, 3, 4, 5, 6, 0].forEach(d => {
+        const s = HORAIRES[d], li = document.createElement("li");
+        if (d === n.dow) li.className = "today";
+        const a = document.createElement("span"), b = document.createElement("span");
+        a.textContent = JOURS[d];
+        b.textContent = s.length ? s.map(([x, y]) => `${x.replace(":", "h")}–${y.replace(":", "h")}`).join(" · ") : "Fermé";
+        li.append(a, b); ul.appendChild(li);
+      });
+      if (n.date in EXCEPTIONS || n.date.slice(5) in EXCEPTIONS) {
+        const li = document.createElement("li"); li.textContent = "Horaires exceptionnels aujourd’hui"; ul.appendChild(li);
+      }
+    }
+
+    $("hoursToggle").addEventListener("click", e => {
+      const show = $("hours").classList.toggle("show");
+      e.currentTarget.setAttribute("aria-expanded", show);
+      e.currentTarget.textContent = show ? "Masquer les horaires" : "Voir les horaires";
+    });
+
+    function demarrer() {
+      try { majStatut(); } catch (e) { $("statusText").textContent = "Consultez nos horaires"; }
+    }
+    demarrer();
+    setInterval(demarrer, 30000);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) demarrer(); });
+  </script>
+
+  <!-- ===== COMPTEUR DE VISITES (GoatCounter : gratuit, sans cookies) =====
+       1) Créez un compte gratuit sur goatcounter.com et choisissez un code (ex. vaudree2).
+       2) Remplacez VOTRECODE ci-dessous par ce code.
+       Tant que VOTRECODE n'est pas remplacé, rien n'est compté (la page fonctionne normalement). -->
+  <script data-goatcounter="https://VOTRECODE.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
