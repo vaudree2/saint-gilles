@@ -57,7 +57,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .checkline input{width:auto;margin-top:5px}
 .msg{border-radius:10px;padding:14px 16px;margin:14px 0;border:1px solid}
 .msg.err{border-color:var(--err);color:var(--err);background:#2a1512}
-.msg.warn{border-color:var(--gold);background:#211c11;color:var(--gold-light)}
+.msg.warn{border:2px solid #ff8a1f;background:#3a1f06;color:#ffe2c2;font-weight:600;box-shadow:0 0 0 0 rgba(255,138,31,.55);animation:pulseWarn 1.8s ease-in-out 3}
+.msg.warn strong{color:#ffb25e}
+@keyframes pulseWarn{0%,100%{box-shadow:0 0 0 0 rgba(255,138,31,.55)}50%{box-shadow:0 0 0 8px rgba(255,138,31,0)}}
+@media(prefers-reduced-motion:reduce){.msg.warn{animation:none}}
 .msg.ok{border-color:var(--ok);background:#12231a;color:#e6f7ec}
 [hidden]{display:none!important}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
@@ -162,7 +165,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/e
 
     <div class="msg err" id="formError" role="alert" tabindex="-1" hidden></div>
 
-    <div class="msg warn" id="lateNote" role="status" hidden>Votre précommande intervient après <span id="lateCut"></span> : votre repas sera prêt <strong>1 h à 1 h 15</strong> après votre précommande. Pour un service optimal, précommandez avant 11h (midi) ou avant 17h (soir).</div>
+    <div class="msg warn" id="lateNote" role="status" hidden>⚠️ Votre précommande intervient après <span id="lateCut"></span> : votre repas sera prêt <strong>1 h à 1 h 15</strong> après votre précommande. Pour un service optimal, précommandez avant 11h (midi) ou avant 17h (soir).</div>
 
     <div class="totalbox">
       <div>
@@ -190,7 +193,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/e
 (function (w) {
   const CFG = {
     HORAIRES: {
-      0: [["11:30", "22:00"]],            // À VÉRIFIER : dimanche ouvert ? Mettre [] si fermé
+      0: [],                              // Dimanche : fermé
       1: [],
       2: [["11:30", "14:30"], ["18:00", "23:00"]],
       3: [["11:30", "14:30"], ["18:00", "23:00"]],
@@ -382,7 +385,7 @@ window.SUGGESTIONS = [
 <script>
 /* Réglages propres à cette page (horaires, carte et suggestions viennent des fichiers partagés) */
 const CUT_MIDI=11*60, CUT_SOIR=17*60; /* commande du jour idéalement avant 11h (midi) / 17h (soir) ; après : acceptée, prête en 1h à 1h15 */
-const SLOT_STEP=15, LEAD_MIN=60, LAST_BEFORE_CLOSE=60, MAX_DAYS=120, MAX_GUESTS=12, REQUIRE_ORDER=false;
+const SLOT_STEP=15, LEAD_MIN=60, LAST_BEFORE_CLOSE=60, MAX_DAYS=120, MAX_GUESTS=12, REQUIRE_ORDER=true;
 const { pad, toMin, hh, euro, esc, shiftDate:addDays, longDate, bxl, servicesFor, PHONE, MIDI_UNTIL } = V;
 
 const $=id=>document.getElementById(id);
@@ -515,12 +518,15 @@ const RELAY_URL="https://script.google.com/macros/s/AKfycbw8mGpnR7qDwH1EMS0cu55P
 form.addEventListener("submit",async e=>{
   e.preventDefault();$("formError").hidden=true;
   const chosen=[...document.querySelectorAll("[data-price]")].filter(i=>Number(i.value)>0);
-  if(REQUIRE_ORDER&&!chosen.length)return showError("Veuillez sélectionner au moins un plat ou un supplément.");
-  if(!chosen.length&&!confirm("Vous n'avez choisi aucun plat.\n\nOK : envoyer une réservation de table seule (sans commande).\nAnnuler : revenir choisir vos plats."))return $("suggSection").scrollIntoView({behavior:"smooth",block:"start"});
+  if(REQUIRE_ORDER&&!chosen.length){
+    showError("Pour envoyer votre précommande, veuillez choisir au moins un plat ci-dessus.");
+    $("formError").insertAdjacentHTML("beforeend",'<br><span class="small">Pour réserver une table sans commander, utilisez le formulaire « Réservation » de notre <a href="index.html#reservation">site</a>.</span>');
+    $("suggSection").scrollIntoView({behavior:"smooth",block:"start"});
+    return;
+  }
   if($("guests").value===`Plus de ${MAX_GUESTS}`&&!$("notes").value.trim())return showError(`Pour plus de ${MAX_GUESTS} personnes, précisez le nombre exact dans « Demandes particulières ».`);
   if(!slotsFor(dateEl.value).includes(toMin(timeEl.value)))return showError("Cette heure n'est plus disponible. Choisissez une autre heure.");
 
-  if(!chosen.length&&!confirm("Vous n'avez choisi aucun plat.\n\nVoulez-vous envoyer une simple réservation de table, sans précommande ?\n\nOK = envoyer la réservation\nAnnuler = revenir choisir mes plats"))return;
   const {total}=updateTotal();
   const lines=chosen.map(i=>{const q=Number.parseInt(i.value,10);const sug=i.closest(".sugg")?" [SUGGESTION]":"";return `${q} × ${i.dataset.name}${sug} — ${euro(q*Number(i.dataset.price))}`});
   const summary=chosen.length?lines.join("\n")+"\n\nTOTAL INDICATIF : "+euro(total)+"\n\nCe total est indicatif et doit être vérifié par le restaurant.":"Aucune précommande : réservation de table uniquement.";
