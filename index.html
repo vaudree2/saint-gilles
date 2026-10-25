@@ -14,6 +14,21 @@
   <meta property="og:url" content="https://www.levaudree2.be">
   <meta name="twitter:card" content="summary_large_image">
   
+  <!-- Sécurité -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://maps.googleapis.com https://unpkg.com https://cdn.jsdelivr.net https://cdn-icons-png.flaticon.com 'unsafe-inline';
+    style-src 'self' https://fonts.googleapis.com https://unpkg.com 'unsafe-inline';
+    img-src 'self' data: https:;
+    font-src 'self' https://fonts.gstatic.com;
+    connect-src 'self' https://formspree.io https://maps.googleapis.com;
+    frame-src 'none';
+    object-src 'none';
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  
   <title>Le Vaudrée 2 – Brasserie-restaurant à Liège | Saint-Gilles</title>
   
   <!-- Preload & Preconnect -->
@@ -51,7 +66,6 @@
     }
 
     /* ========== CORRECTIONS URGENTES POUR FORMULAIRES ========== */
-    /* FORCER L'ÉCRITURE DANS LES CHAMPS */
     input, textarea, select {
       z-index: 9999 !important;
       position: relative !important;
@@ -72,7 +86,7 @@
 
     /* CORRECTION POUR LA NAVIGATION FIXE */
     body {
-      padding-top: 80px !important;
+      padding-top: 70px !important;
     }
 
     * { 
@@ -162,6 +176,232 @@
       border: 0;
     }
 
+    /* ========== NAVIGATION BURGER HORIZONTALE ========== */
+    /* MASQUER LE MENU DESKTOP PAR DÉFAUT */
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.98);
+      backdrop-filter: blur(15px);
+      padding: 15px 20px;
+      z-index: 999;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-top: 2px solid var(--gold);
+      border-bottom: 2px solid var(--gold);
+    }
+
+    /* QUAND LE MENU EST OUVERT - AFFICHAGE HORIZONTAL */
+    .nav-links.show {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      animation: slideDown 0.3s ease forwards;
+    }
+
+    /* ANIMATION D'OUVERTURE */
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* STYLE DES LIENS DANS LE MENU BURGER */
+    .nav-links a {
+      color: #fff;
+      padding: 10px 18px;
+      font-weight: 600;
+      border-radius: 25px;
+      display: inline-block;
+      transition: all 0.3s ease;
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      font-size: 0.95rem;
+      white-space: nowrap;
+      margin: 3px;
+    }
+
+    .nav-links a:hover {
+      background: var(--gold);
+      color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+      border-color: var(--gold);
+    }
+
+    /* BOUTON BURGER STYLISÉ */
+    .nav-toggle {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      background: var(--gold);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      padding: 0;
+      position: relative;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      margin: 0 auto;
+    }
+
+    .nav-toggle:hover {
+      background: #b8860b;
+      transform: scale(1.05);
+    }
+
+    /* ICONES BURGER ANIMÉES */
+    .burger-icon {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 24px;
+      height: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .burger-line {
+      width: 100%;
+      height: 3px;
+      background: #000;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* ANIMATION QUAND LE MENU EST OUVERT */
+    .nav-toggle.active .burger-line:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .nav-toggle.active .burger-line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-toggle.active .burger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+
+    /* AMÉNITÉS DANS LE MENU BURGER */
+    .amenities-nav {
+      display: flex;
+      gap: 15px;
+      padding: 10px 0;
+      justify-content: center;
+      width: 100%;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: 10px;
+    }
+
+    /* SELECTEUR DE LANGUE DANS LE MENU BURGER */
+    #lang-switch {
+      width: auto;
+      padding: 8px 15px;
+      border-radius: 20px;
+      border: 1px solid var(--gold);
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 10px auto 0;
+      display: block;
+      max-width: 200px;
+    }
+
+    /* NAVIGATION PRINCIPALE - TOUJOURS VISIBLE */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 10px 20px;
+      box-shadow: var(--shadow);
+      transition: all var(--transition);
+      height: 70px;
+    }
+
+    /* LOGO DANS LA NAV */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .nav-logo span {
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+    }
+
+    /* ZONE DES ACTIONS (BURGER + AMÉNITÉS) */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* AMÉNITÉS VISIBLES SUR TOUS LES ÉCRANS */
+    .amenities-nav-main {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .amenity-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* OVERLAY POUR CLIQUER EN DEHORS */
+    .nav-overlay {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 998;
+      display: none;
+      backdrop-filter: blur(3px);
+    }
+
+    .nav-overlay.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
     /* ========== LAYOUT ========== */
     header {
       position: relative;
@@ -178,7 +418,7 @@
     }
     
     header .logo {
-      width: 200px; /* LOGO PLUS GRAND */
+      width: 200px;
       margin-bottom: 20px;
       filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
       transition: transform var(--transition);
@@ -201,56 +441,6 @@
       margin-top: 10px;
       color: #f5f5f5;
       line-height: 1.6;
-    }
-
-    /* ========== NAVIGATION FIXE ========== */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      background: rgba(212, 175, 55, 0.95);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow);
-      gap: 8px;
-      padding: 12px;
-      transition: all var(--transition);
-    }
-
-    nav a {
-      color: #fff;
-      padding: 12px 20px;
-      font-weight: 600;
-      border-radius: 30px;
-      display: inline-block;
-      transition: all var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    nav a::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s;
-    }
-
-    nav a:hover::before {
-      left: 100%;
-    }
-
-    nav a:hover {
-      background: #a52a2a;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     main {
@@ -313,6 +503,16 @@
       box-shadow: var(--shadow);
       transition: transform var(--transition), box-shadow var(--transition);
       border: 1px solid rgba(212, 175, 55, 0.1);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0) rotate(0deg); 
+      }
+      50% { 
+        transform: translateY(-12px) rotate(0.5deg); 
+      }
     }
 
     .feature-card:hover {
@@ -488,6 +688,18 @@
       box-shadow: var(--shadow);
       transition: all var(--transition);
       aspect-ratio: 4/3;
+      animation: scaleIn 0.8s ease-out;
+    }
+
+    @keyframes scaleIn {
+      from { 
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     .gallery-item.video {
@@ -704,6 +916,15 @@
       margin-top: 20px;
       box-shadow: var(--shadow);
       border: 2px solid var(--gold);
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .map-loading {
+      text-align: center;
+      padding: 40px;
     }
 
     /* ========== RECOMPENSES ========== */
@@ -1012,26 +1233,100 @@
       transform: scale(1.1);
     }
 
-    /* ========== MENU MOBILE ========== */
-    .nav-toggle {
-      display: none;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 12px 16px;
-      font-size: 1.5rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: all var(--transition);
+    /* Icônes dorées pour les réseaux sociaux */
+    .icon-gold {
+      filter: invert(54%) sepia(92%) saturate(749%) hue-rotate(1deg) brightness(102%) contrast(101%);
+      transition: transform 0.3s ease, filter 0.3s ease;
     }
 
-    .nav-toggle:hover {
-      background: var(--brand);
-      transform: scale(1.05);
+    .icon-gold:hover {
+      transform: scale(1.2);
+      filter: invert(57%) sepia(96%) saturate(800%) hue-rotate(1deg) brightness(105%) contrast(105%);
     }
 
     /* ========== RESPONSIVE ========== */
-    @media (max-width: 768px) {
+    @media (max-width: 1100px) {
+      /* CACHER LE TEXTE DES AMÉNITÉS SUR PETITS ÉCRANS */
+      .amenity-item span.amenity-text {
+        display: none;
+      }
+      
+      .amenity-item {
+        font-size: 1.2rem;
+      }
+      
+      /* POUR LES GRANDS ÉCRANS - AFFICHER LE MENU CLASSIQUE */
+      .nav-toggle {
+        display: flex;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .nav-links.show {
+        display: flex;
+      }
+    }
+
+    @media (min-width: 1101px) {
+      .nav-toggle {
+        display: none;
+      }
+      
+      .nav-links {
+        display: flex !important;
+        position: static;
+        background: transparent;
+        backdrop-filter: none;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+        animation: none;
+      }
+      
+      .nav-links a {
+        background: transparent;
+        border: 1px solid transparent;
+        padding: 8px 16px;
+        margin: 0;
+      }
+      
+      .nav-links a:hover {
+        background: var(--gold);
+        color: #000;
+      }
+      
+      .amenities-nav {
+        display: none;
+      }
+      
+      #lang-switch {
+        margin: 0 0 0 15px;
+        display: inline-block;
+        width: auto;
+      }
+      
+      .nav-overlay {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .nav-links.show {
+        gap: 8px;
+        padding: 12px 15px;
+      }
+      
+      .nav-links a {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+      }
+      
       header {
         min-height: 50vh;
         padding: 40px 20px;
@@ -1043,35 +1338,6 @@
       
       header p {
         font-size: 1rem;
-      }
-      
-      .nav-toggle {
-        display: block;
-      }
-
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        background: var(--brand);
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        padding: 20px;
-        border-radius: 0 0 var(--radius) var(--radius);
-        z-index: 1000;
-        box-shadow: var(--shadow-lg);
-      }
-
-      .nav-links.show {
-        display: flex;
-      }
-
-      .nav-links a {
-        text-align: center;
-        padding: 15px;
-        margin: 5px 0;
-        border-radius: var(--radius);
       }
 
       section {
@@ -1145,7 +1411,68 @@
       }
     }
 
+    @media (max-width: 768px) {
+      .nav-links.show {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 10px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      
+      .nav-links a {
+        padding: 7px 12px;
+        font-size: 0.85rem;
+        flex: 1;
+        min-width: calc(50% - 12px);
+        text-align: center;
+      }
+      
+      .amenities-nav-main {
+        gap: 10px;
+      }
+      
+      .amenity-item {
+        font-size: 1.1rem;
+      }
+      
+      .nav-toggle {
+        width: 45px;
+        height: 45px;
+      }
+      
+      .burger-icon {
+        width: 20px;
+        height: 16px;
+      }
+    }
+
     @media (max-width: 480px) {
+      .nav-links.show {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      
+      .nav-links a {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        min-width: calc(50% - 10px);
+      }
+      
+      .nav-logo span {
+        font-size: 1.1rem;
+      }
+      
+      .nav-logo img {
+        height: 35px;
+      }
+      
+      .amenities-nav-main {
+        gap: 8px;
+      }
+      
       header h1 {
         font-size: 1.8rem;
       }
@@ -1167,216 +1494,109 @@
       }
     }
 
-    /* Icônes dorées pour les réseaux sociaux */
-    .icon-gold {
-      filter: invert(54%) sepia(92%) saturate(749%) hue-rotate(1deg) brightness(102%) contrast(101%);
-      transition: transform 0.3s ease, filter 0.3s ease;
+    /* EFFET DE FERMETURE */
+    .nav-links.closing {
+      animation: slideUp 0.3s ease forwards;
     }
 
-    .icon-gold:hover {
-      transform: scale(1.2);
-      filter: invert(57%) sepia(96%) saturate(800%) hue-rotate(1deg) brightness(105%) contrast(105%);
+    @keyframes slideUp {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
     }
-   /* ========== AMÉNITÉS NAVIGATION ========== */
-  .amenities-nav {
-    display: flex;
-    gap: 15px;
-    margin-left: auto;
-    padding: 0 20px;
-  }
 
-  @media (max-width: 768px) {
-    .amenities-nav span:not(:first-child) {
-      display: none;
+    /* ========== STYLES POUR LE POPUP SUGGESTION ========== */
+    .suggestion-image {
+      width: 100%;
+      height: 160px;
+      border-radius: 12px 12px 0 0;
+      overflow: hidden;
+      margin-bottom: 20px;
     }
-    
-    .amenities-nav {
-      gap: 10px;
-      padding: 0 10px;
+
+    .suggestion-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-  }
 
-  @media (max-width: 480px) {
-    .amenities-nav {
-      display: none;
+    .suggestion-content {
+      padding: 0 5px;
     }
-  } 
-/* ========== ANIMATIONS MODERNES ========== */
-.feature-card {
-  animation: float 6s ease-in-out infinite;
-}
 
-@keyframes float {
-  0%, 100% { 
-    transform: translateY(0) rotate(0deg); 
-  }
-  50% { 
-    transform: translateY(-12px) rotate(0.5deg); 
-  }
-}
+    #suggestion-popup .card {
+      background: white;
+      border-radius: 20px;
+      max-width: 550px;
+      width: 90%;
+      text-align: center;
+      padding: 25px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      color: #222;
+      animation: fadeIn 0.5s ease forwards;
+      border: 2px solid var(--gold);
+      max-height: 85vh;
+      overflow-y: auto;
+    }
 
-.feature-card:nth-child(1) { animation-delay: 0s; }
-.feature-card:nth-child(2) { animation-delay: 1.5s; }
-.feature-card:nth-child(3) { animation-delay: 3s; }
-.feature-card:nth-child(4) { animation-delay: 4.5s; }
+    /* Effets hover pour les liens des fêtes */
+    .fete-link div:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+      border-color: var(--gold) !important;
+      background: rgba(255, 255, 255, 1) !important;
+    }
 
-.gallery-item {
-  animation: scaleIn 0.8s ease-out;
-}
+    /* Adaptation pour le mode sombre */
+    body.dark #suggestion-popup .card {
+      background: #1a1a1a;
+      color: #f5f5f5;
+    }
 
-@keyframes scaleIn {
-  from { 
-    opacity: 0;
-    transform: scale(0.9) translateY(20px);
-  }
-  to { 
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
+    body.dark #suggestion-popup .suggestion-content {
+      color: #f5f5f5;
+    }
 
-.avis-btn, .contact-form button {
-  position: relative;
-  overflow: hidden;
-}
+    body.dark .hours-banner {
+      background: linear-gradient(135deg, var(--gold), #b8860b) !important;
+      color: #fff !important;
+    }
 
-.avis-btn::after, .contact-form button::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-  transition: left 0.8s;
-}
+    body.dark .fetes-section {
+      background: rgba(212, 175, 55, 0.15) !important;
+    }
 
-.avis-btn:hover::after, .contact-form button:hover::after {
-  left: 100%;
-}
-/* ========== GLASS MORPHISM MODERNE ========== */
-.nav-links {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(15px) saturate(180%);
-  -webkit-backdrop-filter: blur(15px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-}
+    body.dark .fetes-section div div {
+      background: rgba(255,255,255,0.1) !important;
+      color: #f5f5f5 !important;
+    }
 
-/* Amélioration de la navigation principale */
-nav {
-   background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
+    body.dark .fete-link div:hover {
+      background: rgba(255,255,255,0.2) !important;
+    }
 
-/* Effet glass pour le popup */
-#suggestion-popup .card {
-  background: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Adaptation mode sombre */
-body.dark #suggestion-popup .card {
-  background: rgba(26, 26, 26, 0.95) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-body.dark .nav-links {
-  background: rgba(0, 0, 0, 0.2) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* ========== STYLES POUR LE NOUVEAU POPUP ========== */
-.suggestion-image {
-  width: 100%;
-  height: 160px;
-  border-radius: 12px 12px 0 0;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-
-.suggestion-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.suggestion-content {
-  padding: 0 5px;
-}
-
-#suggestion-popup .card {
-  background: white;
-  border-radius: 20px;
-  max-width: 550px;
-  width: 90%;
-  text-align: center;
-  padding: 25px;
-  position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  color: #222;
-  animation: fadeIn 0.5s ease forwards;
-  border: 2px solid var(--gold);
-  max-height: 85vh;
-  overflow-y: auto;
-}
-
-/* Effets hover pour les liens des fêtes */
-.fete-link div:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
-  border-color: var(--gold) !important;
-  background: rgba(255, 255, 255, 1) !important;
-}
-
-/* Adaptation pour le mode sombre */
-body.dark #suggestion-popup .card {
-  background: #1a1a1a;
-  color: #f5f5f5;
-}
-
-body.dark #suggestion-popup .suggestion-content {
-  color: #f5f5f5;
-}
-
-body.dark .hours-banner {
-  background: linear-gradient(135deg, var(--gold), #b8860b) !important;
-  color: #fff !important;
-}
-
-body.dark .fetes-section {
-  background: rgba(212, 175, 55, 0.15) !important;
-}
-
-body.dark .fetes-section div div {
-  background: rgba(255,255,255,0.1) !important;
-  color: #f5f5f5 !important;
-}
-
-body.dark .fete-link div:hover {
-  background: rgba(255,255,255,0.2) !important;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  #suggestion-popup .card {
-    max-width: 90%;
-    padding: 20px 15px;
-  }
-  
-  .fetes-section div[style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
-  }
-}
-</style>
+    /* Responsive popup */
+    @media (max-width: 768px) {
+      #suggestion-popup .card {
+        max-width: 90%;
+        padding: 20px 15px;
+      }
+      
+      .fetes-section div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- ========== HEADER ========== -->
- 
+  
 <!-- ========== HEADER ========== -->
 <header data-aos="fade-down" role="banner">
   <img
@@ -1423,15 +1643,20 @@ body.dark .fete-link div:hover {
   </p>
 </header>
 
-
-  <!-- ========== NAVIGATION FIXE ========== -->
+  <!-- ========== NAVIGATION BURGER HORIZONTALE ========== -->
   <nav data-aos="fade-down" aria-label="Navigation principale">
-    <button class="nav-toggle" aria-label="Menu mobile">☰</button>
-    <div class="nav-links">
-      <a href="menu.html">Menu</a>
+    <!-- LOGO -->
+    <div class="nav-logo">
+      <img src="images/logo_vaudree2.png" alt="Logo Vaudrée 2" height="40">
+      <span>Vaudrée 2</span>
+    </div>
+    
+    <!-- MENU DESKTOP (caché sur mobile) -->
+    <div class="nav-links" id="mainNav">
+      <a href="accueil-qr.html">Menu</a>
+      <a href="#reservation">Réservation</a>
       <a href="#commande">Commande rapide</a>
-      
-      
+      <a href="livraison.html">Livraison/Emporter</a>
       <a href="groupe.html">Groupes</a>
      
 <a href="evenement.html">Événements</a>
@@ -1439,33 +1664,54 @@ body.dark .fete-link div:hover {
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSc-kEHbXZboc2y2OqcDSwUFfnuhkFhrWKdjoYBxpM8kRUB2nA/viewform" target="_blank" rel="noopener noreferrer">Le Club Vaudrée 2</a>
 <a href="#contact">Contact</a>
 
-       <!-- ICÔNES TERRASSE & WiFi À DROITE -->
-    <div class="amenities-nav" style="display: flex; gap: 15px; margin-left: auto; padding: 0 20px;">
-      <div style="display: flex; align-items: center; gap: 5px;">
-        <span style="font-size: 1.1rem;">🌞</span>
-        <span style="color: white; font-size: 0.9rem; font-weight: 600;">Terrasse</span>
+      
+      <!-- AMÉNITÉS DANS LE MENU BURGER -->
+      <div class="amenities-nav">
+        <div class="amenity-item">
+          <span style="font-size: 1.1rem;">🌞</span>
+          <span>Terrasse</span>
+        </div>
+        <div class="amenity-item">
+          <span style="font-size: 1.1rem;">📶</span>
+          <span>WiFi</span>
+        </div>
       </div>
-      <div style="display: flex; align-items: center; gap: 5px;">
-        <span style="font-size: 1.1rem;">📶</span>
-        <span style="color: white; font-size: 0.9rem; font-weight: 600;">WiFi</span>
-      </div>
-    </div>
-      <!-- Sélecteur de langue -->
-      <select id="lang-switch" aria-label="Changer la langue" style="
-        margin-top: 10px;
-        padding: 10px;
-        border-radius: 8px;
-        border: 2px solid #fff;
-        font-weight: 600;
-        background: rgba(255,255,255,0.9);
-        color: #222;
-        cursor: pointer;">
+      
+      <!-- SELECTEUR DE LANGUE -->
+      <select id="lang-switch" aria-label="Changer la langue">
         <option value="fr" selected>🇫🇷 Français</option>
         <option value="en">🇬🇧 English</option>
         <option value="zh">🇨🇳 中文</option>
       </select>
     </div>
+    
+    <!-- PARTIE DROITE : AMÉNITÉS + BURGER -->
+    <div class="nav-actions">
+      <!-- AMÉNITÉS VISIBLES SUR MOBILE ET DESKTOP -->
+      <div class="amenities-nav-main">
+        <div class="amenity-item" title="Terrasse">
+          <span style="font-size: 1.1rem;">🌞</span>
+          <span class="amenity-text">Terrasse</span>
+        </div>
+        <div class="amenity-item" title="WiFi Gratuit">
+          <span style="font-size: 1.1rem;">📶</span>
+          <span class="amenity-text">WiFi</span>
+        </div>
+      </div>
+      
+      <!-- BOUTON BURGER -->
+      <button class="nav-toggle" id="navToggle" aria-label="Ouvrir/fermer le menu" aria-expanded="false">
+        <div class="burger-icon">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </div>
+      </button>
+    </div>
   </nav>
+  
+  <!-- OVERLAY POUR FERMER LE MENU -->
+  <div class="nav-overlay" id="navOverlay"></div>
 
   <main>
     <!-- ========== SECTION HERO ========== -->
@@ -1484,7 +1730,7 @@ body.dark .fete-link div:hover {
       Une brasserie conviviale où se rencontrent cuisine gourmande,
       bières belges et plaisir de partager de bons moments.
       En famille, entre amis ou en groupe, le Vaudrée 2 vous accueille
-      rue Saint-Gilles.
+      Rue Saint-Gilles 149.
     </p>
 
     <div class="features-grid">
@@ -1679,13 +1925,14 @@ body.dark .fete-link div:hover {
         
         <!-- Vidéo 1 - ESPACE RÉSERVÉ -->
         <div class="gallery-item video">
-          <video controls poster="images/video-poster1.jpg">
-            <source src="videos/ambiance-restaurant.mp4" type="video/mp4">
-            Votre navigateur ne supporte pas la lecture de vidéos.
-          </video>
-          <div class="play-icon">▶</div>
-          <div class="gallery-caption">Ambiance du restaurant</div>
-        </div>
+  <video controls playsinline preload="metadata" style="width:100%;height:100%;">
+    <source src="videos/ambiance-restaurant.mp4" type="video/mp4">
+    <source src="videos/ambiance-restaurant.webm" type="video/webm">
+    Votre navigateur ne supporte pas la lecture de vidéos.
+  </video>
+  <div class="play-icon">▶</div>
+  <div class="gallery-caption">Ambiance du restaurant</div>
+</div>
         
         <!-- Photo 3 -->
         <div class="gallery-item">
@@ -1756,7 +2003,25 @@ body.dark .fete-link div:hover {
           <a href="mailto:vaudree2rs@gmail.com" style="font-size:1.1rem;">vaudree2rs@gmail.com</a>
         </p>
       </div>
-      <div id="map" aria-label="Carte Google Maps montrant l'emplacement du restaurant Le Vaudrée 2"></div>
+      <div id="map" class="map-loading" aria-label="Carte Google Maps montrant l'emplacement du restaurant Le Vaudrée 2">
+        <div style="text-align:center; padding:20px;">
+          <div style="font-size:3rem; margin-bottom:15px;">📍</div>
+          <h3 style="color:var(--brand); margin-bottom:10px;">Le Vaudrée 2</h3>
+          <p>Rue Saint-Gilles 149, 4000 Liège</p>
+          <button id="loadMapBtn" style="
+            margin-top:15px;
+            padding:10px 20px;
+            background:var(--brand);
+            color:white;
+            border:none;
+            border-radius:var(--radius);
+            cursor:pointer;
+            font-weight:600;
+          ">
+            Charger la carte
+          </button>
+        </div>
+      </div>
     </section>
 
     <!-- ========== RECOMPENSES ========== -->
@@ -1807,19 +2072,17 @@ body.dark .fete-link div:hover {
     🔇
   </button>
 
-  
   <!-- ========== POPUP SUGGESTION AVEC MENUS FÊTES ========== -->
-
 <div id="suggestion-popup" aria-hidden="true" aria-modal="true" role="dialog">
   <div class="card" role="document">
     <button class="close" id="close-popup" aria-label="Fermer la fenêtre de suggestion">&times;</button>
    
- <!-- PHOTO DE SUGGESTION EN HAUT -->
+    <!-- PHOTO DE SUGGESTION EN HAUT -->
     <div class="suggestion-image">
       <img src="images/suggestion-photo.jpg" alt="Spécialité du Vaudrée 2" loading="lazy">
     </div>
    
- <!-- SUGGESTION DU CHEF MODIFIÉE -->
+    <!-- SUGGESTION DU CHEF MODIFIÉE -->
     <div class="suggestion-content">
       <h2 id="popup-title" style="font-size:1.8rem; margin-bottom:15px; color:var(--gold);">Suggestion du Chef</h2>
       <p id="popup-text" style="font-size:1.1rem; line-height:1.6; margin-bottom:20px; color:var(--fg);">
@@ -1827,7 +2090,7 @@ body.dark .fete-link div:hover {
       </p>
     </div>
 
-    <!-- SECTION MENUS DES FÊTES -->
+    <!-- SECTION MENUS DES FÊTES - LIENS MODIFIÉS -->
     <div class="fetes-section" style="margin: 20px 0; padding: 20px; background: rgba(212, 175, 55, 0.1); border-radius: 12px; border: 2px dashed var(--gold);">
       <h3 style="color: var(--gold); text-align: center; margin-bottom: 20px; font-size: 1.4rem;">
         🎉 Menus des Fêtes
@@ -1835,7 +2098,7 @@ body.dark .fete-link div:hover {
       
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
         <!-- Réveillon -->
-        <a href="menu-reveillon.html" class="fete-link" onclick="fermerPopup()" style="text-decoration: none;">
+        <a href="menus/menu-reveillon.html" class="fete-link" onclick="fermerPopup()" style="text-decoration: none;">
           <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.9); border-radius: 10px; transition: all 0.3s ease; border: 2px solid transparent;">
             <div style="font-size: 2rem; margin-bottom: 8px;">🌟</div>
             <div style="font-weight: 600; font-size: 0.95rem; color: #222;">Réveillon</div>
@@ -1844,7 +2107,7 @@ body.dark .fete-link div:hover {
         </a>
         
         <!-- Nouvel An -->
-        <a href="menu-nouvel-an.html" class="fete-link" onclick="fermerPopup()" style="text-decoration: none;">
+        <a href="menus/menu-nouvel-an.html" class="fete-link" onclick="fermerPopup()" style="text-decoration: none;">
           <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.9); border-radius: 10px; transition: all 0.3s ease; border: 2px solid transparent;">
             <div style="font-size: 2rem; margin-bottom: 8px;">🎇</div>
             <div style="font-weight: 600; font-size: 0.95rem; color: #222;">Nouvel An</div>
@@ -1853,7 +2116,7 @@ body.dark .fete-link div:hover {
         </a>
         
         <!-- Saint-Valentin -->
-        <a href="menu-saint-valentin.html" class="fete-link" onclick="fermerPopup()" style="text-decoration: none;">
+        <a href="menus/menu-saint-valentin.html" class="fete-link" onclick="fermerPopup()" style="text-decoration: none;">
           <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.9); border-radius: 10px; transition: all 0.3s ease; border: 2px solid transparent;">
             <div style="font-size: 2rem; margin-bottom: 8px;">💝</div>
             <div style="font-weight: 600; font-size: 0.95rem; color: #222;">St-Valentin</div>
@@ -2037,58 +2300,116 @@ body.dark .fete-link div:hover {
     });
 
     function initApp() {
-      // ========== GESTION DU THÈME ==========
+      // ========== GESTION DU MENU BURGER HORIZONTAL ==========
+      const navToggle = document.getElementById('navToggle');
+      const mainNav = document.getElementById('mainNav');
+      const navOverlay = document.getElementById('navOverlay');
       const body = document.body;
-      const btn = document.getElementById('themeToggle');
-      const icon = document.getElementById('themeIcon');
+      
+      function toggleMenu() {
+        const isOpening = !mainNav.classList.contains('show');
+        
+        if (isOpening) {
+          // Ouvrir le menu
+          mainNav.classList.remove('closing');
+          mainNav.classList.add('show');
+          navToggle.classList.add('active');
+          navOverlay.classList.add('show');
+          navToggle.setAttribute('aria-expanded', 'true');
+          body.style.overflow = 'hidden';
+        } else {
+          // Fermer le menu
+          mainNav.classList.add('closing');
+          navToggle.classList.remove('active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          body.style.overflow = '';
+          
+          setTimeout(() => {
+            mainNav.classList.remove('show', 'closing');
+            navOverlay.classList.remove('show');
+          }, 300);
+        }
+      }
+      
+      if (navToggle) {
+        navToggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          toggleMenu();
+        });
+      }
+      
+      if (navOverlay) {
+        navOverlay.addEventListener('click', function() {
+          if (mainNav.classList.contains('show')) {
+            toggleMenu();
+          }
+        });
+      }
+      
+      if (mainNav) {
+        mainNav.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', function() {
+            if (window.innerWidth < 1101) {
+              toggleMenu();
+            }
+          });
+        });
+      }
+      
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mainNav && mainNav.classList.contains('show')) {
+          toggleMenu();
+        }
+      });
+      
+      function handleResize() {
+        if (window.innerWidth >= 1101) {
+          if (mainNav) mainNav.classList.remove('show', 'closing');
+          if (navToggle) navToggle.classList.remove('active');
+          if (navOverlay) navOverlay.classList.remove('show');
+          if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
+          body.style.overflow = '';
+          if (navToggle) navToggle.style.display = 'none';
+        } else {
+          if (navToggle) navToggle.style.display = 'flex';
+        }
+      }
+      
+      window.addEventListener('resize', handleResize);
+      handleResize();
+      
+      // ========== GESTION DU THÈME ==========
+      const themeBtn = document.getElementById('themeToggle');
+      const themeIcon = document.getElementById('themeIcon');
+      const themeToggleBtn = document.getElementById('themeToggleBtn');
       const storageKey = 'vaudree_theme';
 
-      // Images pour les icônes de thème
       const sunIcon = "https://cdn-icons-png.flaticon.com/512/1164/1164954.png";
       const moonIcon = "https://cdn-icons-png.flaticon.com/512/1163/1163661.png";
 
-      // Charger le thème depuis le stockage local
       const saved = localStorage.getItem(storageKey);
       if(saved === 'dark') {
         body.classList.add('dark');
-        icon.src = moonIcon;
+        themeIcon.src = moonIcon;
       } else {
         body.classList.remove('dark');
-        icon.src = sunIcon;
+        themeIcon.src = sunIcon;
       }
 
       function toggleTheme() {
         body.classList.toggle('dark');
         const isDark = body.classList.contains('dark');
         localStorage.setItem(storageKey, isDark ? 'dark' : 'light');
-        icon.src = isDark ? moonIcon : sunIcon;
-        btn.setAttribute('aria-pressed', isDark);
+        themeIcon.src = isDark ? moonIcon : sunIcon;
+        themeBtn.setAttribute('aria-pressed', isDark);
       }
 
-      btn.addEventListener('click', toggleTheme);
+      if (themeBtn) {
+        themeBtn.addEventListener('click', toggleTheme);
+      }
       
-      // Bouton thème dans les actions flottantes
-      const themeToggleBtn = document.getElementById('themeToggleBtn');
       if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', toggleTheme);
-      }
-
-      // ========== MENU MOBILE ==========
-      const toggle = document.querySelector('.nav-toggle');
-      const links = document.querySelector('.nav-links');
-      if (toggle && links) {
-        toggle.addEventListener('click', () => {
-          links.classList.toggle('show');
-          toggle.setAttribute('aria-expanded', links.classList.contains('show'));
-        });
-        
-        // Fermer le menu en cliquant à l'extérieur
-        document.addEventListener('click', (e) => {
-          if (!nav.contains(e.target)) {
-            links.classList.remove('show');
-            toggle.setAttribute('aria-expanded', 'false');
-          }
-        });
       }
 
       // ========== LAZY LOADING DES IMAGES ==========
@@ -2118,7 +2439,8 @@ body.dark .fete-link div:hover {
 
       sections.forEach(section => sectionObserver.observe(section));
 
-      // ========== GESTION DES FORMULAIRES CORRIGÉE ==========
+      // ========== GESTION DES FORMULAIRES ==========
+      const RELAY_URL = 'https://script.google.com/macros/s/AKfycbw8mGpnR7qDwH1EMS0cu55PgvND1uCI0oloIESXx_wdVilcsllMcbJsJZzB6jgoM52BHg/exec';
       function attachFormUX(formId, messageElId, sendingText, successText) {
         const form = document.getElementById(formId);
         const messageEl = document.getElementById(messageElId);
@@ -2131,17 +2453,14 @@ body.dark .fete-link div:hover {
             return;
           }
           
-          // Afficher message d'envoi
           messageEl.style.display = 'block';
           messageEl.style.background = '#eef';
           messageEl.style.color = '#024';
           messageEl.textContent = sendingText || 'Envoi en cours...';
           
-          // Préparer les données
           const formData = new FormData(form);
           
           try {
-            // Envoyer avec Fetch API
             const response = await fetch(form.action, {
               method: 'POST',
               body: formData,
@@ -2151,33 +2470,27 @@ body.dark .fete-link div:hover {
             });
             
             if (response.ok) {
-              // Succès
+              // Copie vers le relais Google (notification GSM). Ne bloque jamais le client.
+              try { if (RELAY_URL) fetch(RELAY_URL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(formData) }).catch(function(){}); } catch (_) {}
               messageEl.style.background = '#e6ffed';
               messageEl.style.color = '#064';
               messageEl.textContent = successText || 'Merci ! Votre formulaire a été envoyé avec succès.';
               
-              // Réinitialiser le formulaire
               setTimeout(() => {
                 form.reset();
               }, 1000);
               
-              // Cacher le message après 5 secondes
               setTimeout(() => {
                 messageEl.style.display = 'none';
               }, 5000);
             } else {
-              // Erreur
               throw new Error('Erreur lors de l\'envoi');
             }
           } catch (error) {
-            // Erreur réseau ou autre
             messageEl.style.background = '#ffe6e6';
             messageEl.style.color = '#d00';
             messageEl.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer ou nous appeler au 04 223 18 80.';
           }
-          
-          // NE PAS BLOQUER L'ENVOI NATIF DU FORMULAIRE
-          // Laisser Formspree gérer l'envoi normalement
         });
       }
 
@@ -2197,7 +2510,6 @@ body.dark .fete-link div:hover {
         return isValid;
       }
 
-      // Attacher les formulaires
       attachFormUX('reservationForm', 'reservationMessage', 
         'Envoi de la réservation...', 
         '✅ Réservation envoyée ! Nous vous contacterons pour confirmation.');
@@ -2220,7 +2532,6 @@ body.dark .fete-link div:hover {
       const text = document.getElementById('popup-text');
       const shownKey = 'vaudree_popup_shown';
 
-      // Suggestions variées
       const suggestions = [
         { 
           title: "Suggestion du Chef", 
@@ -2240,7 +2551,6 @@ body.dark .fete-link div:hover {
       title.innerHTML = s.title;
       text.innerHTML = s.text;
 
-      // Affiche le popup si pas déjà montré dans la session
       if (!sessionStorage.getItem(shownKey)) {
         setTimeout(() => {
           popup.style.display = 'flex';
@@ -2249,7 +2559,6 @@ body.dark .fete-link div:hover {
         }, 3000);
       }
 
-      // Fermer le popup
       closeBtn.addEventListener('click', () => {
         popup.style.display = 'none';
         popup.setAttribute('aria-hidden', 'true');
@@ -2262,7 +2571,6 @@ body.dark .fete-link div:hover {
         }
       });
 
-      // ========== FONCTION POUR FERMER LE POPUP ==========
       function fermerPopup() {
         const popup = document.getElementById('suggestion-popup');
         popup.style.display = 'none';
@@ -2276,7 +2584,6 @@ body.dark .fete-link div:hover {
       if (musique && sonBtn) {
         musique.volume = 0.3;
 
-        // Permet d'activer le son après un premier clic sur la page
         document.addEventListener('click', () => {
           if (musique.muted) {
             musique.muted = false;
@@ -2285,7 +2592,6 @@ body.dark .fete-link div:hover {
           }
         }, { once: true });
 
-        // Bouton pour activer / couper le son
         sonBtn.addEventListener('click', () => {
           musique.muted = !musique.muted;
           sonBtn.textContent = musique.muted ? '🔇' : '🔊';
@@ -2321,7 +2627,6 @@ body.dark .fete-link div:hover {
             localStorage.setItem('promo_shown', 'true');
           });
           
-          // Fermer automatiquement après 8 secondes
           setTimeout(() => {
             if (notification.parentNode) {
               notification.remove();
@@ -2331,89 +2636,56 @@ body.dark .fete-link div:hover {
         }
       }
       
-      // Afficher la notification après 2 secondes
       setTimeout(showPromoNotification, 2000);
 
-      // ========== CARTE GOOGLE MAPS ==========
-      window.initMap = function() {
-        const location = { lat: 50.63827, lng: 5.56365 };
+      // ========== CARTE GOOGLE MAPS SÉCURISÉE ==========
+      const loadMapBtn = document.getElementById('loadMapBtn');
+      if (loadMapBtn) {
+        loadMapBtn.addEventListener('click', function() {
+          loadSecureGoogleMap();
+          this.style.display = 'none';
+        });
+      }
+
+      function loadSecureGoogleMap() {
+        // ICI: Charger la clé depuis votre serveur (méthode sécurisée)
+        // Pour l'instant, on utilise un fallback
         const mapEl = document.getElementById('map');
-        if (!mapEl || !window.google) return;
-
-        const map = new google.maps.Map(mapEl, {
-          zoom: 16,
-          center: location,
-          styles: [
-            {
-              "featureType": "poi",
-              "stylers": [{ "visibility": "off" }]
-            }
-          ]
-        });
-
-        // Créer un marqueur personnalisé
-        const marker = new google.maps.Marker({
-          position: location,
-          map: map,
-          title: 'Le Vaudrée 2 - Saint-Gilles',
-          icon: {
-            url: 'data:image/svg+xml;base64,' + btoa(`
-              <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="20" cy="20" r="18" fill="#d4af37" stroke="#b22222" stroke-width="2"/>
-                <text x="20" y="26" text-anchor="middle" fill="white" font-family="Arial" font-size="14">V2</text>
-              </svg>
-            `)
-          }
-        });
-
-        // Info window
-        const infoWindow = new google.maps.InfoWindow({
-          content: `
-            <div style="padding:10px;max-width:200px;">
-              <h3 style="margin:0 0 8px 0;color:#d4af37;">Le Vaudrée 2</h3>
-              <p style="margin:0 0 10px 0;">Rue Saint-Gilles 149<br>4000 Liège</p>
-              <a href="https://maps.google.com/maps?q=Le+Vaudrée+2+Liège" target="_blank" 
-                 style="background:#d4af37;color:white;padding:5px 10px;text-decoration:none;border-radius:4px;font-size:12px;">
-                Itinéraire
-              </a>
-            </div>
-          `
-        });
-
-        marker.addListener('click', () => {
-          infoWindow.open(map, marker);
-        });
-      };
+        mapEl.innerHTML = `
+          <div style="padding:40px;text-align:center;color:var(--muted);">
+            <h3 style="color:var(--brand);margin-bottom:15px;">Le Vaudrée 2</h3>
+            <p>Rue Saint-Gilles 149, 4000 Liège</p>
+            <a href="https://maps.google.com/maps?q=Rue+Saint-Gilles+149+Liège" target="_blank" rel="noopener noreferrer"
+               style="display:inline-block;margin-top:15px;padding:10px 20px;background:var(--brand);color:white;text-decoration:none;border-radius:var(--radius);">
+              Voir sur Google Maps
+            </a>
+          </div>
+        `;
+      }
 
       // Fallback si la carte ne charge pas
       setTimeout(() => {
         const mapEl = document.getElementById('map');
-        if (mapEl && mapEl.children.length === 0) {
-          mapEl.innerHTML = `
-            <div style="padding:40px;text-align:center;color:var(--muted);background:#f5f5f5;border-radius:var(--radius);">
-              <h3 style="color:var(--brand);margin-bottom:15px;">Le Vaudrée 2</h3>
-              <p>Rue Saint-Gilles 149, 4000 Liège</p>
-              <a href="https://maps.google.com/maps?q=Rue+Saint-Gilles+149+Liège" target="_blank" 
-                 style="display:inline-block;margin-top:15px;padding:10px 20px;background:var(--brand);color:white;text-decoration:none;border-radius:var(--radius);">
-                Voir sur Google Maps
-              </a>
-            </div>
-          `;
+        if (mapEl && mapEl.querySelector('#loadMapBtn')) {
+          // La carte n'a pas encore été chargée
         }
       }, 5000);
     }
   </script>
 
-  <!-- Google Maps API -->
-  <script async defer 
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQGdZIvj6_mcZ8m1sCZaWjQZHsV4R0lCU&callback=initMap">
-  </script>
+  <!-- IMPORTANT: Retirer la clé API Google Maps de ce fichier -->
+  <!-- Déplacer la dans un fichier sécurisé sur votre serveur -->
+  <!-- <script async defer 
+    src="https://maps.googleapis.com/maps/api/js?key=VOTRE_CLE_ICI&callback=initMap">
+  </script> -->
 
   <noscript>
     <style>
       .gallery img { opacity: 1; transform: none; }
       header { background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.45)), url('images/fond_header.jpg') center/cover no-repeat; }
       section { opacity: 1; transform: none; }
+      .nav-toggle { display: none; }
+      .nav-links { display: flex !important; }
     </style>
     <div style="padding:15px;text-align:center;background:#fff3cd;color:#856404;position:fixed;top:0;left:0;right:0;z-index:9999;">
       JavaScript désactivé — certaines fonctionnalités (animations, carte interactive) sont limitées.
@@ -2421,6 +2693,3 @@ body.dark .fete-link div:hover {
   </noscript>
 </body>
 </html>
-
-
-
