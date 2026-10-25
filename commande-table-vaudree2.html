@@ -175,7 +175,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/e
 <footer>
   <p><strong>Vaudrée 2</strong> · Rue Saint-Gilles 149, 4000 Liège</p>
   <p><a href="tel:+3242231880">04 223 18 80</a> · <a href="menu.html">Découvrir notre carte</a></p>
-  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 25/10 (12h30)</p>
+  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 25/10 (13h40)</p>
 </footer>
 
 <script>
@@ -504,9 +504,11 @@ form.addEventListener("submit",async e=>{
   e.preventDefault();$("formError").hidden=true;
   const chosen=[...document.querySelectorAll("[data-price]")].filter(i=>Number(i.value)>0);
   if(REQUIRE_ORDER&&!chosen.length)return showError("Veuillez sélectionner au moins un plat ou un supplément.");
+  if(!chosen.length&&!confirm("Vous n'avez choisi aucun plat.\n\nOK : envoyer une réservation de table seule (sans commande).\nAnnuler : revenir choisir vos plats."))return $("suggSection").scrollIntoView({behavior:"smooth",block:"start"});
   if($("guests").value===`Plus de ${MAX_GUESTS}`&&!$("notes").value.trim())return showError(`Pour plus de ${MAX_GUESTS} personnes, précisez le nombre exact dans « Demandes particulières ».`);
   if(!slotsFor(dateEl.value).includes(toMin(timeEl.value)))return showError("Cette heure n'est plus disponible. Choisissez une autre heure.");
 
+  if(!chosen.length&&!confirm("Vous n'avez choisi aucun plat.\n\nVoulez-vous envoyer une simple réservation de table, sans précommande ?\n\nOK = envoyer la réservation\nAnnuler = revenir choisir mes plats"))return;
   const {total}=updateTotal();
   const lines=chosen.map(i=>{const q=Number.parseInt(i.value,10);const sug=i.closest(".sugg")?" [SUGGESTION]":"";return `${q} × ${i.dataset.name}${sug} — ${euro(q*Number(i.dataset.price))}`});
   const summary=chosen.length?lines.join("\n")+"\n\nTOTAL INDICATIF : "+euro(total)+"\n\nCe total est indicatif et doit être vérifié par le restaurant.":"Aucune précommande : réservation de table uniquement.";
