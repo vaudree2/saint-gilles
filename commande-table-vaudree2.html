@@ -182,7 +182,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/e
 <footer>
   <p><strong>Vaudrée 2</strong> · Rue Saint-Gilles 149, 4000 Liège</p>
   <p><a href="tel:+3242231880">04 223 18 80</a> · <a href="menu.html">Découvrir notre carte</a></p>
-  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 25/10 (13h40)</p>
+  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 25/10 (20h10)</p>
 </footer>
 
 <script>
@@ -297,7 +297,7 @@ window.MENU = [
 ["Signature",19,"Salade / Crudités / Camembert rôti / Oignons confits / Pain croustillant"],
 ["Burrata",18,"Salade / Roquette / Aubergines / Courgettes / Poivrons / Tomates cerises / Burrata / Balsamique"],
 ["Vaudrée 2",22,"Gambas / Scampis / Calamars frits / Tartare maison / Citron"]]},
-{title:"Pâtes fraîches",items:[
+{title:"Pâtes fraîches",photo:"images/ravioles.jpg",alt:"Ravioles à la truffe",items:[
 ["Carbonara",18,"Lardons / Œuf / Légèrement crémeux / Grana Padano"],
 ["All'Amatriciana",18,"Lardons / Ail / Vin blanc / Tomate / Grana Padano / Basilic"],
 ["4 Fromages",18,"4 fromages / Crème / Parmesan Grana Padano"],
@@ -307,7 +307,7 @@ window.MENU = [
 ["Scampis du Chef",18,"6 scampis / Ail / Sauce crème tomate du chef"],
 ["Gratinés",18,"Jambon à l'os / Crème / Fromage / Parmesan"],
 ["Ravioles alla Tartufata",20,"Ricotta et truffe / Crème / Tapenade de truffe / Roquette"]]},
-{title:"Poissons & crustacés",items:[
+{title:"Poissons & crustacés",photo:"images/saumon.jpg",alt:"Darne de saumon",items:[
 ["Cassolette Vaudrée 2",24,"7 scampis / Petits légumes / Ail / Sauce crème tomate / Salade"],
 ["Darne de Saumon",26,"Saumon rôti / Poêlée de légumes / Sauce béarnaise"],
 ["Épée de Gambas",26,"8 pièces / Poêlée de légumes / Flambée au Pastis (supplément +3 €)"],
@@ -324,7 +324,7 @@ window.MENU = [
 ["Vaudrée 2",21,"Bœuf / Sauce Vaudrée 2 / Cheddar / Bacon / Oignons caramélisés / Œuf"],
 ["Signature",22,"Steak de bœuf / Mayo truffe / Mozzarella / Roquette / Parmesan / Oignons"],
 ["Végétarien",18,"Burger végétarien / Cheddar / Tartare / Légumes grillés / Oignons caramélisés"]]},
-{title:"Viandes & steaks",description:"Nos pierrades sont servies avec accompagnement, 3 sauces froides maison et salade.",items:[
+{title:"Viandes & steaks",photo:"images/entrecote-frites.jpg",alt:"Entrecôte et frites",description:"Nos pierrades sont servies avec accompagnement, 3 sauces froides maison et salade.",items:[
 ["Bavette d'Aloyau 250 g",26,""],["Pavé de Bœuf Irlandais 300 g",29,""],["Cube Roll Irlandais 350 g",37,""],
 ["Entrecôte Limousine 350 g",36,""],["Côte à l'Os Irlandaise 600 g (à partager)",54,""]]},
 {title:"Brochettes & épées",items:[
@@ -338,20 +338,21 @@ window.MENU = [
 ["Spare Ribs Caramélisés",26,"Cuisson basse température"],["Escalope de Veau Milanaise",24,""],
 ["Escalope de Veau Parmigiana",24,"Aubergines / Parmesan / Mozza"],["Jambonneau à la Moutarde",25,""],
 ["Jambonneau à la Béarnaise",24,""],["Rognons à la Liégeoise",24,"Lardons / Peket / Crème"],
-["Rognons à la Moutarde",24,""],["Souris d'Agneau",30,"Sauce au miel et romarin"]]},
-{title:"Desserts",description:"Exemples à modifier : changez le nom, le prix ou la description. Un dessert à 0 € est caché.",items:[
-["Tiramisu maison",8,"Mascarpone / Café / Cacao"],
-["Moelleux au chocolat",8.5,"Cœur coulant / Glace vanille"],
-["Crème brûlée",7.5,"Vanille de Madagascar"],
-["Dame blanche",8,"Glace vanille / Sauce chocolat chaud / Chantilly"],
-["Café gourmand",9.5,"Café / Assortiment de 3 mignardises"],
-["Tarte du jour",7.5,"Selon l'inspiration du chef"],
-["Mousse au chocolat",6.5,"Chocolat noir / Chantilly"],
-["Panna cotta",7,"Coulis de fruits rouges"],
-["Profiteroles",8.5,"Choux / Glace vanille / Sauce chocolat chaud"],
-["Gaufre de Liège",7.5,"Chantilly / Sauce chocolat"],
-["Salade de fruits frais",7,"Fruits de saison"],
-["Sorbet citron",7,"2 boules / Zestes de citron"]]},
+["Rognons à la Moutarde",24,""],["Souris d'Agneau",30,"Sauce au miel et romarin","images/souris-agneau.jpg"]]},
+{title:"Gourmandises du Vaudrée",photo:"images/dessert-mangue.jpg",alt:"Dessert à la mangue",items:[
+/* PRIX À COMPLÉTER : remplacez chaque 0 par le prix. Un dessert à 0 € reste caché sur le site. */
+["Verrines ou mignardises du moment",0,"Maison / Au choix / Prix à la pièce"],
+["Dame blanche",0,"3 boules de glace vanille / Chocolat belge / Chantilly / Riz soufflé au chocolat"],
+["Trio de sorbets",0,"Fraise / Citron / Goût du moment / Fruits frais"],
+["Café liégeois",0,"Café glacé comme un milkshake / Peket ou Baileys, ou sans alcool"],
+["Colonel",0,"Vodka / 2 boules de sorbet citron"],
+["Tiramisu",0,"Savoiardi / Crémeux mascarpone italien / Cacao"],
+["Café ou thé gourmand",0,"Trio de verrines de la maison"],
+["Crêpes sucre ou cassonade",0,""],
+["Crêpes Vaudrée",0,"Crêpes farcies de tiramisu / Glace vanille / Cacao"],
+["Brownie maison",0,"Brownie ou chocolat belge coulant / Glace vanille / Chantilly / Riz soufflé au chocolat"],
+["Brioche Vaudrée",0,"Pain perdu briochée / Crème de tiramisu / Glace vanille / Cacao / Crème chantilly / Soufflé au chocolat"],
+["Brioche Signature",0,"Pain perdu briochée / Glace vanille / Pistache / Praliné de pistache / Crème chantilly"]]},
 {title:"Les petits plus",description:"Suppléments, accompagnements et douceurs pour personnaliser votre plat ou votre dessert. Rien n'est ajouté automatiquement : choisissez uniquement ce que vous souhaitez.",items:[
 ["Supplément Burrata — Planche Italienne",3.5,""],["Flambée au Pastis — Épée de Gambas",3,""],
 ["Supplément viande double — Burger",14,""],["Pain sans gluten — Burger",1.5,""],
