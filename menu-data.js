@@ -76,11 +76,10 @@ window.MENU = [
 ["Jambonneau à la Béarnaise",24,""],["Rognons à la Liégeoise",24,"Lardons / Peket / Crème"],
 ["Rognons à la Moutarde",24,""],["Souris d'Agneau",30,"Sauce au miel et romarin","images/souris-agneau.jpg"]]},
 {title:"Gourmandises du Vaudrée",photo:"images/dessert-mangue.jpg",alt:"Dessert à la mangue",items:[
-/* PRIX À COMPLÉTER : remplacez chaque 0 par le prix. Un dessert à 0 € reste caché sur le site. */
-["Verrines ou mignardises du moment Maison, au choix prix à la pièce",3,"Maison / Au choix / Prix à la pièce"],
+["Verrines ou mignardises du moment",3,"Maison / Au choix / Prix à la pièce"],
 ["Dame blanche",9,"3 boules de glace vanille / Chocolat belge / Chantilly / Riz soufflé au chocolat"],
 ["Trio de sorbets",9,"Fraise / Citron / Goût du moment / Fruits frais"],
-["Café liégeois",9.5,"Café glacé comme un milkshake / Peket ou Baileys, ou sans alcool 8.5E"],
+["Café liégeois",9.5,"Café glacé comme un milkshake / Peket ou Baileys, ou sans alcool"],
 ["Colonel",9,"Vodka / 2 boules de sorbet citron"],
 ["Tiramisu",9.5,"Savoiardi / Crémeux mascarpone italien / Cacao"],
 ["Café ou thé gourmand",11,"Trio de verrines de la maison"],
