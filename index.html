@@ -673,6 +673,21 @@
       text-align: left;
     }
 
+
+    /* Précommande express */
+    #commande .pre-lead { max-width: 760px; margin: 0 auto 28px; }
+    .pre-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; position: relative; z-index: 1; }
+    .pre-card { background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.45); border-radius: 14px; padding: 20px 18px; text-align: center; }
+    .pre-card h3 { margin: 6px 0 8px; color: var(--gold); font-size: 1.15rem; }
+    #commande .pre-card p { margin: 0; font-size: 0.95rem; text-align: center; }
+    .pre-ico { font-size: 1.9rem; }
+    .pre-cta { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 28px; position: relative; z-index: 1; }
+    .pre-btn { display: inline-block; padding: 16px 30px; border-radius: 999px; background: var(--gold); color: #17130b !important; font-weight: 800; font-size: 1.05rem; text-decoration: none; box-shadow: 0 6px 18px rgba(212,175,55,0.35); transition: transform .2s, background .2s; text-align: center; }
+    .pre-btn:hover { transform: translateY(-2px); background: #e3c158; }
+    .pre-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+    .pre-note { font-size: 0.9rem; opacity: .85; }
+    @media (prefers-reduced-motion: reduce) { .pre-btn { transition: none; } }
+
     /* ========== GALLERIE AMÉLIORÉE ========== */
     .gallery {
       display: grid;
@@ -1655,7 +1670,7 @@
     <div class="nav-links" id="mainNav">
       <a href="accueil-qr.html">Menu</a>
       <a href="#reservation">Réservation</a>
-      <a href="#commande">Commande rapide</a>
+      <a href="commande-table-vaudree2.html">Précommande</a>
       <a href="livraison.html">Livraison/Emporter</a>
       <a href="groupe.html">Groupes</a>
      
@@ -1860,50 +1875,21 @@
       </form>
     </section>
 
-    <!-- ========== COMMANDE RAPIDE AMÉLIORÉE ========== -->
+    <!-- ========== PRÉCOMMANDE EXPRESS ========== -->
     <section id="commande" data-aos="fade-up" aria-labelledby="cmd-title">
-     <h2 id="cmd-title">Commande Rapide & Raffinée</h2>
+      <h2 id="cmd-title">Précommande express</h2>
+      <p class="pre-lead">Choisissez vos plats à l'avance : votre table est prête à votre arrivée.</p>
 
-<div class="commande-info">
-  <p><strong>🎯 Votre pause gourmande optimisée</strong></p>
-  <p>📅 <strong>Planifiez</strong> : Commande avant 11h (midi) ou 17h (soir)</p>
-  <p>🕐 <strong>Programmez</strong> : Indiquez votre heure de passage</p>
-  <p>⚡ <strong>Savourez</strong> : Service immédiat à votre arrivée</p>
-  <p>🌟 <strong>Profitez</strong> : Quelques minutes seulement entre votre entrée et la dégustation</p>
-</div>
+      <div class="pre-grid">
+        <div class="pre-card"><div class="pre-ico" aria-hidden="true">💼</div><h3>Pause de midi</h3><p>Peu de temps ? Retour au bureau à l'heure.</p></div>
+        <div class="pre-card"><div class="pre-ico" aria-hidden="true">🎭</div><h3>Avant le spectacle</h3><p>Un dîner sans stress, avant le lever de rideau.</p></div>
+        <div class="pre-card"><div class="pre-ico" aria-hidden="true">⚡</div><h3>En quelques clics</h3><p>Carte et suggestions intégrées, depuis votre téléphone.</p></div>
+      </div>
 
-<p style="text-align: center; background: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 10px; border-left: 4px solid var(--gold);">
-  La solution idéale pour les professionnels pressés et les amateurs de spectacles - Toute la qualité Vaudrée2, sans le temps d'attente.
-</p>
-      <form action="https://formspree.io/f/xdkwlewd" method="POST" class="contact-form" id="commandeForm" aria-label="Formulaire de commande">
-        <div class="form-group">
-          <label for="cmd-name">Nom</label>
-          <input type="text" id="cmd-name" name="name" placeholder="Votre nom" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="cmd-email">Email</label>
-          <input type="email" id="cmd-email" name="email" placeholder="votre@email.com" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="cmd-phone">Numéro de GSM</label>
-          <input type="tel" id="cmd-phone" name="phone" placeholder="04XXXXXXXX" required pattern="[0-9]{10}" title="10 chiffres sans espaces">
-        </div>
-        
-        <div class="form-group">
-          <label for="cmd-order">Votre commande</label>
-          <textarea id="cmd-order" name="commande" placeholder="Décrivez votre commande en détail..." required rows="4"></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label for="pickup-time">Heure de retrait souhaitée</label>
-          <input type="time" id="pickup-time" name="pickup_time" required min="12:00" max="23:00">
-        </div>
-        
-        <button type="submit">Envoyer ma commande</button>
-        <div id="formMessage" style="display:none; margin-top:15px; padding:12px; border-radius:10px; text-align:center;"></div>
-      </form>
+      <div class="pre-cta">
+        <a class="pre-btn" href="commande-table-vaudree2.html">Précommander</a>
+        <span class="pre-note">Le jour même : idéalement avant 11h (midi) ou 17h (soir). Après, prête en 1 h à 1 h 15.</span>
+      </div>
     </section>
 
     <!-- ========== GALERIE AMÉLIORÉE ========== -->
@@ -2158,8 +2144,8 @@
     
     <!-- BOUTONS D'ACTION -->
     <div style="display: flex; gap: 10px; margin-top: 20px;">
-      <a href="#commande" class="avis-btn" onclick="fermerPopup()" style="flex: 1; display: inline-block; text-decoration: none; text-align: center; padding: 12px;">
-        Commander maintenant
+      <a href="commande-table-vaudree2.html" class="avis-btn" onclick="fermerPopup()" style="flex: 1; display: inline-block; text-decoration: none; text-align: center; padding: 12px;">
+        Précommander
       </a>
       <a href="#reservation" onclick="fermerPopup()" style="
         flex: 1;
@@ -2515,9 +2501,7 @@
         'Envoi de la réservation...', 
         '✅ Réservation envoyée ! Nous vous contacterons pour confirmation.');
 
-      attachFormUX('commandeForm', 'formMessage', 
-        'Envoi de la commande...', 
-        '✅ Commande envoyée ! Nous préparons votre repas.');
+
 
       // ========== VALIDATION DES DATES ==========
       const dateInput = document.getElementById('date');
