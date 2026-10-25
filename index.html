@@ -2447,9 +2447,10 @@
         if(!form || !messageEl) return;
         
         form.addEventListener('submit', async function(e) {
+          // On gère l'envoi nous-mêmes (sinon le navigateur quitte la page et coupe l'envoi)
+          e.preventDefault();
           // Validation
           if (!validateForm(form)) {
-            e.preventDefault();
             return;
           }
           
