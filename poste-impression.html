@@ -49,7 +49,7 @@ ol{padding-left:20px;margin:6px 0}
 </head>
 <body>
 <h1>Poste d'impression</h1>
-<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service</p>
+<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service <span style="opacity:.6">· version 26/10 (11h15)</span></p>
 
 <div class="card" id="setup" hidden>
   <p class="status err" id="setupMsg"></p>
@@ -145,10 +145,21 @@ function setStatus(txt, cls, detail) {
 
 async function api(params) {
   const u = RELAY_URL + "?" + new URLSearchParams(Object.assign({ key: KEY }, params)).toString();
-  const r = await fetch(u, { method: "GET", redirect: "follow", cache: "no-store" });
-  const j = await r.json();
+  let r, txt;
+  try { r = await fetch(u, { method: "GET", redirect: "follow", cache: "no-store" }); txt = await r.text(); }
+  catch (e) { throw new Error("reseau:" + (e && e.message ? e.message : e)); }
+  let j;
+  try { j = JSON.parse(txt); }
+  catch (e) { throw new Error("format:" + r.status + ":" + txt.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 140)); }
   if (!j.ok) throw new Error(j.erreur || "erreur");
   return j;
+}
+
+function explique(msg) {
+  if (msg === "cle") return "La clé secrète n'est pas acceptée : vérifiez la clé dans le raccourci (ou relancez creerCleImpression et remplacez-la).";
+  if (msg.indexOf("format:") === 0) return "Le relais Google répond, mais pas comme prévu : la nouvelle version du relais n'est probablement pas déployée, ou l'accès n'est pas « Tout le monde ». Réponse reçue : " + msg.slice(7);
+  if (msg.indexOf("reseau:") === 0) return "Le relais est injoignable depuis cet ordinateur (internet coupé ou bloqué). Détail : " + msg.slice(7);
+  return "Erreur : " + msg;
 }
 
 async function cycle() {
@@ -169,7 +180,7 @@ async function cycle() {
     if (j.orders.length) chargerRecent();
   } catch (e) {
     setStatus("● Connexion perdue : nouvelle tentative…", "err",
-      e.message === "cle" ? "La clé secrète n'est pas acceptée. Vérifiez le raccourci." : "Vérifiez la connexion internet de l'ordinateur.");
+      explique(e.message));
   } finally { busy = false; }
 }
 
