@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Poste d'impression | Vaudrée 2</title>
+<style>
+:root{--gold:#d6b36a;--bg:#101010;--panel:#1b1b1b;--ok:#6fcf8e;--err:#ff9b8c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#f5f5f5;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5;padding:20px}
+h1{color:var(--gold);margin:0 0 4px;font-size:26px}
+.sub{color:#bbb;margin:0 0 18px}
+.card{background:var(--panel);border:1px solid #49402d;border-radius:12px;padding:16px;margin-bottom:16px}
+button{background:var(--gold);color:#17130b;border:0;border-radius:8px;padding:12px 18px;font-size:16px;font-weight:800;cursor:pointer;margin:4px 8px 4px 0}
+button.alt{background:#2a2518;color:#f1dba5;border:1px solid #49402d}
+button:disabled{opacity:.5;cursor:not-allowed}
+.status{font-size:18px;font-weight:700}
+.status.ok{color:var(--ok)} .status.err{color:var(--err)}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 0;border-top:1px solid #2a2418}
+.row:first-child{border-top:0}
+.small{font-size:13px;color:#bbb}
+ol{padding-left:20px;margin:6px 0}
+
+/* ----- Ticket (écran : aperçu ; impression : seul élément affiché) ----- */
+#ticket{width:72mm;background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif;padding:3mm 2mm;margin:0 auto;display:none}
+#ticket .center{text-align:center}
+#ticket .brand{font-size:26px;font-weight:900;letter-spacing:2px}
+#ticket .genre{display:block;background:#000;color:#fff;font-size:20px;font-weight:900;padding:4px 0;margin:6px 0;text-align:center}
+#ticket .quand{font-size:24px;font-weight:900;text-align:center;line-height:1.2}
+#ticket .pers{font-size:20px;font-weight:800;text-align:center;margin-bottom:4px}
+#ticket .qui{font-size:18px;font-weight:700;text-align:center}
+#ticket hr{border:0;border-top:2px dashed #000;margin:8px 0}
+#ticket .plats{font-size:19px;font-weight:800;white-space:pre-wrap;line-height:1.35}
+#ticket .alert{border:3px solid #000;padding:4px;margin-top:8px;font-size:18px;font-weight:900;white-space:pre-wrap}
+#ticket .rem{font-size:16px;font-weight:700;margin-top:6px;white-space:pre-wrap}
+#ticket .foot{font-size:13px;text-align:center;margin-top:8px}
+#preview{background:#ddd;padding:14px;border-radius:10px;margin-top:10px}
+#preview #ticket{display:block}
+@page{margin:0}
+@media print{
+  body{background:#fff;padding:0}
+  body>*:not(#printzone){display:none !important}
+  #printzone{display:block !important}
+  #printzone #ticket{display:block;margin:0}
+}
+#printzone{display:none}
+</style>
+</head>
+<body>
+<h1>Poste d'impression</h1>
+<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service</p>
+
+<div class="card" id="setup" hidden>
+  <p class="status err" id="setupMsg"></p>
+</div>
+
+<div class="card" id="main">
+  <p class="status" id="status">Prêt. Cliquez sur « Démarrer ».</p>
+  <p class="small" id="detail"></p>
+  <button id="start">Démarrer l'impression automatique</button>
+  <button id="stop" class="alt" disabled>Pause</button>
+  <button id="test" class="alt">Imprimer un ticket test</button>
+</div>
+
+<div class="card">
+  <strong>Dernières commandes</strong>
+  <div id="recent"><p class="small">Aucune commande pour l'instant.</p></div>
+</div>
+
+<div class="card small">
+  <strong>Rappel</strong>
+  <ol>
+    <li>Imprimante Epson allumée, papier en place, réglée comme imprimante par défaut de Windows.</li>
+    <li>Cette page ouverte avec le raccourci « Poste d'impression » (impression sans fenêtre de confirmation).</li>
+    <li>En cas de doute, le message Telegram reste le filet de sécurité.</li>
+  </ol>
+</div>
+
+<div id="printzone"><div id="ticket"></div></div>
+
+<script>
+/* ===== Réglages ===== */
+const RELAY_URL = "https://script.google.com/macros/s/AKfycbw8mGpnR7qDwH1EMS0cu55PgvND1uCI0oloIESXx_wdVilcsllMcbJsJZzB6jgoM52BHg/exec";
+const POLL_MS = 8000;      // vérification toutes les 8 secondes
+const GAP_MS  = 2500;      // pause entre deux tickets
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const KEY = (new URLSearchParams(location.hash.slice(1))).get("key") || "";
+let timer = null, running = false, busy = false, audioCtx = null;
+const printedHere = new Set();
+
+if (!KEY) {
+  $("setup").hidden = false; $("main").hidden = true;
+  $("setupMsg").textContent = "Clé manquante : ouvrez cette page avec le raccourci « Poste d'impression » (l'adresse doit se terminer par #key=… ).";
+}
+
+function quand(o) {
+  let d = o.date || "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(d)) {
+    d = new Date(d + "T12:00:00Z").toLocaleDateString("fr-BE", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+  }
+  const h = (o.heure || "").replace(":", "h");
+  return { d: d ? d.toUpperCase() : "AUJOURD'HUI", h };
+}
+
+function ticketHtml(o) {
+  const q = quand(o);
+  return `
+  <div class="center brand">VAUDRÉE 2</div>
+  <span class="genre">${esc(o.genre)}</span>
+  <div class="quand">${esc(q.d)}<br>${esc(q.h)}</div>
+  ${o.pers ? `<div class="pers">${esc(o.pers)} pers.</div>` : ""}
+  <div class="qui">${esc(o.nom)}<br>${esc(o.tel)}</div>
+  ${o.plats ? `<hr><div class="plats">${esc(o.plats)}</div>` : ""}
+  ${o.allergies ? `<div class="alert">⚠ ALLERGIES :\n${esc(o.allergies)}</div>` : ""}
+  ${o.remarques ? `<div class="rem">Remarques :\n${esc(o.remarques)}</div>` : ""}
+  <hr>
+  <div class="foot">Reçue à ${esc(o.recu || "")} · n° ${esc(o.id || "")}</div>
+  <div class="foot">.</div>`;
+}
+
+function imprimer(o) {
+  $("ticket").innerHTML = ticketHtml(o);
+  window.print();
+}
+
+function bip() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.25].forEach(t => {
+      const osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+      osc.frequency.value = 880; osc.connect(g); g.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0.2, audioCtx.currentTime + t);
+      osc.start(audioCtx.currentTime + t); osc.stop(audioCtx.currentTime + t + 0.18);
+    });
+  } catch (e) {}
+}
+
+function setStatus(txt, cls, detail) {
+  const s = $("status"); s.textContent = txt; s.className = "status " + (cls || "");
+  if (detail !== undefined) $("detail").textContent = detail;
+}
+
+async function api(params) {
+  const u = RELAY_URL + "?" + new URLSearchParams(Object.assign({ key: KEY }, params)).toString();
+  const r = await fetch(u, { method: "GET", redirect: "follow", cache: "no-store" });
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.erreur || "erreur");
+  return j;
+}
+
+async function cycle() {
+  if (busy || !running) return;
+  busy = true;
+  try {
+    const j = await api({ action: "pending" });
+    const heure = new Date().toLocaleTimeString("fr-BE");
+    if (j.orders.length) bip();
+    for (const o of j.orders) {
+      if (printedHere.has(o.id)) continue;
+      await api({ action: "done", id: o.id });       // on marque d'abord : jamais d'impression en double
+      printedHere.add(o.id);
+      imprimer(o);
+      await new Promise(r => setTimeout(r, GAP_MS));
+    }
+    setStatus("● En marche · en attente de commandes", "ok", "Dernière vérification : " + heure);
+    if (j.orders.length) chargerRecent();
+  } catch (e) {
+    setStatus("● Connexion perdue : nouvelle tentative…", "err",
+      e.message === "cle" ? "La clé secrète n'est pas acceptée. Vérifiez le raccourci." : "Vérifiez la connexion internet de l'ordinateur.");
+  } finally { busy = false; }
+}
+
+async function chargerRecent() {
+  try {
+    const j = await api({ action: "recent" });
+    const box = $("recent");
+    if (!j.orders.length) { box.innerHTML = '<p class="small">Aucune commande pour l\'instant.</p>'; return; }
+    box.innerHTML = j.orders.map((o, i) => {
+      const q = quand(o);
+      return `<div class="row"><div><strong>${esc(o.genre)}</strong> · ${esc(q.d)} ${esc(q.h)}<br><span class="small">${esc(o.nom)} · reçue à ${esc(o.recu)}</span></div><button class="alt" data-i="${i}">Réimprimer</button></div>`;
+    }).join("");
+    box.querySelectorAll("button").forEach(b => b.addEventListener("click", () => imprimer(j.orders[Number(b.dataset.i)])));
+  } catch (e) {}
+}
+
+$("start").addEventListener("click", () => {
+  running = true; $("start").disabled = true; $("stop").disabled = false;
+  bip();
+  setStatus("● En marche : vérification…", "ok", "");
+  cycle(); timer = setInterval(cycle, POLL_MS); chargerRecent();
+});
+$("stop").addEventListener("click", () => {
+  running = false; clearInterval(timer); $("start").disabled = false; $("stop").disabled = true;
+  setStatus("⏸ En pause : aucune commande n'est imprimée.", "err", "");
+});
+$("test").addEventListener("click", () => imprimer({
+  genre: "TICKET TEST", date: new Date().toISOString().slice(0, 10), heure: "12:30", pers: "2",
+  nom: "TEST Vaudrée 2", tel: "04 223 18 80",
+  plats: "2 × Carbonara — 36,00 €\n1 × Dame blanche — 9,00 €\n\nTOTAL INDICATIF : 45,00 €",
+  allergies: "Sans gluten", remarques: "Table calme", recu: new Date().toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" }), id: "TEST"
+}));
+if (KEY) chargerRecent();
+</script>
+</body>
+</html>
