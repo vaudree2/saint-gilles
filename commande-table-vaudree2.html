@@ -19,6 +19,7 @@ header a,.back{color:var(--gold-light);text-decoration-color:var(--gold);text-un
 .container{width:min(1100px,94%);margin:24px auto 50px}
 .intro,.notice,.form-section,.category{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:18px}
 .category.sugg{border-color:var(--gold);background:#211c11}
+.category.ph{background:linear-gradient(rgba(14,11,7,.62),rgba(14,11,7,.82)),var(--ph) center/cover no-repeat;border-color:#4a3f2b}
 h1,h2{color:var(--gold)}
 h1{font-size:clamp(24px,4vw,34px);margin:0 0 10px}
 h2{font-size:22px;margin:0 0 16px}
@@ -182,7 +183,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/c
 <footer>
   <p><strong>Vaudrée 2</strong> · Rue Saint-Gilles 149, 4000 Liège</p>
   <p><a href="tel:+3242231880">04 223 18 80</a> · <a href="menu.html">Découvrir notre carte</a></p>
-  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 25/10 (22h50)</p>
+  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 28/10 (00h30)</p>
 </footer>
 
 <script>
@@ -270,7 +271,7 @@ window.MENU = [
 {title:"Menu du midi",midi:true,items:[
 ["Croque Monsieur",10,"Gouda / Jambon à l'os / Salade / Crudités / Ketchup"],
 ["Croque Madame",11.5,"Gouda / Jambon à l'os / Œuf au plat / Salade / Crudités / Ketchup"]]},
-{title:"À partager & grignoter",items:[
+{title:"À partager & grignoter",photo:"images/carte-planche.jpg",alt:"Planche signature",items:[
 ["Apéro Mixte",13,"Assortiments fritures mixtes"],
 ["Planche de Fromages",16,"5 variétés de fromages / Salade / Roquette / Confiture / Fruits secs"],
 ["Planche Italienne",16,"Charcuterie italienne / Salade / Roquette / Légumes"],
@@ -283,21 +284,21 @@ window.MENU = [
 ["Burrata",15,"Burrata crémeuse / Garniture du moment"],
 ["Carpaccio Angus Beef",17,"Bœuf Angus / Roquette / Parmesan / Champignons / Balsamique / Tomates cerises"],
 ["Carpaccio de Saumon",16.5,"Saumon norvégien / Pickles d'oignons rouges / Concombre / Citron / Pain"]]},
-{title:"Entrées chaudes",items:[
+{title:"Entrées chaudes",photo:"images/carte-entree-chaude.jpg",alt:"Gambas à la crème",items:[
 ["Croquettes de Fromage",16,"2 pièces / Salade / Crudités (Maison)"],
 ["Croquettes de Crevettes",19,"2 pièces / Salade / Crudités (Maison)"],
 ["Duo Croquettes",18,"1 fromage + 1 crevette / Salade / Crudités"],
 ["Cuisses de Grenouilles",18,"Crème à l'ail ou beurre d'ail / Persil"],
 ["Calamars Frits Maison",17,"Salade / Crudités / Sauce tartare maison"],
 ["Scampis Vaudrée 2",17,"Sauce crème tomate / Petits légumes / Ail"]]},
-{title:"Salades",items:[
+{title:"Salades",photo:"images/carte-salade.jpg",alt:"Salade grecque",items:[
 ["Poulet Croquant",18,"Poulet pané maison / Salade / Crudités / Citron / Tartare"],
 ["Frisée aux Lardons",17,"Salade / Crudités / Lardons / Oignons / Crème / Œuf / Croûtons"],
 ["Chèvre",18,"Salade / Crudités / Chèvre / Miel / Lardons / Pain toasté"],
 ["Signature",19,"Salade / Crudités / Camembert rôti / Oignons confits / Pain croustillant"],
 ["Burrata",18,"Salade / Roquette / Aubergines / Courgettes / Poivrons / Tomates cerises / Burrata / Balsamique"],
 ["Vaudrée 2",22,"Gambas / Scampis / Calamars frits / Tartare maison / Citron"]]},
-{title:"Pâtes fraîches",photo:"images/carte-pates.jpg",alt:"Ravioles à la truffe",items:[
+{title:"Pâtes fraîches",photo:"images/carte-pates.jpg",alt:"Ravioles à la roquette",items:[
 ["Carbonara",18,"Lardons / Œuf / Légèrement crémeux / Grana Padano"],
 ["All'Amatriciana",18,"Lardons / Ail / Vin blanc / Tomate / Grana Padano / Basilic"],
 ["4 Fromages",18,"4 fromages / Crème / Parmesan Grana Padano"],
@@ -307,7 +308,7 @@ window.MENU = [
 ["Scampis du Chef",18,"6 scampis / Ail / Sauce crème tomate du chef"],
 ["Gratinés",18,"Jambon à l'os / Crème / Fromage / Parmesan"],
 ["Ravioles alla Tartufata",20,"Ricotta et truffe / Crème / Tapenade de truffe / Roquette"]]},
-{title:"Poissons & crustacés",photo:"images/carte-poisson.jpg",alt:"Darne de saumon",items:[
+{title:"Poissons & crustacés",photo:"images/carte-poisson.jpg",alt:"Pavé de saumon",items:[
 ["Cassolette Vaudrée 2",24,"7 scampis / Petits légumes / Ail / Sauce crème tomate / Salade"],
 ["Darne de Saumon",26,"Saumon rôti / Poêlée de légumes / Sauce béarnaise"],
 ["Épée de Gambas",26,"8 pièces / Poêlée de légumes / Flambée au Pastis (supplément +3 €)"],
@@ -339,7 +340,7 @@ window.MENU = [
 ["Escalope de Veau Parmigiana",24,"Aubergines / Parmesan / Mozza"],["Jambonneau à la Moutarde",25,""],
 ["Jambonneau à la Béarnaise",24,""],["Rognons à la Liégeoise",24,"Lardons / Peket / Crème"],
 ["Rognons à la Moutarde",24,""],["Souris d'Agneau",30,"Sauce au miel et romarin","images/souris-agneau.jpg"]]},
-{title:"Gourmandises du Vaudrée",photo:"images/carte-dessert.jpg",alt:"Dessert à la mangue",items:[
+{title:"Gourmandises du Vaudrée",photo:"images/carte-dessert.jpg",alt:"Carpaccio d'ananas",items:[
 ["Verrines ou mignardises du moment",3,"Maison / Au choix / Prix à la pièce"],
 ["Dame blanche",9,"3 boules de glace vanille / Chocolat belge / Chantilly / Riz soufflé au chocolat"],
 ["Trio de sorbets",9,"Fraise / Citron / Goût du moment / Fruits frais"],
@@ -352,7 +353,7 @@ window.MENU = [
 ["Brownie maison",11,"Brownie ou chocolat belge coulant / Glace vanille / Chantilly / Riz soufflé au chocolat"],
 ["Brioche Vaudrée",13,"Pain perdu briochée / Crème de tiramisu / Glace vanille / Cacao / Crème chantilly / Soufflé au chocolat"],
 ["Brioche Signature",14,"Pain perdu briochée / Glace vanille / Pistache / Praliné de pistache / Crème chantilly"]]},
-{title:"Les petits plus",description:"Suppléments, accompagnements et douceurs pour personnaliser votre plat ou votre dessert. Rien n'est ajouté automatiquement : choisissez uniquement ce que vous souhaitez.",items:[
+{title:"Les petits plus",photo:"images/carte-supplements.jpg",alt:"Café et mignardises",description:"Suppléments, accompagnements et douceurs pour personnaliser votre plat ou votre dessert. Rien n'est ajouté automatiquement : choisissez uniquement ce que vous souhaitez.",items:[
 ["Supplément Burrata — Planche Italienne",3.5,""],["Flambée au Pastis — Épée de Gambas",3,""],
 ["Supplément viande double — Burger",14,""],["Pain sans gluten — Burger",1.5,""],
 ["Supplément gratin",5,"Accompagnement"],["Supplément légumes — viandes & steaks",4,"Accompagnement"],
@@ -411,6 +412,7 @@ MENU.forEach((s,i)=>{
   if(!s.items.some(it=>it[1]>0))return;
   const el=document.createElement("section");
   el.className="category"; if(s.midi)el.dataset.midi="1";
+  if(s.photo){el.classList.add("ph");el.style.setProperty("--ph","url('"+s.photo+"')");}
   el.innerHTML=`<h2>${esc(s.title)}</h2>${s.description?`<p class="category-intro">${esc(s.description)}</p>`:""}<div class="dish-list">${s.items.map((it,j)=>it[1]>0?dish(it[0],it[1],it[2],`d-${i}-${j}`):"").join("")}</div>`;
   $("menuSections").appendChild(el);
 });
