@@ -27,7 +27,17 @@ a:focus-visible,button:focus-visible{outline:3px solid #fff;outline-offset:3px}
 main{width:min(860px,94%);margin:22px auto}
 section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:18px}
 section.sugg{border-color:var(--gold);background:rgba(213,173,85,.1)}
+section.sugg.ph{border-color:var(--gold);background:linear-gradient(rgba(14,11,7,.62),rgba(14,11,7,.84)),var(--ph) center/cover no-repeat}
 h2{font:700 24px 'Playfair Display',Georgia,serif;color:var(--gold);margin:0 0 6px}
+.ph{background:linear-gradient(rgba(14,11,7,.58),rgba(14,11,7,.80)),var(--ph) var(--pos,center)/cover no-repeat;border-color:#4a3f2b}
+header.top{background:linear-gradient(rgba(14,11,7,.55),rgba(14,11,7,.92)),url('images/carte-entete.jpg') center 30%/cover no-repeat;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.banner{display:block;width:100%;height:170px;object-fit:cover;border-radius:10px;margin:0 0 14px;background:#2a2418}
+.thumb{flex:none;width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--border);background:#2a2418}
+.hero{position:relative;border-radius:12px;overflow:hidden;margin-bottom:18px;border:1px solid var(--border)}
+.hero img{display:block;width:100%;height:210px;object-fit:cover}
+.hero div{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 20px;background:linear-gradient(transparent 20%,rgba(10,8,5,.88))}
+.hero b{font:700 22px 'Playfair Display',Georgia,serif;color:var(--gold-light)}
+.hero span{font-size:13.5px;color:#e6dfd0}
 .intro{color:var(--muted);font-size:13.5px;margin:0 0 12px}
 .item{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid #2a2418}
 .item:first-of-type{border-top:0}
@@ -43,15 +53,15 @@ h2{font:700 24px 'Playfair Display',Georgia,serif;color:var(--gold);margin:0 0 6
 .bar .go{background:var(--gold);color:#17130b}
 .bar .alt{border:1px solid var(--gold);color:#fff}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-@media print{body{background:#fff;color:#000;padding:0}.chips,.bar,.dl{display:none}section{background:#fff;border:1px solid #999;break-inside:avoid}h2,.price,.name,.desc,.intro{color:#000}}
+@media print{.thumb{display:none}.ph,header.top{background:#fff !important}body{background:#fff;color:#000;padding:0}.chips,.bar,.dl{display:none}section{background:#fff;border:1px solid #999;break-inside:avoid}h2,.price,.name,.desc,.intro{color:#000}}
 </style>
 </head>
 <body>
-<header>
+<header class="top">
   <div class="sub">Brasserie · Restaurant · Beer Shop’E</div>
   <h1>Notre carte</h1>
   <p>Rue Saint-Gilles 149 · 4000 Liège</p>
-  <p><a href="index.html">← Accueil</a> · <a href="tel:+32422318880">04 223 18 80</a></p>
+  <p><a href="index.html">← Accueil</a> · <a href="tel:+3242231880">04 223 18 80</a></p>
 </header>
 
 <nav class="chips" id="chips" aria-label="Catégories de la carte"></nav>
@@ -75,22 +85,21 @@ h2{font:700 24px 'Playfair Display',Georgia,serif;color:var(--gold);margin:0 0 6
 <script>
 const { esc, euro } = V;
 const slug = (s, i) => "c" + i + "-" + s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-const row = (n, p, d) => `<div class="item"><div><div class="name">${esc(n)}</div>${d ? `<div class="desc">${esc(d)}</div>` : ""}</div><div class="price">${euro(p)}</div></div>`;
+const row = (n, p, d, img) => `<div class="item">${img ? `<img class="thumb" src="${esc(img)}" alt="${esc(n)}" loading="lazy" decoding="async">` : ""}<div style="flex:1"><div class="name">${esc(n)}</div>${d ? `<div class="desc">${esc(d)}</div>` : ""}</div><div class="price">${euro(p)}</div></div>`;
 
 const today = V.bxl().date, sg = V.suggestionsFor(today);
 const chips = [];
 if (sg.length) {
   chips.push(`<a href="#suggestions">✨ Suggestions</a>`);
-  document.getElementById("sugg").innerHTML = `<section class="sugg" id="suggestions"><h2>Nos suggestions gourmandes</h2><p class="intro">Disponibles actuellement : entrée, plat ou dessert, au choix.</p>${V.groupSuggestions(sg).map(g => `<h3 class="sub">${esc(g.label)}</h3>` + g.items.map(s => row(s.nom, s.prix, s.desc)).join("")).join("")}</section>`;
+  document.getElementById("sugg").innerHTML = `<section class="sugg ph" id="suggestions" style="--ph:url('images/carte-gateau.jpg')"><h2>Nos suggestions gourmandes</h2><p class="intro">Composez votre repas à votre guise : entrée et plat, plat et dessert, ou simplement l'un des trois. Chaque rubrique est proposée séparément, à son propre prix.</p>${V.groupSuggestions(sg).map(g => `<h3 class="sub">${esc(g.label)}</h3>` + g.items.map(s => row(s.nom, s.prix, s.desc)).join("")).join("")}</section>`;
 }
 document.getElementById("carte").innerHTML = MENU.map((c, i) => {
   c = Object.assign({}, c, { items: c.items.filter(it => it[1] > 0) });
   if (!c.items.length) return "";
   const id = slug(c.title, i); chips.push(`<a href="#${id}">${esc(c.title)}</a>`);
-  return `<section id="${id}"><h2>${esc(c.title)}</h2>${c.description ? `<p class="intro">${esc(c.description)}</p>` : ""}${c.items.map(it => row(it[0], it[1], it[2])).join("")}</section>`;
+  return `<section id="${id}"${c.photo ? ` class="ph" style="--ph:url('${esc(c.photo)}');--pos:${esc(c.pos||'center')}"` : ""}><h2>${esc(c.title)}</h2>${c.description ? `<p class="intro">${esc(c.description)}</p>` : ""}${c.items.map(it => row(it[0], it[1], it[2], it[3])).join("")}</section>`;
 }).join("");
 document.getElementById("chips").innerHTML = chips.join("");
 </script>
 </body>
 </html>
-
