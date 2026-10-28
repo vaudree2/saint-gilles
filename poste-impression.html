@@ -23,7 +23,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 ol{padding-left:20px;margin:6px 0}
 
 /* ----- Ticket (écran : aperçu ; impression : seul élément affiché) ----- */
-#ticket{width:72mm;background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif;padding:3mm 2mm;margin:0 auto;display:none}
+#ticket{width:var(--tw,72mm);transform:translateX(var(--dx,0mm));background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif;padding:3mm 2mm;margin:0 auto;display:none}
 #ticket .center{text-align:center}
 #ticket .brand{font-size:26px;font-weight:900;letter-spacing:2px}
 #ticket .genre{display:block;background:#000;color:#fff;font-size:20px;font-weight:900;padding:4px 0;margin:6px 0;text-align:center}
@@ -42,14 +42,14 @@ ol{padding-left:20px;margin:6px 0}
   body{background:#fff;padding:0}
   body>*:not(#printzone){display:none !important}
   #printzone{display:block !important}
-  #printzone #ticket{display:block;margin:0}
+  #printzone #ticket{display:block;margin:0 auto}
 }
 #printzone{display:none}
 </style>
 </head>
 <body>
 <h1>Poste d'impression</h1>
-<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service <span style="opacity:.6">· version 26/10 (11h15)</span></p>
+<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service <span style="opacity:.6">· version 28/10 (14h00)</span></p>
 
 <div class="card" id="setup" hidden>
   <p class="status err" id="setupMsg"></p>
@@ -61,6 +61,15 @@ ol{padding-left:20px;margin:6px 0}
   <button id="start">Démarrer l'impression automatique</button>
   <button id="stop" class="alt" disabled>Pause</button>
   <button id="test" class="alt">Imprimer un ticket test</button>
+</div>
+
+<div class="card">
+  <strong>Réglage du ticket</strong>
+  <p class="small">Si le ticket sort trop à gauche ou trop à droite, décalez-le puis imprimez un ticket test.</p>
+  <div class="row"><span>Position : <b id="dxv">0</b> mm</span>
+    <span><button class="alt" id="dxm">◀ Gauche</button><button class="alt" id="dxp">Droite ▶</button></span></div>
+  <div class="row"><span>Largeur : <b id="twv">72</b> mm</span>
+    <span><button class="alt" id="twm">− Plus étroit</button><button class="alt" id="twp">+ Plus large</button></span></div>
 </div>
 
 <div class="card">
@@ -213,6 +222,20 @@ $("test").addEventListener("click", () => imprimer({
   plats: "2 × Carbonara — 36,00 €\n1 × Dame blanche — 9,00 €\n\nTOTAL INDICATIF : 45,00 €",
   allergies: "Sans gluten", remarques: "Table calme", recu: new Date().toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" }), id: "TEST"
 }));
+/* ----- Réglage position / largeur du ticket (mémorisé sur cet ordinateur) ----- */
+let dx = 0, tw = 72;
+try { dx = Number(localStorage.getItem("ticket_dx")) || 0; tw = Number(localStorage.getItem("ticket_tw")) || 72; } catch (e) {}
+function appliquerReglage() {
+  document.documentElement.style.setProperty("--dx", dx + "mm");
+  document.documentElement.style.setProperty("--tw", tw + "mm");
+  $("dxv").textContent = (dx > 0 ? "+" : "") + dx; $("twv").textContent = tw;
+  try { localStorage.setItem("ticket_dx", dx); localStorage.setItem("ticket_tw", tw); } catch (e) {}
+}
+$("dxm").addEventListener("click", () => { dx = Math.max(-30, dx - 1); appliquerReglage(); });
+$("dxp").addEventListener("click", () => { dx = Math.min(30, dx + 1); appliquerReglage(); });
+$("twm").addEventListener("click", () => { tw = Math.max(50, tw - 1); appliquerReglage(); });
+$("twp").addEventListener("click", () => { tw = Math.min(80, tw + 1); appliquerReglage(); });
+appliquerReglage();
 if (KEY) chargerRecent();
 </script>
 </body>
