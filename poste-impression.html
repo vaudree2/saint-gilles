@@ -25,6 +25,7 @@ ol{padding-left:20px;margin:6px 0}
 /* ----- Ticket (écran : aperçu ; impression : seul élément affiché) ----- */
 #ticket{width:var(--tw,72mm);transform:translateX(var(--dx,0mm));background:#fff;color:#000;font-family:Arial,Helvetica,sans-serif;padding:3mm 2mm;margin:0 auto;display:none}
 #ticket .center{text-align:center}
+#ticket .num{font-size:40px;font-weight:900;text-align:center;line-height:1.1;margin-top:2px}
 #ticket .brand{font-size:26px;font-weight:900;letter-spacing:2px}
 #ticket .genre{display:block;background:#000;color:#fff;font-size:20px;font-weight:900;padding:4px 0;margin:6px 0;text-align:center}
 #ticket .quand{font-size:24px;font-weight:900;text-align:center;line-height:1.2}
@@ -49,7 +50,7 @@ ol{padding-left:20px;margin:6px 0}
 </head>
 <body>
 <h1>Poste d'impression</h1>
-<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service <span style="opacity:.6">· version 28/10 (14h00)</span></p>
+<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service <span style="opacity:.6">· version 28/10 (19h15)</span></p>
 
 <div class="card" id="setup" hidden>
   <p class="status err" id="setupMsg"></p>
@@ -118,6 +119,7 @@ function ticketHtml(o) {
   const q = quand(o);
   return `
   <div class="center brand">VAUDRÉE 2</div>
+  ${o.num ? `<div class="num">N° ${esc(o.num)}</div>` : ""}
   <span class="genre">${esc(o.genre)}</span>
   <div class="quand">${esc(q.d)}<br>${esc(q.h)}</div>
   ${o.pers ? `<div class="pers">${esc(o.pers)} pers.</div>` : ""}
@@ -220,7 +222,7 @@ $("test").addEventListener("click", () => imprimer({
   genre: "TICKET TEST", date: new Date().toISOString().slice(0, 10), heure: "12:30", pers: "2",
   nom: "TEST Vaudrée 2", tel: "04 223 18 80",
   plats: "2 × Carbonara — 36,00 €\n1 × Dame blanche — 9,00 €\n\nTOTAL INDICATIF : 45,00 €",
-  allergies: "Sans gluten", remarques: "Table calme", recu: new Date().toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" }), id: "TEST"
+  allergies: "Sans gluten", remarques: "Table calme", recu: new Date().toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" }), id: "TEST", num: "001"
 }));
 /* ----- Réglage position / largeur du ticket (mémorisé sur cet ordinateur) ----- */
 let dx = 0, tw = 72;
