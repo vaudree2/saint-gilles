@@ -19,6 +19,18 @@ header a,.back{color:var(--gold-light);text-decoration-color:var(--gold);text-un
 .container{width:min(1100px,94%);margin:24px auto 50px}
 .intro,.notice,.form-section,.category{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:18px}
 .category.sugg{border-color:var(--gold);background:#211c11}
+
+.cat-h{display:flex;align-items:center;gap:10px;cursor:pointer;margin:0;user-select:none;-webkit-tap-highlight-color:transparent}
+.cat-h .chev{margin-left:auto;font-size:22px;line-height:1;transition:transform .2s;color:var(--gold)}
+.category.open .cat-h .chev{transform:rotate(180deg)}
+.cat-count{background:var(--gold);color:#17130b;border-radius:999px;padding:1px 10px;font-size:13px;font-weight:800;font-family:inherit}
+.cat-count[hidden]{display:none}
+.category:not(.open) .cat-body{display:none}
+.category.open .cat-body{margin-top:14px}
+.cat-note{font-size:12.5px;color:var(--muted);margin:12px 0 0}
+.cat-tools{margin:0 0 10px;text-align:right}
+.cat-tools button{background:none;color:var(--gold);padding:4px 0;font-size:14px;font-weight:700;text-decoration:underline;border:0}
+.cat-tools button:hover{background:none;color:var(--gold-light)}
 .category.ph{background:linear-gradient(rgba(14,11,7,.62),rgba(14,11,7,.82)),var(--ph) center/cover no-repeat;border-color:#4a3f2b}
 h1,h2{color:var(--gold)}
 h1{font-size:clamp(24px,4vw,34px);margin:0 0 10px}
@@ -145,6 +157,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/c
     </section>
 
     <div id="suggSection"></div>
+    <p class="cat-tools"><button type="button" id="toggleAll">Tout déplier</button></p>
     <div id="menuSections"></div>
 
     <section class="form-section">
@@ -183,7 +196,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/c
 <footer>
   <p><strong>Vaudrée 2</strong> · Rue Saint-Gilles 149, 4000 Liège</p>
   <p><a href="tel:+3242231880">04 223 18 80</a> · <a href="menu.html">Découvrir notre carte</a></p>
-  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 29/10 (00h10)</p>
+  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 29/10 (16h15)</p>
 </footer>
 
 <script>
@@ -408,14 +421,20 @@ const dish=(n,p,d,id)=>`<div class="dish"><div><div class="dish-name">${esc(n)}<
 <input id="${id}" type="number" min="0" max="99" step="1" value="0" inputmode="numeric" data-name="${esc(n)}" data-price="${p}" aria-label="Quantité : ${esc(n)}">
 <button type="button" class="step" data-for="${id}" data-d="1" aria-label="Ajouter : ${esc(n)}">+</button></div></div>`;
 
+const NOTE_SUPP=["Pâtes fraîches","Poissons & crustacés","Moules (selon saison)","Burgers","Viandes & steaks","Brochettes & épées","Les incontournables"];
 MENU.forEach((s,i)=>{
   if(!s.items.some(it=>it[1]>0))return;
   const el=document.createElement("section");
   el.className="category"; if(s.midi)el.dataset.midi="1";
   if(s.photo){el.classList.add("ph");el.style.setProperty("--ph","url('"+s.photo+"')");}
-  el.innerHTML=`<h2>${esc(s.title)}</h2>${s.description?`<p class="category-intro">${esc(s.description)}</p>`:""}<div class="dish-list">${s.items.map((it,j)=>it[1]>0?dish(it[0],it[1],it[2],`d-${i}-${j}`):"").join("")}</div>`;
+  const note=NOTE_SUPP.includes(s.title)?`<p class="cat-note">Suppléments et accompagnements supplémentaires : voir la rubrique « Les petits plus ».</p>`:"";
+  el.innerHTML=`<h2 class="cat-h" role="button" tabindex="0" aria-expanded="false"><span>${esc(s.title)}</span><span class="cat-count" hidden></span><span class="chev" aria-hidden="true">▾</span></h2><div class="cat-body">${s.description?`<p class="category-intro">${esc(s.description)}</p>`:""}<div class="dish-list">${s.items.map((it,j)=>it[1]>0?dish(it[0],it[1],it[2],`d-${i}-${j}`):"").join("")}</div>${note}</div>`;
   $("menuSections").appendChild(el);
 });
+function toggleCat(sec,open){const o=open===undefined?!sec.classList.contains("open"):open;sec.classList.toggle("open",o);const h=sec.querySelector(".cat-h");if(h)h.setAttribute("aria-expanded",o);}
+$("menuSections").addEventListener("click",e=>{const h=e.target.closest(".cat-h");if(h)toggleCat(h.closest(".category"));});
+$("menuSections").addEventListener("keydown",e=>{const h=e.target.closest&&e.target.closest(".cat-h");if(h&&(e.key==="Enter"||e.key===" ")){e.preventDefault();toggleCat(h.closest(".category"));}});
+(function(){const b=$("toggleAll");if(!b)return;b.addEventListener("click",()=>{const secs=[...document.querySelectorAll("#menuSections .category")];const openAll=secs.some(s=>!s.classList.contains("open"));secs.forEach(s=>toggleCat(s,openAll));b.textContent=openAll?"Tout replier":"Tout déplier";});})();
 for(let g=1;g<=MAX_GUESTS;g++)$("guests").add(new Option(g,g));
 $("guests").add(new Option(`Plus de ${MAX_GUESTS} (à préciser en remarque)`,`Plus de ${MAX_GUESTS}`));
 
@@ -476,6 +495,7 @@ function updateTotal(){
     total+=q*Number(i.dataset.price);count+=q;
     i.closest(".dish").classList.toggle("on",q>0);
   });
+  document.querySelectorAll("#menuSections .category").forEach(sec=>{let n=0;sec.querySelectorAll("[data-price]").forEach(i=>{const q=Number.parseInt(i.value,10);if(q>0)n+=q;});const b=sec.querySelector(".cat-count");if(b){b.textContent=n;b.hidden=!n;}});
   $("totalDisplay").textContent=euro(total);
   $("orderTotal").value=euro(total);
   $("countLabel").textContent=count?`Précommande · ${count} article${count>1?"s":""}`:"Total indicatif de la précommande";
