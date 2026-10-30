@@ -27,6 +27,7 @@ header a,.back{color:var(--gold-light);text-decoration-color:var(--gold);text-un
 .cat-count[hidden]{display:none}
 .category:not(.open) .cat-body{display:none}
 .category.open .cat-body{margin-top:14px}
+.cat-tools{display:flex;gap:8px;margin:0 0 12px}.cat-tools button{background:#2a2518;color:var(--gold-light);border:1px solid var(--border);padding:9px 14px;font-size:14px}
 .cat-note{font-size:12.5px;color:var(--muted);margin:12px 0 0}
 .cat-tools{margin:0 0 10px;text-align:right}
 .cat-tools button{background:none;color:var(--gold);padding:4px 0;font-size:14px;font-weight:700;text-decoration:underline;border:0}
@@ -49,6 +50,7 @@ textarea{min-height:95px;resize:vertical}
 .dish-list{display:grid;grid-template-columns:1fr;gap:10px}
 .dish{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px;border:1px solid #39342a;border-radius:9px;background:#151515}
 .dish.on{border-color:var(--gold);background:#1e1a12}
+.acc-box{grid-column:1/-1;display:grid;gap:8px;margin-top:2px;padding-top:10px;border-top:1px dashed #4a3f2b}.acc-box[hidden]{display:none}.acc-row{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--gold-light)}.acc-row span{flex:0 0 auto;min-width:92px}.acc-row select{flex:1;padding:9px}
 .dish-name{font-weight:700}
 .dish-desc{font-size:13px;color:var(--muted);margin-top:4px}
 .dish-price{font-weight:700;color:var(--gold-light);margin-top:5px}
@@ -107,12 +109,13 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/c
 
   <section class="notice">
     <strong>Votre demande n'est pas encore confirmée.</strong>
-    <p>Nous devons vérifier la disponibilité de la table et de vos plats. Attendez notre confirmation avant de considérer votre réservation comme acceptée.</p>
+    <p>Votre demande nous parvient aussitôt. Avec votre adresse e-mail, vous recevez une confirmation automatique. Les jours très chargés ou les grands groupes, nous pouvons vous demander de nous appeler.</p>
   </section>
 
   <div class="msg ok" id="success" role="status" tabindex="-1" hidden>
     <strong>Demande envoyée.</strong>
-    <p>Merci ! Notre équipe vous recontacte pour confirmer. Votre réservation n'est acceptée qu'après cette confirmation.</p>
+    <p id="okMsg">Merci ! Notre équipe vous recontacte pour confirmer. Votre réservation n'est acceptée qu'après cette confirmation.</p>
+    <p class="msg warn" id="fullNote" hidden>Nous sommes presque complets ce jour-là. Merci de nous appeler au <a href="tel:+3242231880">04 223 18 80</a> afin de confirmer votre place.</p>
     <p class="small" id="recap" style="white-space:pre-line"></p>
   </div>
 
@@ -150,8 +153,9 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/c
           <input type="tel" id="phone" name="Téléphone" autocomplete="tel" inputmode="tel" pattern="[0-9+()./ \-]{8,20}" title="Numéro de téléphone (8 à 20 chiffres)" required>
         </div>
         <div class="field">
-          <label for="email">Adresse e-mail (facultatif)</label>
+          <label for="email">Adresse e-mail (recommandée : pour recevoir votre confirmation)</label>
           <input type="email" id="email" name="email" autocomplete="email">
+          <label class="chk" style="display:flex;gap:8px;align-items:flex-start;margin-top:8px;font-size:13px;color:var(--muted);font-weight:400"><input type="checkbox" name="newsletter" value="oui" style="width:auto;margin-top:3px"> <span>Je souhaite recevoir les suggestions de la semaine par e-mail (facultatif, désinscription à tout moment).</span></label>
         </div>
       </div>
     </section>
@@ -196,7 +200,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/c
 <footer>
   <p><strong>Vaudrée 2</strong> · Rue Saint-Gilles 149, 4000 Liège</p>
   <p><a href="tel:+3242231880">04 223 18 80</a> · <a href="menu.html">Découvrir notre carte</a></p>
-  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 29/10 (16h15)</p>
+  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 30/10 (03h00)</p>
 </footer>
 
 <script>
@@ -338,9 +342,9 @@ window.MENU = [
 ["Vaudrée 2",21,"Bœuf / Sauce Vaudrée 2 / Cheddar / Bacon / Oignons caramélisés / Œuf"],
 ["Signature",22,"Steak de bœuf / Mayo truffe / Mozzarella / Roquette / Parmesan / Oignons"],
 ["Végétarien",18,"Burger végétarien / Cheddar / Tartare / Légumes grillés / Oignons caramélisés"]]},
-{title:"Viandes & steaks",photo:"images/carte-grillade.jpg",alt:"Entrecôte à griller",description:"Nos pierrades sont servies avec accompagnement, 3 sauces froides maison et salade.",items:[
-["Bavette d'Aloyau 250 g",26,""],["Pavé de Bœuf Irlandais 300 g",29,""],["Cube Roll Irlandais 350 g",37,""],
-["Entrecôte Limousine 350 g",36,""],["Côte à l'Os Irlandaise 600 g (à partager)",54,""]]},
+{title:"Pierrades",photo:"images/carte-grillade.jpg",alt:"Entrecôte à griller",description:"Nos pierrades sont servies avec accompagnement, 3 sauces froides maison et salade.",items:[
+["Bavette d'Aloyau 250 g",26,""],["Pavé de Bœuf Irlandais 300 g",29,"♥ Coup de cœur"],["Cube Roll Irlandais 350 g",37,"♥ Cœur d'entrecôte irlandaise, tendre, grasse et persillée"],
+["Entrecôte Limousine 350 g",36,"♥ Entrecôte de race française, fondante, grasse et savoureuse"],["Côte à l'Os Irlandaise 600 g (à partager)",54,""]]},
 {title:"Brochettes & épées",photo:"images/carte-epee.jpg",alt:"Épée de bœuf",items:[
 ["Brochette Bœuf d'Aloyau 300 g",27,""],["Brochette Bœuf Irlandais 300 g",33,""],
 ["Épée Bœuf d'Aloyau 450 g",30,""],["Épée Bœuf Irlandais 450 g",40,""]]},
@@ -416,23 +420,34 @@ function slotsFor(ds){
 function nextAvailable(ds){for(let i=1;i<=21;i++){const d=addDays(ds,i);if(slotsFor(d).length)return d}return null}
 
 /* ---------- Construction des plats ---------- */
-const dish=(n,p,d,id)=>`<div class="dish"><div><div class="dish-name">${esc(n)}</div>${d?`<div class="dish-desc">${esc(d)}</div>`:""}<div class="dish-price">${euro(p)}</div></div>
+const ACC=["Frites","Croquettes","Pommes de terre","Pâtes"],ACC_CATS=["Poissons & crustacés","Pierrades","Brochettes & épées","Les incontournables"];
+let ACCSEL={};
+function renderAcc(inp){const box=inp.closest(".dish")&&inp.closest(".dish").querySelector(".acc-box");if(!box)return;
+  const q=Math.max(0,Math.min(99,Number.parseInt(inp.value,10)||0));if(box.children.length===q){box.hidden=!q;return;}
+  const sel=ACCSEL[inp.id]||[];box.hidden=!q;
+  box.innerHTML=Array.from({length:q},(_,k)=>`<label class="acc-row"><span>${q>1?"Assiette "+(k+1):"Accompagnement"}</span><select data-id="${inp.id}" data-k="${k}">${ACC.map(a=>`<option${a===(sel[k]||ACC[0])?" selected":""}>${a}</option>`).join("")}</select></label>`).join("");}
+const dish=(n,p,d,id,acc)=>`<div class="dish"><div><div class="dish-name">${esc(n)}</div>${d?`<div class="dish-desc">${esc(d)}</div>`:""}<div class="dish-price">${euro(p)}</div></div>
 <div class="qty"><button type="button" class="step" data-for="${id}" data-d="-1" aria-label="Retirer : ${esc(n)}">−</button>
 <input id="${id}" type="number" min="0" max="99" step="1" value="0" inputmode="numeric" data-name="${esc(n)}" data-price="${p}" aria-label="Quantité : ${esc(n)}">
-<button type="button" class="step" data-for="${id}" data-d="1" aria-label="Ajouter : ${esc(n)}">+</button></div></div>`;
+<button type="button" class="step" data-for="${id}" data-d="1" aria-label="Ajouter : ${esc(n)}">+</button></div>${acc?`<div class="acc-box" hidden></div>`:""}</div>`;
 
-const NOTE_SUPP=["Pâtes fraîches","Poissons & crustacés","Moules (selon saison)","Burgers","Viandes & steaks","Brochettes & épées","Les incontournables"];
+const NOTE_SUPP=["Pâtes fraîches","Poissons & crustacés","Moules (selon saison)","Burgers","Pierrades","Brochettes & épées","Les incontournables"];
 MENU.forEach((s,i)=>{
   if(!s.items.some(it=>it[1]>0))return;
   const el=document.createElement("section");
   el.className="category"; if(s.midi)el.dataset.midi="1";
   if(s.photo){el.classList.add("ph");el.style.setProperty("--ph","url('"+s.photo+"')");}
   const note=NOTE_SUPP.includes(s.title)?`<p class="cat-note">Suppléments et accompagnements supplémentaires : voir la rubrique « Les petits plus ».</p>`:"";
-  el.innerHTML=`<h2 class="cat-h" role="button" tabindex="0" aria-expanded="false"><span>${esc(s.title)}</span><span class="cat-count" hidden></span><span class="chev" aria-hidden="true">▾</span></h2><div class="cat-body">${s.description?`<p class="category-intro">${esc(s.description)}</p>`:""}<div class="dish-list">${s.items.map((it,j)=>it[1]>0?dish(it[0],it[1],it[2],`d-${i}-${j}`):"").join("")}</div>${note}</div>`;
+  el.innerHTML=`<h2 class="cat-h" role="button" tabindex="0" aria-expanded="false"><span>${esc(s.title)}</span><span class="cat-count" hidden></span><span class="chev" aria-hidden="true">▾</span></h2><div class="cat-body">${s.description?`<p class="category-intro">${esc(s.description)}</p>`:""}<div class="dish-list">${s.items.map((it,j)=>it[1]>0?dish(it[0],it[1],it[2],`d-${i}-${j}`,ACC_CATS.includes(s.title)):"").join("")}</div>${note}</div>`;
   $("menuSections").appendChild(el);
 });
 function toggleCat(sec,open){const o=open===undefined?!sec.classList.contains("open"):open;sec.classList.toggle("open",o);const h=sec.querySelector(".cat-h");if(h)h.setAttribute("aria-expanded",o);}
 $("menuSections").addEventListener("click",e=>{const h=e.target.closest(".cat-h");if(h)toggleCat(h.closest(".category"));});
+(function(){const bar=document.createElement("div");bar.className="cat-tools";
+bar.innerHTML='<button type="button" class="alt" id="openAll">Tout ouvrir</button> <button type="button" class="alt" id="closeAll">Tout fermer</button>';
+$("menuSections").parentNode.insertBefore(bar,$("menuSections"));
+$("openAll").addEventListener("click",()=>document.querySelectorAll("#menuSections .category").forEach(c=>toggleCat(c,true)));
+$("closeAll").addEventListener("click",()=>document.querySelectorAll("#menuSections .category").forEach(c=>toggleCat(c,false)));})();
 $("menuSections").addEventListener("keydown",e=>{const h=e.target.closest&&e.target.closest(".cat-h");if(h&&(e.key==="Enter"||e.key===" ")){e.preventDefault();toggleCat(h.closest(".category"));}});
 (function(){const b=$("toggleAll");if(!b)return;b.addEventListener("click",()=>{const secs=[...document.querySelectorAll("#menuSections .category")];const openAll=secs.some(s=>!s.classList.contains("open"));secs.forEach(s=>toggleCat(s,openAll));b.textContent=openAll?"Tout replier":"Tout déplier";});})();
 for(let g=1;g<=MAX_GUESTS;g++)$("guests").add(new Option(g,g));
@@ -493,7 +508,7 @@ function updateTotal(){
   document.querySelectorAll("[data-price]").forEach(i=>{
     let q=Number.parseInt(i.value,10);if(!Number.isFinite(q)||q<0)q=0;if(q>99)q=99;
     total+=q*Number(i.dataset.price);count+=q;
-    i.closest(".dish").classList.toggle("on",q>0);
+    i.closest(".dish").classList.toggle("on",q>0);renderAcc(i);
   });
   document.querySelectorAll("#menuSections .category").forEach(sec=>{let n=0;sec.querySelectorAll("[data-price]").forEach(i=>{const q=Number.parseInt(i.value,10);if(q>0)n+=q;});const b=sec.querySelector(".cat-count");if(b){b.textContent=n;b.hidden=!n;}});
   $("totalDisplay").textContent=euro(total);
@@ -509,6 +524,7 @@ const KEY="vaudree2-draft",FIELDS=["date","time","guests","name","phone","email"
 function save(){try{
   const d={f:{},q:{}};FIELDS.forEach(i=>d.f[i]=$(i).value);
   document.querySelectorAll("[data-price]").forEach(i=>{if(Number(i.value)>0)d.q[i.id]=i.value});
+  d.a={};Object.keys(d.q).forEach(id=>{if(ACCSEL[id])d.a[id]=ACCSEL[id]});
   sessionStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
 function restore(){try{
   const d=JSON.parse(sessionStorage.getItem(KEY)||"null");if(!d)return;
@@ -518,10 +534,13 @@ function restore(){try{
   if(d.f.time&&[...timeEl.options].some(o=>o.value===d.f.time))timeEl.value=d.f.time;
   renderSuggestions();
   Object.entries(d.q).forEach(([id,v])=>{const el=$(id);if(el)el.value=v});
+  ACCSEL=d.a||{};document.querySelectorAll('[data-price]').forEach(i=>renderAcc(i));
+  document.querySelectorAll('#menuSections .category').forEach(sec=>{if([...sec.querySelectorAll('[data-price]')].some(i=>Number(i.value)>0))toggleCat(sec,true);});
 }catch(e){}}
 
 /* ---------- Événements ---------- */
 const form=$("orderForm");
+form.addEventListener("input",e=>{const t=e.target;if(t.matches&&t.matches(".acc-row select")){(ACCSEL[t.dataset.id]=ACCSEL[t.dataset.id]||[])[Number(t.dataset.k)]=t.value;}});
 form.addEventListener("click",e=>{
   const b=e.target.closest(".step");if(!b)return;
   const i=$(b.dataset.for),v=Math.max(0,Math.min(99,(Number.parseInt(i.value,10)||0)+Number(b.dataset.d)));
@@ -550,13 +569,15 @@ form.addEventListener("submit",async e=>{
   if(!slotsFor(dateEl.value).includes(toMin(timeEl.value)))return showError("Cette heure n'est plus disponible. Choisissez une autre heure.");
 
   const {total}=updateTotal();
-  const lines=chosen.map(i=>{const q=Number.parseInt(i.value,10);const sug=i.closest(".sugg")?" [SUGGESTION]":"";return `${q} × ${i.dataset.name}${sug} — ${euro(q*Number(i.dataset.price))}`});
+  const lines=chosen.map(i=>{const q=Number.parseInt(i.value,10);const sug=i.closest(".sugg")?" [SUGGESTION]":"";let l=`${q} × ${i.dataset.name}${sug} — ${euro(q*Number(i.dataset.price))}`;const bx=i.closest(".dish").querySelector(".acc-box");if(bx&&!bx.hidden){const v=[...bx.querySelectorAll("select")].map(x=>x.value),c={};v.forEach(x=>c[x]=(c[x]||0)+1);l+="\n   ↳ "+(q===1?v[0]:Object.entries(c).map(([k,n])=>n+" "+k.toLowerCase()).join(", "));}return l;});
   const summary=chosen.length?lines.join("\n")+"\n\nTOTAL INDICATIF : "+euro(total)+"\n\nCe total est indicatif et doit être vérifié par le restaurant.":"Aucune précommande : réservation de table uniquement.";
   const lateCut=chosen.length?isLate():null;
   const summaryFull=lateCut?`⏱ COMMANDE APRÈS ${lateCut} : à servir 1 h à 1 h 15 après la demande.\n\n`+summary:summary;
   $("orderSummary").value=summaryFull;
 
   const btn=$("submitButton");btn.disabled=true;btn.textContent="Envoi en cours…";
+  let cap=null;
+  try{if(RELAY_URL){const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),3500);const r2=await fetch(RELAY_URL+"?"+new URLSearchParams({action:"capacite",date:dateEl.value,heure:timeEl.value,pers:$("guests").value}),{signal:ac.signal,cache:"no-store"});clearTimeout(tm);cap=await r2.json();}}catch(_){}
   try{
     const r=await fetch(form.action,{method:"POST",body:new FormData(form),headers:{Accept:"application/json"}});
     if(!r.ok)throw new Error(r.status);
@@ -565,6 +586,7 @@ form.addEventListener("submit",async e=>{
     try{if(RELAY_URL)fetch(RELAY_URL,{method:"POST",mode:"no-cors",body:new URLSearchParams(new FormData(form))}).catch(()=>{})}catch(_){}
     try{sessionStorage.removeItem(KEY)}catch(_){}
     $("recap").textContent=`${longDate(dateEl.value)} à ${hh(toMin(timeEl.value))} · ${$("guests").value} pers.\n${summaryFull}`;
+    if(cap&&cap.ok){const hasMail=!!$("email").value.trim();$("fullNote").hidden=!cap.presque;if(!cap.presque)$("okMsg").textContent=hasMail?"Merci ! Votre réservation est confirmée : un e-mail de confirmation vous est envoyé. Pour modifier ou annuler, appelez-nous.":"Merci ! Votre demande est bien enregistrée. Pour modifier ou annuler, appelez-nous.";else $("okMsg").textContent="Merci ! Votre demande est bien reçue.";}
     form.hidden=true;$("success").hidden=false;$("success").focus();window.scrollTo({top:0});
   }catch(err){
     showError(`L'envoi a échoué. Vérifiez votre connexion et réessayez, ou appelez-nous au ${PHONE}.`);
