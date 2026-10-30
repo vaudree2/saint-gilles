@@ -50,7 +50,7 @@ ol{padding-left:20px;margin:6px 0}
 </head>
 <body>
 <h1>Poste d'impression</h1>
-<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service <span style="opacity:.6">· version 29/10 (00h10)</span></p>
+<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service <span style="opacity:.6">· version 30/10 (03h00)</span></p>
 
 <div class="card" id="setup" hidden>
   <p class="status err" id="setupMsg"></p>
@@ -121,6 +121,7 @@ function ticketHtml(o) {
   <div class="center brand">VAUDRÉE 2</div>
   ${o.num ? `<div class="num">N° ${esc(o.num)}</div>` : ""}
   <span class="genre">${esc(o.genre)}</span>
+  ${o.alerte ? `<div class="alert" style="text-align:center">⚠ ${esc(o.alerte)}</div>` : ""}
   <div class="quand">${esc(q.d)}<br>${esc(q.h)}</div>
   ${o.pers ? `<div class="pers">${esc(o.pers)} pers.</div>` : ""}
   <div class="qui">${esc(o.nom)}<br>${esc(o.tel)}</div>
@@ -210,7 +211,7 @@ async function chargerRecent() {
 
 $("start").addEventListener("click", () => {
   running = true; $("start").disabled = true; $("stop").disabled = false;
-  bip();
+  bip(); garderEveille();
   setStatus("● En marche : vérification…", "ok", "");
   cycle(); timer = setInterval(cycle, POLL_MS); chargerRecent();
 });
@@ -238,7 +239,14 @@ $("dxp").addEventListener("click", () => { dx = Math.min(30, dx + 1); appliquerR
 $("twm").addEventListener("click", () => { tw = Math.max(50, tw - 1); appliquerReglage(); });
 $("twp").addEventListener("click", () => { tw = Math.min(80, tw + 1); appliquerReglage(); });
 appliquerReglage();
-if (KEY) chargerRecent();
+/* Garde l'écran allumé (sinon l'ordinateur peut s'endormir et l'impression s'arrête) */
+let verrou = null;
+async function garderEveille() {
+  try { if (navigator.wakeLock && !verrou) { verrou = await navigator.wakeLock.request("screen"); verrou.addEventListener("release", () => { verrou = null; }); } } catch (e) {}
+}
+document.addEventListener("visibilitychange", () => { if (running && document.visibilityState === "visible") garderEveille(); });
+/* Démarrage automatique à l'ouverture de la page */
+if (KEY) { chargerRecent(); setTimeout(() => { if (!running) $("start").click(); }, 800); }
 </script>
 </body>
 </html>
