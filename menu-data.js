@@ -60,7 +60,7 @@ window.MENU = [
 ["Vaudrée 2",21,"Bœuf / Sauce Vaudrée 2 / Cheddar / Bacon / Oignons caramélisés / Œuf"],
 ["Signature",22,"Steak de bœuf / Mayo truffe / Mozzarella / Roquette / Parmesan / Oignons"],
 ["Végétarien",18,"Burger végétarien / Cheddar / Tartare / Légumes grillés / Oignons caramélisés"]]},
-{title:"Viandes (grillades)",photo:"images/carte-viande.jpg",alt:"Entrecôte, frites et salade",description:"Cuisson au choix, avec accompagnement. Nature ou avec une sauce chaude (+ 4 €) : champignons crème, poivre vert, roquefort, dijonnaise, béarnaise ou beurre maître d'hôtel.",items:[
+{title:"Viandes",photo:"images/carte-viande.jpg",alt:"Entrecôte, frites et salade",description:"Cuisson au choix, avec accompagnement. Nature ou avec une sauce chaude (+ 4 €) : champignons crème, poivre vert, roquefort, dijonnaise, béarnaise ou beurre maître d'hôtel.",items:[
 ["Bavette d'Aloyau 250 g",25,""],["Pavé Irlandais 300 g",29,"♥ Coup de cœur"],["Cube Roll Irlandais 350 g",37,"♥ Noix d'entrecôte grasse, tendre et persillée"],
 ["Entrecôte Limousine 350 g",36,"♥ Entrecôte de race française, fondante, grasse et savoureuse"],["Côte à l'Os Irlandaise 600 g",54,"À partager si vous le souhaitez, 1 ou 2 personnes"]]},
 {title:"Pierrades",photo:"images/carte-grillade.jpg",alt:"Entrecôte à griller",description:"Nos pierrades sont servies avec accompagnement, 3 sauces froides maison et salade.",items:[
