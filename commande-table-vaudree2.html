@@ -200,7 +200,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/c
 <footer>
   <p><strong>Vaudrée 2</strong> · Rue Saint-Gilles 149, 4000 Liège</p>
   <p><a href="tel:+3242231880">04 223 18 80</a> · <a href="menu.html">Découvrir notre carte</a></p>
-  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 31/10 (17h30)</p>
+  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 31/10 (18h30)</p>
 </footer>
 
 <script>
@@ -342,7 +342,7 @@ window.MENU = [
 ["Vaudrée 2",21,"Bœuf / Sauce Vaudrée 2 / Cheddar / Bacon / Oignons caramélisés / Œuf"],
 ["Signature",22,"Steak de bœuf / Mayo truffe / Mozzarella / Roquette / Parmesan / Oignons"],
 ["Végétarien",18,"Burger végétarien / Cheddar / Tartare / Légumes grillés / Oignons caramélisés"]]},
-{title:"Viandes (grillades)",photo:"images/carte-viande.jpg",alt:"Entrecôte, frites et salade",description:"Cuisson au choix, avec accompagnement. Nature ou avec une sauce chaude (+ 4 €) : champignons crème, poivre vert, roquefort, dijonnaise, béarnaise ou beurre maître d'hôtel.",items:[
+{title:"Viandes",photo:"images/carte-viande.jpg",alt:"Entrecôte, frites et salade",description:"Cuisson au choix, avec accompagnement. Nature ou avec une sauce chaude (+ 4 €) : champignons crème, poivre vert, roquefort, dijonnaise, béarnaise ou beurre maître d'hôtel.",items:[
 ["Bavette d'Aloyau 250 g",25,""],["Pavé Irlandais 300 g",29,"♥ Coup de cœur"],["Cube Roll Irlandais 350 g",37,"♥ Noix d'entrecôte grasse, tendre et persillée"],
 ["Entrecôte Limousine 350 g",36,"♥ Entrecôte de race française, fondante, grasse et savoureuse"],["Côte à l'Os Irlandaise 600 g",54,"À partager si vous le souhaitez, 1 ou 2 personnes"]]},
 {title:"Pierrades",photo:"images/carte-grillade.jpg",alt:"Entrecôte à griller",description:"Nos pierrades sont servies avec accompagnement, 3 sauces froides maison et salade.",items:[
@@ -426,7 +426,7 @@ function nextAvailable(ds){for(let i=1;i<=21;i++){const d=addDays(ds,i);if(slots
 const ACC=[["Frites",0],["Croquettes",0],["Pommes de terre",0],["Pâtes",0],["Gratin dauphinois",5]],
 CUIS=["Bleu","Saignant","À point","Bien cuit"],
 SAUCES=[["Nature",0],["Champignons crème",4],["Poivre vert",4],["Roquefort",4],["Dijonnaise",4],["Béarnaise",4],["Beurre maître d'hôtel",4]],
-KIND={"Poissons & crustacés":"a","Pierrades":"s","Brochettes & épées":"v","Les incontournables":"a","Viandes (grillades)":"v"};
+KIND={"Poissons & crustacés":"a","Pierrades":"s","Brochettes & épées":"v","Les incontournables":"a","Viandes":"v"};
 let ACCSEL={};
 const optsX=(list,cur,ph)=>(ph?`<option value=""${cur?"":" selected"}>${ph}</option>`:"")+list.map(o=>{const n=Array.isArray(o)?o[0]:o,x=Array.isArray(o)?o[1]:0;return `<option value="${esc(n)}" data-x="${x}"${n===cur?" selected":""}>${esc(n)}${x?` (+${x} €)`:""}</option>`}).join("");
 function renderAcc(inp){const dish=inp.closest(".dish"),box=dish&&dish.querySelector(".acc-box");if(!box)return;
@@ -439,19 +439,20 @@ function renderAcc(inp){const dish=inp.closest(".dish"),box=dish&&dish.querySele
     (hs?`<label class="acc-row"><span>Sauce chaude</span><select data-id="${inp.id}" data-k="${k}" data-f="s">${optsX(SAUCES,c.s||"Nature")}</select></label>`:"")+`</div>`}).join("");
   box.querySelectorAll("select").forEach(x=>{const o=ACCSEL[x.dataset.id]=ACCSEL[x.dataset.id]||[];o[x.dataset.k]=o[x.dataset.k]&&typeof o[x.dataset.k]==="object"?o[x.dataset.k]:{};o[x.dataset.k][x.dataset.f]=x.value;});}
 function plates(bx){const out=[];bx.querySelectorAll(".acc-plate").forEach(pl=>{const g=f=>{const e=pl.querySelector(`[data-f=${f}]`);return e?e.value:""},x=[...pl.querySelectorAll("select")].reduce((t,e)=>t+Number(e.selectedOptions[0]&&e.selectedOptions[0].dataset.x||0),0);out.push({a:g("a"),c:g("c"),s:g("s"),x})});return out}
-const dish=(n,p,d,id,kind)=>`<div class="dish"><div><div class="dish-name">${esc(n)}</div>${d?`<div class="dish-desc">${esc(d)}</div>`:""}<div class="dish-price">${euro(p)}</div></div>
+const PRE={"Pierrades":"PIERRADE · "};
+const dish=(n,p,d,id,kind,pre)=>`<div class="dish"><div><div class="dish-name">${esc(n)}</div>${d?`<div class="dish-desc">${esc(d)}</div>`:""}<div class="dish-price">${euro(p)}</div></div>
 <div class="qty"><button type="button" class="step" data-for="${id}" data-d="-1" aria-label="Retirer : ${esc(n)}">−</button>
-<input id="${id}" type="number" min="0" max="99" step="1" value="0" inputmode="numeric" data-name="${esc(n)}" data-price="${p}" aria-label="Quantité : ${esc(n)}">
+<input id="${id}" type="number" min="0" max="99" step="1" value="0" inputmode="numeric" data-name="${esc((pre||"")+n)}" data-price="${p}" aria-label="Quantité : ${esc(n)}">
 <button type="button" class="step" data-for="${id}" data-d="1" aria-label="Ajouter : ${esc(n)}">+</button></div>${kind?`<div class="acc-box" data-kind="${kind}" hidden></div>`:""}</div>`;
 
-const NOTE_SUPP=["Pâtes fraîches","Poissons & crustacés","Moules (selon saison)","Burgers","Pierrades","Viandes (grillades)","Brochettes & épées","Les incontournables"];
+const NOTE_SUPP=["Pâtes fraîches","Poissons & crustacés","Moules (selon saison)","Burgers","Pierrades","Viandes","Brochettes & épées","Les incontournables"];
 MENU.forEach((s,i)=>{
   if(!s.items.some(it=>it[1]>0))return;
   const el=document.createElement("section");
   el.className="category"; if(s.midi)el.dataset.midi="1";
   if(s.photo){el.classList.add("ph");el.style.setProperty("--ph","url('"+s.photo+"')");}
   const note=NOTE_SUPP.includes(s.title)?`<p class="cat-note">Suppléments et accompagnements supplémentaires : voir la rubrique « Les petits plus ».</p>`:"";
-  el.innerHTML=`<h2 class="cat-h" role="button" tabindex="0" aria-expanded="false"><span>${esc(s.title)}</span><span class="cat-count" hidden></span><span class="chev" aria-hidden="true">▾</span></h2><div class="cat-body">${s.description?`<p class="category-intro">${esc(s.description)}</p>`:""}<div class="dish-list">${s.items.map((it,j)=>it[1]>0?dish(it[0],it[1],it[2],`d-${i}-${j}`,KIND[s.title]):"").join("")}</div>${note}</div>`;
+  el.innerHTML=`<h2 class="cat-h" role="button" tabindex="0" aria-expanded="false"><span>${esc(s.title)}</span><span class="cat-count" hidden></span><span class="chev" aria-hidden="true">▾</span></h2><div class="cat-body">${s.description?`<p class="category-intro">${esc(s.description)}</p>`:""}<div class="dish-list">${s.items.map((it,j)=>it[1]>0?dish(it[0],it[1],it[2],`d-${i}-${j}`,KIND[s.title],PRE[s.title]):"").join("")}</div>${note}</div>`;
   $("menuSections").appendChild(el);
 });
 function toggleCat(sec,open){const o=open===undefined?!sec.classList.contains("open"):open;sec.classList.toggle("open",o);const h=sec.querySelector(".cat-h");if(h)h.setAttribute("aria-expanded",o);}
