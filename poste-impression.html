@@ -38,6 +38,33 @@ ol{padding-left:20px;margin:6px 0}
 #ticket .foot{font-size:13px;text-align:center;margin-top:8px}
 #preview{background:#ddd;padding:14px;border-radius:10px;margin-top:10px}
 #preview #ticket{display:block}
+#ticket .rl{font-size:16px;font-weight:700;border-bottom:1px dashed #000;padding:3px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chips button{margin:0;padding:8px 14px;font-size:14px}
+.chips button.on{background:var(--gold);color:#17130b}
+.cnt{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+.cnt div{background:#241f14;border:1px solid #49402d;border-radius:8px;padding:6px 10px;font-size:14px}
+.ord{border-top:1px solid #2a2418;padding:10px 0}
+.ord.servi{opacity:.5}
+.ord-h{display:flex;gap:10px;align-items:center;cursor:pointer}
+.ord-h .num{font-weight:900;font-size:22px;color:var(--gold);min-width:50px}
+.tag{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid #6b5a2a;margin-left:4px}
+.tag.al{background:#5a1f12;border-color:#ff9b8c;color:#ffd2c9}
+.tag.pc{background:#4a3306;border-color:#ffb347;color:#ffe2b5}
+.tag.late{background:#3a1f06;border-color:#ff8a1f;color:#ffe2c2}
+.st{font-size:12px;font-weight:700;padding:3px 9px;border-radius:8px;white-space:nowrap;background:#2a2518;color:#f1dba5}
+.st-prepa{background:#7a4a00;color:#fff}.st-pret{background:#1f6b3a;color:#fff}.st-servi{background:#333;color:#aaa}
+.ord-b{display:none;padding:8px 0 0 60px;font-size:14px;white-space:pre-wrap}
+.ord.open .ord-b{display:block}
+.ord-b button{margin:8px 6px 0 0;padding:9px 12px;font-size:14px}
+#agenda{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:8px 0}
+#agenda .dh{font-size:12px;text-align:center;opacity:.7}
+#agenda button{margin:0;padding:6px 2px;min-height:54px;font-size:14px;background:#241f14;color:#f1dba5;border:1px solid #3a321f;border-radius:8px;line-height:1.2}
+#agenda button.vide{opacity:.45}
+#agenda button.auj{border-color:var(--gold)}
+#agenda button.sel{background:var(--gold);color:#17130b}
+#agenda button small{display:block;font-size:11px}
+#agenda .pad{visibility:hidden}
 @page{margin:0}
 @media print{
   body{background:#fff;padding:0}
@@ -50,7 +77,7 @@ ol{padding-left:20px;margin:6px 0}
 </head>
 <body>
 <h1>Poste d'impression</h1>
-<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service <span style="opacity:.6">· version 30/10 (03h00)</span></p>
+<p class="sub">Vaudrée 2 · à laisser ouvert sur l'ordinateur du restaurant pendant le service <span style="opacity:.6">· version 31/10 (15h00)</span></p>
 
 <div class="card" id="setup" hidden>
   <p class="status err" id="setupMsg"></p>
@@ -66,6 +93,7 @@ ol{padding-left:20px;margin:6px 0}
 
 <div class="card">
   <strong>Réglage du ticket</strong>
+  <label class="small" style="display:flex;gap:8px;align-items:center;margin:8px 0"><input type="checkbox" id="x2"> Imprimer 2 exemplaires (cuisine + bar)</label>
   <p class="small">Si le ticket sort trop à gauche ou trop à droite, décalez-le puis imprimez un ticket test.</p>
   <div class="row"><span>Position : <b id="dxv">0</b> mm</span>
     <span><button class="alt" id="dxm">◀ Gauche</button><button class="alt" id="dxp">Droite ▶</button></span></div>
@@ -74,8 +102,22 @@ ol{padding-left:20px;margin:6px 0}
 </div>
 
 <div class="card">
-  <strong>Dernières commandes</strong>
-  <div id="recent"><p class="small">Aucune commande pour l'instant.</p></div>
+  <strong>📅 Agenda du mois</strong>
+  <div class="chips" style="align-items:center;justify-content:space-between"><button class="alt" id="moisPrev">◀</button><b id="moisTitre"></b><button class="alt" id="moisNext">▶</button></div>
+  <div id="agenda"></div>
+  <p class="small">Touche un jour pour voir toutes ses réservations et commandes en détail, juste en dessous.</p>
+</div>
+
+<div class="card" id="cartejour">
+  <strong>Commandes du jour</strong>
+  <div class="chips">
+    <input type="date" id="jourDate" style="padding:8px;border-radius:8px;border:1px solid #49402d;background:#101010;color:#fff">
+    <button class="alt" id="jourAuj">Aujourd'hui</button>
+    <button class="alt on" data-f="tous">Tous</button><button class="alt" data-f="midi">🍽 Midi</button><button class="alt" data-f="soir">🌙 Soir</button>
+    <button class="alt" id="jourPrint">🖨 Imprimer la liste</button>
+  </div>
+  <div class="cnt" id="compteurs"></div>
+  <div id="jour"><p class="small">Chargement…</p></div>
 </div>
 
 <div class="card small">
@@ -115,7 +157,7 @@ function quand(o) {
   return { d: d ? d.toUpperCase() : "AUJOURD'HUI", h };
 }
 
-function ticketHtml(o) {
+function ticketHtml(o, tag) {
   const q = quand(o);
   return `
   <div class="center brand">VAUDRÉE 2</div>
@@ -130,13 +172,21 @@ function ticketHtml(o) {
   ${o.remarques ? `<div class="rem">Remarques :\n${esc(o.remarques)}</div>` : ""}
   <hr>
   <div class="foot">Reçue à ${esc(o.recu || "")} · n° ${esc(o.id || "")}</div>
+  ${tag ? `<div class="alert" style="text-align:center;margin-top:6px">${esc(tag)}</div>` : ""}
   <div class="foot">.</div>`;
 }
 
-function imprimer(o) {
-  $("ticket").innerHTML = ticketHtml(o);
-  window.print();
+let x2 = false;
+try { x2 = localStorage.getItem("ticket_x2") === "1"; } catch (e) {}
+async function imprimer(o) {
+  const n = x2 ? 2 : 1;
+  for (let k = 0; k < n; k++) {
+    $("ticket").innerHTML = ticketHtml(o, n > 1 ? (k === 0 ? "EXEMPLAIRE CUISINE" : "EXEMPLAIRE BAR") : "");
+    window.print();
+    if (k < n - 1) await new Promise(r => setTimeout(r, GAP_MS));
+  }
 }
+function imprimerHtml(h) { $("ticket").innerHTML = h; window.print(); }
 
 function bip() {
   try {
@@ -189,31 +239,117 @@ async function cycle() {
       await new Promise(r => setTimeout(r, GAP_MS));
     }
     setStatus("● En marche · en attente de commandes", "ok", "Dernière vérification : " + heure);
-    if (j.orders.length) chargerRecent();
+    if (j.orders.length) chargerJour();
   } catch (e) {
     setStatus("● Connexion perdue : nouvelle tentative…", "err",
       explique(e.message));
   } finally { busy = false; }
 }
 
-async function chargerRecent() {
-  try {
-    const j = await api({ action: "recent" });
-    const box = $("recent");
-    if (!j.orders.length) { box.innerHTML = '<p class="small">Aucune commande pour l\'instant.</p>'; return; }
-    box.innerHTML = j.orders.map((o, i) => {
-      const q = quand(o);
-      return `<div class="row"><div><strong>${esc(o.genre)}</strong> · ${esc(q.d)} ${esc(q.h)}<br><span class="small">${esc(o.nom)} · reçue à ${esc(o.recu)}</span></div><button class="alt" data-i="${i}">Réimprimer</button></div>`;
-    }).join("");
-    box.querySelectorAll("button").forEach(b => b.addEventListener("click", () => imprimer(j.orders[Number(b.dataset.i)])));
-  } catch (e) {}
+/* ----- Commandes du jour ----- */
+const aujourdhui = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Brussels" });
+let jourSel = aujourdhui(), filtre = "tous", jourData = [];
+const ouverts = new Set();
+const svcDe = o => { const m = String(o.heure || "").match(/(\d{1,2})/); return m && Number(m[1]) < 15 ? "midi" : "soir"; };
+const persN = o => { const m = String(o.pers || "").match(/\d+/); return m ? Number(m[0]) : 0; };
+const STATUTS = { "": "Nouveau", prepa: "En préparation", pret: "Prêt", servi: "Servi" };
+const dateFr = iso => { const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? m[3] + "/" + m[2] + "/" + m[1] : iso; };
+
+async function chargerJour() {
+  if (!KEY) return;
+  try { const j = await api({ action: "jour", date: jourSel }); jourData = j.orders || []; rendreJour(); } catch (e) {}
 }
+
+function listeFiltree() { return jourData.filter(o => filtre === "tous" || svcDe(o) === filtre); }
+
+function rendreJour() {
+  const box = $("jour"), list = listeFiltree();
+  const stat = sv => { const l = jourData.filter(o => svcDe(o) === sv); return { n: l.length, c: l.reduce((a, o) => a + persN(o), 0), al: l.filter(o => o.allergies).length }; };
+  const m = stat("midi"), s2 = stat("soir");
+  $("compteurs").innerHTML = `<div>🍽 Midi : <b>${m.n}</b> commande(s) · <b>${m.c}</b> couverts</div><div>🌙 Soir : <b>${s2.n}</b> commande(s) · <b>${s2.c}</b> couverts</div>` + ((m.al + s2.al) ? `<div>⚠ <b>${m.al + s2.al}</b> avec allergies</div>` : "");
+  document.querySelectorAll("[data-f]").forEach(b => b.classList.toggle("on", b.dataset.f === filtre));
+  if (!list.length) { box.innerHTML = '<p class="small">Aucune commande pour ce jour.</p>'; return; }
+  box.innerHTML = list.map(o => {
+    const tags = [];
+    if (o.allergies) tags.push('<span class="tag al">⚠ allergies</span>');
+    if (o.alerte) tags.push('<span class="tag pc">presque complet</span>');
+    if (String(o.plats || "").indexOf("⏱") === 0) tags.push('<span class="tag late">après l\'heure</span>');
+    const st = o.statut || "";
+    const det = [o.tel ? "📞 " + o.tel : "", o.plats ? "\n" + o.plats : "", o.allergies ? "\n⚠ ALLERGIES : " + o.allergies : "", o.remarques ? "\n📝 " + o.remarques : "", "\nReçue à " + (o.recu || "") + " · " + (o.imprime ? "imprimée" : "pas encore imprimée")].filter(Boolean).join("\n");
+    return `<div class="ord ${st === "servi" ? "servi" : ""} ${ouverts.has(o.id) ? "open" : ""}" data-id="${esc(o.id)}">
+      <div class="ord-h"><span class="num">${esc(o.num || "–")}</span>
+        <div style="flex:1"><strong>${esc(o.heure)}</strong> · ${esc(o.nom)}${o.pers ? " · " + esc(o.pers) + " pers." : ""}<br><span class="small">${esc(o.genre)}</span>${tags.join("")}</div>
+        <span class="st st-${st}">${STATUTS[st]}</span></div>
+      <div class="ord-b">${esc(det)}<div><button class="alt" data-act="print">🖨 Réimprimer</button><button class="alt" data-act="prepa">En préparation</button><button class="alt" data-act="pret">Prêt</button><button class="alt" data-act="servi">Servi</button></div></div></div>`;
+  }).join("");
+}
+
+function recapHtml() {
+  const list = listeFiltree();
+  const lignes = ["midi", "soir"].map(sv => {
+    const l = list.filter(o => svcDe(o) === sv); if (!l.length) return "";
+    return `<div class="genre">${sv === "midi" ? "MIDI" : "SOIR"} · ${l.length} cmd · ${l.reduce((a, o) => a + persN(o), 0)} couverts</div>` +
+      l.map(o => `<div class="rl">${esc(o.num || "")} · ${esc(o.heure)} · ${esc(o.nom)}${o.pers ? " · " + esc(o.pers) + "p" : ""}${o.allergies ? " ⚠" : ""}</div>`).join("");
+  }).join("");
+  return `<div class="center brand">VAUDRÉE 2</div><span class="genre">LISTE DU ${esc(dateFr(jourSel))}</span>${lignes || '<div class="rl">Aucune commande</div>'}<div class="foot">Imprimée à ${new Date().toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" })}</div><div class="foot">.</div>`;
+}
+
+$("jour").addEventListener("click", async e => {
+  const ord = e.target.closest(".ord"); if (!ord) return;
+  const o = jourData.find(x => x.id === ord.dataset.id); if (!o) return;
+  const b = e.target.closest("button");
+  if (b) {
+    if (b.dataset.act === "print") return imprimer(o);
+    o.statut = b.dataset.act; rendreJour();
+    try { await api({ action: "statut", id: o.id, s: b.dataset.act }); } catch (err) {}
+    return chargerJour();
+  }
+  if (e.target.closest(".ord-h")) { ouverts.has(o.id) ? ouverts.delete(o.id) : ouverts.add(o.id); rendreJour(); }
+});
+document.querySelectorAll("[data-f]").forEach(b => b.addEventListener("click", () => { filtre = b.dataset.f; rendreJour(); }));
+$("jourDate").value = jourSel;
+$("jourDate").addEventListener("change", () => { jourSel = $("jourDate").value || aujourdhui(); if (jourSel.slice(0,7) !== moisSel) { moisSel = jourSel.slice(0,7); chargerMois(); } else rendreAgenda(); chargerJour(); });
+$("jourAuj").addEventListener("click", () => { jourSel = aujourdhui(); $("jourDate").value = jourSel; moisSel = jourSel.slice(0,7); chargerMois(); chargerJour(); });
+$("jourPrint").addEventListener("click", () => imprimerHtml(recapHtml()));
+setInterval(chargerJour, 20000);
+
+/* ----- Agenda du mois ----- */
+let moisSel = aujourdhui().slice(0, 7), moisData = [];
+const NOMS_MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+async function chargerMois() {
+  if (!KEY) return;
+  try { const j = await api({ action: "mois", mois: moisSel }); moisData = j.orders || []; } catch (e) {}
+  rendreAgenda();
+}
+function rendreAgenda() {
+  const [an, mo] = moisSel.split("-").map(Number);
+  $("moisTitre").textContent = NOMS_MOIS[mo - 1] + " " + an;
+  const nb = new Date(an, mo, 0).getDate(), dec = (new Date(an, mo - 1, 1).getDay() + 6) % 7;
+  const par = {};
+  moisData.forEach(o => { const d = String(o.jour || "").slice(0, 10); (par[d] = par[d] || []).push(o); });
+  let h = ["L","M","M","J","V","S","D"].map(x => `<div class="dh">${x}</div>`).join("") + '<div class="pad"></div>'.repeat(dec);
+  for (let d = 1; d <= nb; d++) {
+    const iso = moisSel + "-" + String(d).padStart(2, "0"), l = par[iso] || [];
+    const c = l.reduce((a, o) => a + persN(o), 0);
+    h += `<button class="${l.length ? "" : "vide"} ${iso === aujourdhui() ? "auj" : ""} ${iso === jourSel ? "sel" : ""}" data-d="${iso}">${d}${l.length ? `<small>${l.length} cmd</small><small>${c} couv.</small>` : ""}</button>`;
+  }
+  $("agenda").innerHTML = h;
+}
+$("agenda").addEventListener("click", e => {
+  const b = e.target.closest("button[data-d]"); if (!b) return;
+  jourSel = b.dataset.d; $("jourDate").value = jourSel; ouverts.clear(); rendreAgenda(); chargerJour();
+  $("cartejour").scrollIntoView({ behavior: "smooth" });
+});
+function moisDecale(n) { const [a, m] = moisSel.split("-").map(Number); const d = new Date(a, m - 1 + n, 1); moisSel = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"); chargerMois(); }
+$("moisPrev").addEventListener("click", () => moisDecale(-1));
+$("moisNext").addEventListener("click", () => moisDecale(1));
+setInterval(chargerMois, 60000);
 
 $("start").addEventListener("click", () => {
   running = true; $("start").disabled = true; $("stop").disabled = false;
   bip(); garderEveille();
   setStatus("● En marche : vérification…", "ok", "");
-  cycle(); timer = setInterval(cycle, POLL_MS); chargerRecent();
+  cycle(); timer = setInterval(cycle, POLL_MS); chargerJour();
 });
 $("stop").addEventListener("click", () => {
   running = false; clearInterval(timer); $("start").disabled = false; $("stop").disabled = true;
@@ -239,6 +375,8 @@ $("dxp").addEventListener("click", () => { dx = Math.min(30, dx + 1); appliquerR
 $("twm").addEventListener("click", () => { tw = Math.max(50, tw - 1); appliquerReglage(); });
 $("twp").addEventListener("click", () => { tw = Math.min(80, tw + 1); appliquerReglage(); });
 appliquerReglage();
+$("x2").checked = x2;
+$("x2").addEventListener("change", () => { x2 = $("x2").checked; try { localStorage.setItem("ticket_x2", x2 ? "1" : "0"); } catch (e) {} });
 /* Garde l'écran allumé (sinon l'ordinateur peut s'endormir et l'impression s'arrête) */
 let verrou = null;
 async function garderEveille() {
@@ -246,7 +384,7 @@ async function garderEveille() {
 }
 document.addEventListener("visibilitychange", () => { if (running && document.visibilityState === "visible") garderEveille(); });
 /* Démarrage automatique à l'ouverture de la page */
-if (KEY) { chargerRecent(); setTimeout(() => { if (!running) $("start").click(); }, 800); }
+if (KEY) { chargerJour(); chargerMois(); setTimeout(() => { if (!running) $("start").click(); }, 800); }
 </script>
 </body>
 </html>
