@@ -50,7 +50,7 @@ textarea{min-height:95px;resize:vertical}
 .dish-list{display:grid;grid-template-columns:1fr;gap:10px}
 .dish{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px;border:1px solid #39342a;border-radius:9px;background:#151515}
 .dish.on{border-color:var(--gold);background:#1e1a12}
-.acc-box{grid-column:1/-1;display:grid;gap:8px;margin-top:2px;padding-top:10px;border-top:1px dashed #4a3f2b}.acc-box[hidden]{display:none}.acc-row{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--gold-light)}.acc-row span{flex:0 0 auto;min-width:92px}.acc-row select{flex:1;padding:9px}
+.acc-box{grid-column:1/-1;display:grid;gap:8px;margin-top:2px;padding-top:10px;border-top:1px dashed #4a3f2b}.acc-box[hidden]{display:none}.acc-row{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--gold-light)}.acc-row span{flex:0 0 auto;min-width:92px}.acc-row select{flex:1;padding:9px}.acc-plate{display:grid;gap:6px}.acc-plate+.acc-plate{border-top:1px dotted #4a3f2b;padding-top:8px}.acc-t{font-weight:700;color:var(--gold)}
 .dish-name{font-weight:700}
 .dish-desc{font-size:13px;color:var(--muted);margin-top:4px}
 .dish-price{font-weight:700;color:var(--gold-light);margin-top:5px}
@@ -200,7 +200,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/c
 <footer>
   <p><strong>Vaudrée 2</strong> · Rue Saint-Gilles 149, 4000 Liège</p>
   <p><a href="tel:+3242231880">04 223 18 80</a> · <a href="menu.html">Découvrir notre carte</a></p>
-  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 30/10 (03h00)</p>
+  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 31/10 (17h00)</p>
 </footer>
 
 <script>
@@ -342,6 +342,9 @@ window.MENU = [
 ["Vaudrée 2",21,"Bœuf / Sauce Vaudrée 2 / Cheddar / Bacon / Oignons caramélisés / Œuf"],
 ["Signature",22,"Steak de bœuf / Mayo truffe / Mozzarella / Roquette / Parmesan / Oignons"],
 ["Végétarien",18,"Burger végétarien / Cheddar / Tartare / Légumes grillés / Oignons caramélisés"]]},
+{title:"Viandes (grillades)",photo:"images/carte-viande.jpg",alt:"Entrecôte, frites et salade",description:"Cuisson au choix, avec accompagnement. Nature ou avec une sauce chaude (+ 4 €) : champignons crème, poivre vert, roquefort, dijonnaise, béarnaise ou beurre maître d'hôtel.",items:[
+["Bavette d'Aloyau 250 g",25,""],["Pavé Irlandais 300 g",29,"♥ Coup de cœur"],["Cube Roll Irlandais 350 g",37,"♥ Noix d'entrecôte grasse, tendre et persillée"],
+["Entrecôte Limousine 350 g",36,"♥ Entrecôte de race française, fondante, grasse et savoureuse"],["Côte à l'Os Irlandaise 600 g",54,"À partager si vous le souhaitez, 1 ou 2 personnes"]]},
 {title:"Pierrades",photo:"images/carte-grillade.jpg",alt:"Entrecôte à griller",description:"Nos pierrades sont servies avec accompagnement, 3 sauces froides maison et salade.",items:[
 ["Bavette d'Aloyau 250 g",26,""],["Pavé de Bœuf Irlandais 300 g",29,"♥ Coup de cœur"],["Cube Roll Irlandais 350 g",37,"♥ Cœur d'entrecôte irlandaise, tendre, grasse et persillée"],
 ["Entrecôte Limousine 350 g",36,"♥ Entrecôte de race française, fondante, grasse et savoureuse"],["Côte à l'Os Irlandaise 600 g (à partager)",54,""]]},
@@ -373,8 +376,8 @@ window.MENU = [
 {title:"Les petits plus",photo:"images/carte-supplements.jpg",alt:"Café et mignardises",description:"Suppléments, accompagnements et douceurs pour personnaliser votre plat ou votre dessert. Rien n'est ajouté automatiquement : choisissez uniquement ce que vous souhaitez.",items:[
 ["Supplément Burrata — Planche Italienne",3.5,""],["Flambée au Pastis — Épée de Gambas",3,""],
 ["Supplément viande double — Burger",14,""],["Pain sans gluten — Burger",1.5,""],
-["Supplément gratin",5,"Accompagnement"],["Supplément légumes — viandes & steaks",4,"Accompagnement"],
-["Supplément sauce chaude",3.5,"Accompagnement"],["Supplément légumes — incontournables",5,"Accompagnement"],
+["Supplément gratin dauphinois",5,"Accompagnement"],["Supplément légumes — viandes & steaks",4,"Accompagnement"],
+["Supplément sauce chaude — viandes",4,"Accompagnement"],["Supplément légumes — incontournables",5,"Accompagnement"],
 ["Supplément frites — incontournables",3,"Accompagnement"],
 ["Boule de glace — vanille",3,""],["Boule de glace — chocolat",3,""],["Boule de glace — fraise",3,""],
 ["Supplément chantilly",1.5,""]]}
@@ -420,25 +423,35 @@ function slotsFor(ds){
 function nextAvailable(ds){for(let i=1;i<=21;i++){const d=addDays(ds,i);if(slotsFor(d).length)return d}return null}
 
 /* ---------- Construction des plats ---------- */
-const ACC=["Frites","Croquettes","Pommes de terre","Pâtes"],ACC_CATS=["Poissons & crustacés","Pierrades","Brochettes & épées","Les incontournables"];
+const ACC=[["Frites",0],["Croquettes",0],["Pommes de terre",0],["Pâtes",0],["Gratin dauphinois",5]],
+CUIS=["Bleu","Saignant","À point","Bien cuit"],
+SAUCES=[["Nature",0],["Champignons crème",4],["Poivre vert",4],["Roquefort",4],["Dijonnaise",4],["Béarnaise",4],["Beurre maître d'hôtel",4]],
+KIND={"Poissons & crustacés":"a","Pierrades":"s","Brochettes & épées":"s","Les incontournables":"a","Viandes (grillades)":"v"};
 let ACCSEL={};
-function renderAcc(inp){const box=inp.closest(".dish")&&inp.closest(".dish").querySelector(".acc-box");if(!box)return;
+const optsX=(list,cur,ph)=>(ph?`<option value=""${cur?"":" selected"}>${ph}</option>`:"")+list.map(o=>{const n=Array.isArray(o)?o[0]:o,x=Array.isArray(o)?o[1]:0;return `<option value="${esc(n)}" data-x="${x}"${n===cur?" selected":""}>${esc(n)}${x?` (+${x} €)`:""}</option>`}).join("");
+function renderAcc(inp){const dish=inp.closest(".dish"),box=dish&&dish.querySelector(".acc-box");if(!box)return;
   const q=Math.max(0,Math.min(99,Number.parseInt(inp.value,10)||0));if(box.children.length===q){box.hidden=!q;return;}
-  const sel=ACCSEL[inp.id]||[];box.hidden=!q;
-  box.innerHTML=Array.from({length:q},(_,k)=>`<label class="acc-row"><span>${q>1?"Assiette "+(k+1):"Accompagnement"}</span><select data-id="${inp.id}" data-k="${k}">${ACC.map(a=>`<option${a===(sel[k]||ACC[0])?" selected":""}>${a}</option>`).join("")}</select></label>`).join("");}
-const dish=(n,p,d,id,acc)=>`<div class="dish"><div><div class="dish-name">${esc(n)}</div>${d?`<div class="dish-desc">${esc(d)}</div>`:""}<div class="dish-price">${euro(p)}</div></div>
+  const sel=ACCSEL[inp.id]||[],v=box.dataset.kind==="v",hs=v||box.dataset.kind==="s";box.hidden=!q;
+  box.innerHTML=Array.from({length:q},(_,k)=>{const c=(sel[k]&&typeof sel[k]==="object")?sel[k]:{};
+    return `<div class="acc-plate">${q>1?`<div class="acc-t">Assiette ${k+1}</div>`:""}`+
+    `<label class="acc-row"><span>Accompagnement</span><select data-id="${inp.id}" data-k="${k}" data-f="a">${optsX(ACC,c.a||ACC[0][0])}</select></label>`+
+    (v?`<label class="acc-row"><span>Cuisson</span><select data-id="${inp.id}" data-k="${k}" data-f="c" class="cuis">${optsX(CUIS,c.c||"","— Choisir la cuisson —")}</select></label>`:"")+
+    (hs?`<label class="acc-row"><span>Sauce chaude</span><select data-id="${inp.id}" data-k="${k}" data-f="s">${optsX(SAUCES,c.s||"Nature")}</select></label>`:"")+`</div>`}).join("");
+  box.querySelectorAll("select").forEach(x=>{const o=ACCSEL[x.dataset.id]=ACCSEL[x.dataset.id]||[];o[x.dataset.k]=o[x.dataset.k]&&typeof o[x.dataset.k]==="object"?o[x.dataset.k]:{};o[x.dataset.k][x.dataset.f]=x.value;});}
+function plates(bx){const out=[];bx.querySelectorAll(".acc-plate").forEach(pl=>{const g=f=>{const e=pl.querySelector(`[data-f=${f}]`);return e?e.value:""},x=[...pl.querySelectorAll("select")].reduce((t,e)=>t+Number(e.selectedOptions[0]&&e.selectedOptions[0].dataset.x||0),0);out.push({a:g("a"),c:g("c"),s:g("s"),x})});return out}
+const dish=(n,p,d,id,kind)=>`<div class="dish"><div><div class="dish-name">${esc(n)}</div>${d?`<div class="dish-desc">${esc(d)}</div>`:""}<div class="dish-price">${euro(p)}</div></div>
 <div class="qty"><button type="button" class="step" data-for="${id}" data-d="-1" aria-label="Retirer : ${esc(n)}">−</button>
 <input id="${id}" type="number" min="0" max="99" step="1" value="0" inputmode="numeric" data-name="${esc(n)}" data-price="${p}" aria-label="Quantité : ${esc(n)}">
-<button type="button" class="step" data-for="${id}" data-d="1" aria-label="Ajouter : ${esc(n)}">+</button></div>${acc?`<div class="acc-box" hidden></div>`:""}</div>`;
+<button type="button" class="step" data-for="${id}" data-d="1" aria-label="Ajouter : ${esc(n)}">+</button></div>${kind?`<div class="acc-box" data-kind="${kind}" hidden></div>`:""}</div>`;
 
-const NOTE_SUPP=["Pâtes fraîches","Poissons & crustacés","Moules (selon saison)","Burgers","Pierrades","Brochettes & épées","Les incontournables"];
+const NOTE_SUPP=["Pâtes fraîches","Poissons & crustacés","Moules (selon saison)","Burgers","Pierrades","Viandes (grillades)","Brochettes & épées","Les incontournables"];
 MENU.forEach((s,i)=>{
   if(!s.items.some(it=>it[1]>0))return;
   const el=document.createElement("section");
   el.className="category"; if(s.midi)el.dataset.midi="1";
   if(s.photo){el.classList.add("ph");el.style.setProperty("--ph","url('"+s.photo+"')");}
   const note=NOTE_SUPP.includes(s.title)?`<p class="cat-note">Suppléments et accompagnements supplémentaires : voir la rubrique « Les petits plus ».</p>`:"";
-  el.innerHTML=`<h2 class="cat-h" role="button" tabindex="0" aria-expanded="false"><span>${esc(s.title)}</span><span class="cat-count" hidden></span><span class="chev" aria-hidden="true">▾</span></h2><div class="cat-body">${s.description?`<p class="category-intro">${esc(s.description)}</p>`:""}<div class="dish-list">${s.items.map((it,j)=>it[1]>0?dish(it[0],it[1],it[2],`d-${i}-${j}`,ACC_CATS.includes(s.title)):"").join("")}</div>${note}</div>`;
+  el.innerHTML=`<h2 class="cat-h" role="button" tabindex="0" aria-expanded="false"><span>${esc(s.title)}</span><span class="cat-count" hidden></span><span class="chev" aria-hidden="true">▾</span></h2><div class="cat-body">${s.description?`<p class="category-intro">${esc(s.description)}</p>`:""}<div class="dish-list">${s.items.map((it,j)=>it[1]>0?dish(it[0],it[1],it[2],`d-${i}-${j}`,KIND[s.title]):"").join("")}</div>${note}</div>`;
   $("menuSections").appendChild(el);
 });
 function toggleCat(sec,open){const o=open===undefined?!sec.classList.contains("open"):open;sec.classList.toggle("open",o);const h=sec.querySelector(".cat-h");if(h)h.setAttribute("aria-expanded",o);}
@@ -509,6 +522,7 @@ function updateTotal(){
     let q=Number.parseInt(i.value,10);if(!Number.isFinite(q)||q<0)q=0;if(q>99)q=99;
     total+=q*Number(i.dataset.price);count+=q;
     i.closest(".dish").classList.toggle("on",q>0);renderAcc(i);
+    const ab=i.closest(".dish").querySelector(".acc-box");if(ab&&!ab.hidden)plates(ab).forEach(pp=>total+=pp.x);
   });
   document.querySelectorAll("#menuSections .category").forEach(sec=>{let n=0;sec.querySelectorAll("[data-price]").forEach(i=>{const q=Number.parseInt(i.value,10);if(q>0)n+=q;});const b=sec.querySelector(".cat-count");if(b){b.textContent=n;b.hidden=!n;}});
   $("totalDisplay").textContent=euro(total);
@@ -540,7 +554,7 @@ function restore(){try{
 
 /* ---------- Événements ---------- */
 const form=$("orderForm");
-form.addEventListener("input",e=>{const t=e.target;if(t.matches&&t.matches(".acc-row select")){(ACCSEL[t.dataset.id]=ACCSEL[t.dataset.id]||[])[Number(t.dataset.k)]=t.value;}});
+form.addEventListener("input",e=>{const t=e.target;if(t.matches&&t.matches(".acc-row select")){const o=ACCSEL[t.dataset.id]=ACCSEL[t.dataset.id]||[];const k=Number(t.dataset.k);o[k]=o[k]&&typeof o[k]==="object"?o[k]:{};o[k][t.dataset.f]=t.value;}});
 form.addEventListener("click",e=>{
   const b=e.target.closest(".step");if(!b)return;
   const i=$(b.dataset.for),v=Math.max(0,Math.min(99,(Number.parseInt(i.value,10)||0)+Number(b.dataset.d)));
@@ -549,7 +563,7 @@ form.addEventListener("click",e=>{
 form.addEventListener("input",e=>{
   if(e.target===dateEl){renderSlots();applyService();renderSuggestions();updateTotal()}
   if(e.target===timeEl){applyService();renderSuggestions();updateTotal()}
-  if(e.target.matches("[data-price]"))updateTotal();
+  if(e.target.matches("[data-price],.acc-row select"))updateTotal();
   save();
 });
 
@@ -568,8 +582,9 @@ form.addEventListener("submit",async e=>{
   if($("guests").value===`Plus de ${MAX_GUESTS}`&&!$("notes").value.trim())return showError(`Pour plus de ${MAX_GUESTS} personnes, précisez le nombre exact dans « Demandes particulières ».`);
   if(!slotsFor(dateEl.value).includes(toMin(timeEl.value)))return showError("Cette heure n'est plus disponible. Choisissez une autre heure.");
 
+  for(const i of chosen){const bx=i.closest(".dish").querySelector(".acc-box");if(bx&&bx.dataset.kind==="v"&&!bx.hidden&&plates(bx).some(pp=>!pp.c))return showError("Choisissez la cuisson de : "+i.dataset.name+".");}
   const {total}=updateTotal();
-  const lines=chosen.map(i=>{const q=Number.parseInt(i.value,10);const sug=i.closest(".sugg")?" [SUGGESTION]":"";let l=`${q} × ${i.dataset.name}${sug} — ${euro(q*Number(i.dataset.price))}`;const bx=i.closest(".dish").querySelector(".acc-box");if(bx&&!bx.hidden){const v=[...bx.querySelectorAll("select")].map(x=>x.value),c={};v.forEach(x=>c[x]=(c[x]||0)+1);l+="\n   ↳ "+(q===1?v[0]:Object.entries(c).map(([k,n])=>n+" "+k.toLowerCase()).join(", "));}return l;});
+  const lines=chosen.map(i=>{const q=Number.parseInt(i.value,10);const sug=i.closest(".sugg")?" [SUGGESTION]":"";const bx=i.closest(".dish").querySelector(".acc-box"),pl=bx&&!bx.hidden?plates(bx):[],ex=pl.reduce((t,pp)=>t+pp.x,0);let l=`${q} × ${i.dataset.name}${sug} — ${euro(q*Number(i.dataset.price)+ex)}`+(ex?` (dont suppléments ${euro(ex)})`:"");if(pl.length){if(bx.dataset.kind!=="a")pl.forEach((pp,k)=>{l+=`\n   ↳ ${q>1?"Assiette "+(k+1)+" : ":""}${pp.a}${pp.c?" · "+pp.c:""}${pp.s&&pp.s!=="Nature"?" · sauce "+pp.s.toLowerCase():(pp.c?" · nature":"")}`});else{const c={};pl.forEach(pp=>c[pp.a]=(c[pp.a]||0)+1);l+="\n   ↳ "+(q===1?pl[0].a:Object.entries(c).map(([k,n])=>n+" "+k.toLowerCase()).join(", "));}}return l;});
   const summary=chosen.length?lines.join("\n")+"\n\nTOTAL INDICATIF : "+euro(total)+"\n\nCe total est indicatif et doit être vérifié par le restaurant.":"Aucune précommande : réservation de table uniquement.";
   const lateCut=chosen.length?isLate():null;
   const summaryFull=lateCut?`⏱ COMMANDE APRÈS ${lateCut} : à servir 1 h à 1 h 15 après la demande.\n\n`+summary:summary;
