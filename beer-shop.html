@@ -1,213 +1,151 @@
-<!-- RUBRIQUE BEER SHOP -->
-<section id="beer-shop" data-aos="fade-up" aria-labelledby="beer-shop-title"
-  style="position:relative; padding:80px 20px; background:#111; border-radius:16px; margin:40px 0; max-width:1100px; margin-left:auto; margin-right:auto; box-shadow:0 6px 20px rgba(0,0,0,0.5); overflow:hidden;
-         background: url('images/logo_vaudree2.png') center center / cover no-repeat;">
-   <!-- Bouton Retour -->
-  <div style="position:absolute; top:20px; left:20px; z-index:10;">
-    <a href="index.html" style="display:inline-flex; align-items:center; gap:8px; padding:12px 20px; background:var(--brand, #d4af37); color:white; text-decoration:none; border-radius:25px; font-weight:600; transition:all 0.3s ease; box-shadow:0 2px 10px rgba(212,175,55,0.3);">
-      <span style="font-size:1.2rem;">←</span>
-      Retour au site
-    </a>
-  </div>
-  <!-- Voile sombre -->
-  <div style="position:absolute; inset:0; background:rgba(0,0,0,0.6); z-index:0;"></div>
-
-  <div style="position:relative; z-index:1;">
-    <h2 id="beer-shop-title" class="golden-title">
-      Beer Shop’E by Le Vaudrée2
-    </h2>
-
-    <p style="text-align:center; max-width:800px; margin:0 auto 25px auto; font-size:1.15rem; color:#eee; line-height:1.6;">
-      Commandez nos produits directement depuis <strong style="color:#d4af37;">Beer Shop’E by Le Vaudrée2</strong> !  
-      Que ce soit pour offrir ou simplement pour vous faire plaisir, composez votre commande personnalisée en quelques clics.
-    </p>
-
-    <p style="text-align:center; max-width:800px; margin:0 auto 50px auto; font-size:1.1rem; color:#ddd; line-height:1.6;">
-      Une <strong style="color:#d4af37;">livraison</strong> est possible selon votre adresse et le type de commande.  
-      Après la <strong style="color:#d4af37;">confirmation</strong> de votre demande, vous recevrez toutes les 
-      <strong style="color:#d4af37;">informations nécessaires pour le paiement</strong> ainsi que les détails liés à la 
-      <strong style="color:#d4af37;">préparation ou à la livraison</strong>, avec la signature du service raffiné et de l’art de recevoir votre propre commande by <em>Le Vaudrée2</em>.
-    </p>
-
-    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:40px; align-items:flex-start;">
-      <form action="https://formspree.io/f/xnngbpgd" method="POST" aria-label="Formulaire Beer Shop"
-        style="flex:1; min-width:280px; max-width:500px; display:flex; flex-direction:column; gap:14px; background:#1c1c1c; padding:20px; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,0.6); color:#eee;">
-
-        <input type="text" name="name" placeholder="Nom complet" required style="padding:14px; border-radius:30px; border:1px solid #555; background:#111; color:#fff;">
-        <input type="email" name="email" placeholder="Adresse email" required style="padding:14px; border-radius:30px; border:1px solid #555; background:#111; color:#fff;">
-        <input type="tel" name="phone" placeholder="Numéro de GSM" required style="padding:14px; border-radius:30px; border:1px solid #555; background:#111; color:#fff;">
-
-        <select name="type_commande" required style="padding:14px; border-radius:30px; border:1px solid #555; background:#111; color:#fff;">
-          <option value="">Type de commande</option>
-          <option value="bon_cadeau">Bon cadeau</option>
-          <option value="verres">Verres</option>
-          <option value="bieres">Bières</option>
-          <option value="alcools">Alcools</option>
-          <option value="panier_cadeau">Panier cadeau</option>
-        </select>
-
-        <select name="type_biere" style="padding:14px; border-radius:30px; border:1px solid #555; background:#111; color:#fff;">
-          <option value="">Type de bière (si applicable)</option>
-          <option value="assortiment">Assortiment de bières</option>
-          <option value="blonde">Blonde</option>
-          <option value="brune">Brune</option>
-          <option value="ambree">Ambrée</option>
-          <option value="stout">Stout</option>
-          <option value="ipa">IPA</option>
-          <option value="fruitee">Fruitée</option>
-        </select>
-
-        <textarea name="message" placeholder="Détails de la commande (quantité, préférences, message cadeau…)" required style="padding:14px; border-radius:16px; border:1px solid #555; background:#111; color:#fff; min-height:120px;"></textarea>
-
-        <button type="submit" class="golden-btn">
-          Envoyer ma commande
-        </button>
-
-        <p style="text-align:center; margin-top:10px; font-size:0.95rem; color:#d4af37; font-style:italic;">
-          ✨ Nous vous recontacterons sous 24 h pour confirmer votre commande et finaliser les détails de livraison.
-        </p>
-
-        <!-- Ligne dorée animée + 3 icônes -->
-        <div class="gold-line">
-          <div class="gold-shine"></div>
-          <div class="gold-icons">
-            <img src="https://cdn-icons-png.flaticon.com/512/3225/3225545.png" alt="Chope" class="gold-icon">
-            <img src="https://cdn-icons-png.flaticon.com/512/992/992703.png" alt="Cadeau" class="gold-icon" style="width:26px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/1404/1404945.png" alt="Chopes" class="gold-icon">
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- STYLES -->
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beer Shop'E by Le Vaudrée 2</title>
+<meta name="description" content="Bons cadeaux, paniers cadeaux, bières, verres et alcools du Vaudrée 2 à Liège. Composez votre commande en quelques clics.">
 <style>
-  /* Titre doré avec reflet */
-  .golden-title {
-    text-align:center;
-    font-family:'Playfair Display', serif;
-    color:#d4af37;
-    font-size:2.5rem;
-    margin-bottom:20px;
-    position:relative;
-    overflow:hidden;
-  }
-  .golden-title::after {
-    content:'';
-    position:absolute;
-    top:0;
-    left:-100%;
-    width:50%;
-    height:100%;
-    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
-    animation:shine 5s infinite;
-  }
-
-  /* Ligne dorée animée */
-  .gold-line {
-    position:relative;
-    width:100%;
-    margin-top:30px;
-    text-align:center;
-  }
-  .gold-line::before {
-    content:'';
-    display:block;
-    height:2px;
-    background:linear-gradient(90deg, transparent, #d4af37, transparent);
-  }
-  .gold-shine {
-    position:absolute;
-    top:0;
-    left:-20%;
-    width:40%;
-    height:2px;
-    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-    animation:shine-line 6s infinite;
-  }
-  .gold-icons {
-    position:absolute;
-    top:-18px;
-    left:50%;
-    transform:translateX(-50%);
-    display:flex;
-    justify-content:center;
-    gap:14px;
-    background:#1c1c1c;
-    padding:0 10px;
-  }
-  .gold-icon {
-    width:28px;
-    height:28px;
-    filter:invert(78%) sepia(42%) saturate(629%) hue-rotate(14deg) brightness(95%) contrast(90%);
-  }
-
-  /* Animation reflets */
-  @keyframes shine {
-    0% { left:-100%; }
-    50% { left:120%; }
-    100% { left:120%; }
-  }
-  @keyframes shine-line {
-    0% { left:-30%; }
-    50% { left:130%; }
-    100% { left:130%; }
-  }
-
-  /* Bouton effet doré */
-  .golden-btn {
-    padding:14px;
-    border:none;
-    border-radius:30px;
-    background:linear-gradient(90deg, #d4af37, #c19225);
-    color:#111;
-    font-size:1.05rem;
-    font-weight:600;
-    cursor:pointer;
-    transition:transform 0.25s ease, background 0.25s ease;
-  }
-  .golden-btn:hover {
-    background:linear-gradient(90deg, #b8860b, #d4af37);
-    transform:scale(1.05);
-  }
+:root{--gold:#d6b36a;--gold-light:#f1dba5;--black:#101010;--panel:#1b1b1b;--muted:#bcbcbc;--border:#49402d;--err:#ff9b8c;--ok:#6fcf8e}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#f4f4f4;background:#0b0b0b url("images/carte-bieres.jpg") center/cover fixed;line-height:1.5}
+body::before{content:"";position:fixed;inset:0;background:rgba(8,8,8,.82);z-index:0}
+.wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:16px 16px 90px}
+.back{display:inline-block;margin:6px 0 10px;padding:10px 16px;border:1px solid var(--border);border-radius:999px;color:var(--gold-light);text-decoration:none;font-weight:600;background:rgba(0,0,0,.4)}
+.hero{text-align:center;padding:8px 0 4px}
+.hero img{width:130px;height:130px;display:block;margin:0 auto 6px}
+h1{font-family:Georgia,"Playfair Display",serif;color:var(--gold);font-size:clamp(1.7rem,6vw,2.4rem);margin:4px 0 10px;line-height:1.15}
+.lead{color:#e9e9e9;margin:0 auto 8px;max-width:620px}
+.small{font-size:14px;color:var(--muted)}
+.line{height:2px;margin:18px 0;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+h2{color:var(--gold);font-family:Georgia,serif;font-size:1.3rem;margin:0 0 10px;text-align:center}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;color:var(--gold-light);font:inherit;font-weight:700;display:flex;flex-direction:column;gap:4px;align-items:center}
+.card .ic{font-size:30px;line-height:1}
+.card small{font-weight:400;color:var(--muted);font-size:13px}
+.card.on{border-color:var(--gold);background:#2a2415;box-shadow:0 0 0 2px var(--gold) inset}
+.card:last-child:nth-child(odd){grid-column:1/-1}
+form{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px;display:grid;gap:12px;margin-top:6px}
+label{display:grid;gap:5px;font-weight:600;color:var(--gold-light);font-size:15px}
+input,select,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #555;background:#101010;color:#fff;font:inherit;font-weight:400}
+textarea{min-height:110px;resize:vertical}
+input:focus,select:focus,textarea:focus,.card:focus-visible,.btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn{padding:15px;border:0;border-radius:999px;background:linear-gradient(90deg,#d6b36a,#c19225);color:#17130b;font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer}
+.btn[disabled]{opacity:.6}
+.pgrid{display:grid;gap:12px}
+.pan{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:grid}
+.pan .ph{height:170px;background:#26210f center/cover no-repeat;display:grid;place-items:center;color:var(--muted);font-size:14px}
+.pan .b{padding:14px;display:grid;gap:6px}
+.pan h3{margin:0;color:var(--gold-light);font-size:1.1rem}
+.pan p{margin:0;color:#ddd;font-size:15px}
+.pan .pr{color:var(--gold);font-weight:800;font-size:1.15rem}
+.pan button{margin-top:6px;padding:12px;border-radius:999px;border:1px solid var(--gold);background:transparent;color:var(--gold-light);font:inherit;font-weight:700;cursor:pointer}
+.hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+.msg{padding:14px;border-radius:12px;font-weight:600}.msg.ok{background:#12301d;border:1px solid var(--ok);color:#c9f2d6}.msg.err{background:#3a1a14;border:1px solid var(--err);color:#ffd2c9}
+.hide{display:none!important}
+.note{text-align:center;color:var(--gold-light);font-style:italic;font-size:15px;margin:2px 0 0}
+#son{position:fixed;right:16px;bottom:16px;z-index:5;width:56px;height:56px;border-radius:50%;border:1px solid var(--border);background:#1b1b1b;color:#fff;font-size:24px;cursor:pointer}
 </style>
-<audio id="musique" autoplay loop muted>
-  <source src="audio/audiomusique.mp3" type="audio/mpeg">
-</audio>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="accueil-qr.html">← Retour</a>
 
-<button id="son" style="
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #222;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 26px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  z-index: 9999;
-">🔇</button>
+  <div class="hero">
+    <img src="images/logo_vaudree2.png" alt="Vaudrée 2 — Brasserie Restaurant" width="130" height="130">
+    <h1>Beer Shop’E by Le Vaudrée 2</h1>
+    <p class="lead">Pour offrir ou pour vous faire plaisir : composez votre commande personnalisée en quelques clics.</p>
+    <p class="small">Livraison possible selon votre adresse et le type de commande. Après confirmation, vous recevez les informations de paiement et les détails de préparation ou de livraison.</p>
+  </div>
+
+  <div class="line"></div>
+  <h2>Que souhaitez-vous ?</h2>
+  <div class="cards" id="cards" role="group" aria-label="Type de commande">
+    <button type="button" class="card" data-v="Bon cadeau"><span class="ic" aria-hidden="true">🎟</span>Bon cadeau<small>Le montant de votre choix</small></button>
+    <button type="button" class="card" data-v="Panier cadeau"><span class="ic" aria-hidden="true">🎁</span>Panier cadeau<small>Composé sur mesure</small></button>
+    <button type="button" class="card" data-v="Bières"><span class="ic" aria-hidden="true">🍺</span>Bières<small>Assortiment ou à la carte</small></button>
+    <button type="button" class="card" data-v="Verres"><span class="ic" aria-hidden="true">🥂</span>Verres<small>Verres de la maison</small></button>
+    <button type="button" class="card" data-v="Alcools"><span class="ic" aria-hidden="true">🥃</span>Alcools<small>Sur demande</small></button>
+  </div>
+
+  <div id="paniers" class="hide">
+    <div class="line"></div>
+    <h2>Nos paniers cadeaux</h2>
+    <div class="pgrid" id="pgrid"></div>
+  </div>
+
+  <form id="f" novalidate>
+    <input type="hidden" name="beershop" value="1">
+    <input type="hidden" name="_subject" value="Demande Beer Shop — Vaudrée 2">
+    <div class="hp" aria-hidden="true"><input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
+
+    <label>Type de commande
+      <select name="type_commande" id="type" required>
+        <option value="">Choisir…</option><option>Bon cadeau</option><option>Panier cadeau</option><option>Bières</option><option>Verres</option><option>Alcools</option>
+      </select></label>
+    <label id="lblBiere">Type de bière (si applicable)
+      <select name="type_biere"><option value="">Pas de préférence</option><option>Assortiment de bières</option><option>Blonde</option><option>Brune</option><option>Ambrée</option><option>Stout</option><option>IPA</option><option>Fruitée</option></select></label>
+
+    <label>Nom complet<input name="name" autocomplete="name" required></label>
+    <label>Téléphone<input name="phone" type="tel" autocomplete="tel" inputmode="tel" required></label>
+    <label>E-mail (pour recevoir la confirmation)<input name="email" type="email" autocomplete="email" required></label>
+
+    <label>Budget approximatif (facultatif)
+      <select name="budget"><option value="">À définir ensemble</option><option>Moins de 30 €</option><option>30 à 50 €</option><option>50 à 80 €</option><option>80 à 120 €</option><option>Plus de 120 €</option></select></label>
+
+    <label>Retrait ou livraison
+      <select name="mode" id="mode" required><option>Retrait au restaurant</option><option>Livraison</option></select></label>
+    <label id="lblAdr" class="hide">Adresse de livraison<input name="adresse" id="adr" autocomplete="street-address"></label>
+    <label>Pour quelle date ? (facultatif)<input name="date_souhaitee" type="date" id="dt"></label>
+
+    <label>Détails de la commande
+      <textarea name="message" required placeholder="Quantités, préférences, message cadeau…"></textarea></label>
+
+    <div class="msg err hide" id="err" role="alert" tabindex="-1"></div>
+    <div class="msg ok hide" id="ok" role="status" tabindex="-1">✅ Merci ! Votre demande est bien envoyée. Nous vous recontactons sous 24 h pour confirmer les détails, le prix et le paiement. Un e-mail de confirmation vous est envoyé.</div>
+    <button class="btn" id="send" type="submit">Envoyer ma demande</button>
+    <p class="note">✨ Nous vous recontactons sous 24 h pour confirmer votre commande.</p>
+  </form>
+  <p class="small" style="text-align:center;margin-top:14px">Une question ? <a style="color:var(--gold-light)" href="tel:+3242231880">04 223 18 80</a> · Rue Saint-Gilles 149, 4000 Liège</p>
+</div>
+
+<audio id="musique" loop preload="none"><source src="audio/audiomusique.mp3" type="audio/mpeg"></audio>
+<button id="son" type="button" aria-label="Activer la musique">🔇</button>
 
 <script>
-  const musique = document.getElementById('musique');
-  const btn = document.getElementById('son');
-  musique.volume = 0.4;
-
-  // Permet d’activer le son après un premier clic sur la page
-  document.addEventListener('click', () => {
-    musique.muted = false;
-    musique.play();
-    btn.textContent = '🔊';
-  }, { once: true });
-
-  // Bouton pour activer / couper le son
-  btn.addEventListener('click', () => {
-    musique.muted = !musique.muted;
-    btn.textContent = musique.muted ? '🔇' : '🔊';
-  });
+const RELAY_URL="https://script.google.com/macros/s/AKfycbzXen9dOpO1mTNLge5T1pz2hFPXmG7fR9rPAGoNKj6j9ky5Njp3qphzv7p22I6eSq6YlQ/exec";
+const FORMSPREE="https://formspree.io/f/xnngbpgd";
+/* ===== PANIERS : ajoutez-les ici (un par ligne). photo : "images/panier-xxx.jpg" (facultatif) ; prix 0 = « sur demande ». Liste vide = rubrique cachée. =====
+   Exemple : {nom:"Panier Découverte",contenu:"6 bières artisanales, 1 verre, emballage cadeau",prix:35,photo:"images/panier-decouverte.jpg"}, */
+const PANIERS=[
+];
+const $=id=>document.getElementById(id), f=$("f");
+function pick(v){$("type").value=v;document.querySelectorAll(".card").forEach(c=>c.classList.toggle("on",c.dataset.v===v));
+  $("lblBiere").classList.toggle("hide",!["Bières","Panier cadeau"].includes(v)&&v!=="");}
+if(PANIERS.length){$("paniers").classList.remove("hide");
+  $("pgrid").innerHTML=PANIERS.map((p,i)=>`<div class="pan"><div class="ph"${p.photo?` style="background-image:url('${p.photo}')"`:""}>${p.photo?"":"Photo bientôt"}</div><div class="b"><h3>${p.nom}</h3><p>${p.contenu||""}</p><div class="pr">${p.prix>0?p.prix.toLocaleString("fr-BE",{style:"currency",currency:"EUR"}):"Prix sur demande"}</div><button type="button" data-i="${i}">Choisir ce panier</button></div></div>`).join("");
+  $("pgrid").addEventListener("click",e=>{const b=e.target.closest("button[data-i]");if(!b)return;const p=PANIERS[b.dataset.i];pick("Panier cadeau");f.message.value="Panier : "+p.nom+(p.prix>0?" ("+p.prix+" €)":"")+"\n";f.scrollIntoView({behavior:"smooth"});});}
+document.querySelectorAll(".card").forEach(c=>c.addEventListener("click",()=>{pick(c.dataset.v);f.scrollIntoView({behavior:"smooth",block:"start"});}));
+$("type").addEventListener("change",()=>pick($("type").value));
+$("mode").addEventListener("change",()=>{const l=$("mode").value==="Livraison";$("lblAdr").classList.toggle("hide",!l);$("adr").required=l;});
+try{const d=new Date();$("dt").min=d.toLocaleDateString("sv-SE",{timeZone:"Europe/Brussels"});}catch(e){}
+function show(id,t){["err","ok"].forEach(x=>$(x).classList.add("hide"));const e=$(id);if(t)e.textContent=t;e.classList.remove("hide");e.focus();}
+f.addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(f._gotcha&&f._gotcha.value)return;
+  if(!$("type").value)return show("err","Choisissez d'abord un type de commande.");
+  if(!f.checkValidity()){f.reportValidity();return;}
+  $("send").disabled=true;$("send").textContent="Envoi…";
+  const data=new FormData(f);let ok=false;
+  try{fetch(RELAY_URL,{method:"POST",mode:"no-cors",body:new URLSearchParams(data)}).catch(()=>{});}catch(_){}
+  try{const r=await fetch(FORMSPREE,{method:"POST",body:data,headers:{Accept:"application/json"}});ok=r.ok;}catch(_){}
+  $("send").disabled=false;$("send").textContent="Envoyer ma demande";
+  if(!ok)return show("err","L'envoi n'a pas abouti. Réessayez dans un instant ou appelez-nous au 04 223 18 80.");
+  f.reset();pick("");show("ok");
+});
+/* musique : coupée par défaut, activée seulement par le bouton */
+const mu=$("musique"),sn=$("son");mu.volume=.4;
+sn.addEventListener("click",()=>{if(mu.paused){mu.play().then(()=>{sn.textContent="🔊";sn.setAttribute("aria-label","Couper la musique")}).catch(()=>{})}else{mu.pause();sn.textContent="🔇";sn.setAttribute("aria-label","Activer la musique")}});
 </script>
-
+</body>
+</html>
