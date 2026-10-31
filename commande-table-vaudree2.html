@@ -200,7 +200,7 @@ body{background:linear-gradient(rgba(10,8,5,.90),rgba(10,8,5,.95)),url('images/c
 <footer>
   <p><strong>Vaudrée 2</strong> · Rue Saint-Gilles 149, 4000 Liège</p>
   <p><a href="tel:+3242231880">04 223 18 80</a> · <a href="menu.html">Découvrir notre carte</a></p>
-  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 31/10 (17h00)</p>
+  <p class="small">© <span id="year">2026</span> Vaudrée 2 · version 31/10 (17h30)</p>
 </footer>
 
 <script>
@@ -426,7 +426,7 @@ function nextAvailable(ds){for(let i=1;i<=21;i++){const d=addDays(ds,i);if(slots
 const ACC=[["Frites",0],["Croquettes",0],["Pommes de terre",0],["Pâtes",0],["Gratin dauphinois",5]],
 CUIS=["Bleu","Saignant","À point","Bien cuit"],
 SAUCES=[["Nature",0],["Champignons crème",4],["Poivre vert",4],["Roquefort",4],["Dijonnaise",4],["Béarnaise",4],["Beurre maître d'hôtel",4]],
-KIND={"Poissons & crustacés":"a","Pierrades":"s","Brochettes & épées":"s","Les incontournables":"a","Viandes (grillades)":"v"};
+KIND={"Poissons & crustacés":"a","Pierrades":"s","Brochettes & épées":"v","Les incontournables":"a","Viandes (grillades)":"v"};
 let ACCSEL={};
 const optsX=(list,cur,ph)=>(ph?`<option value=""${cur?"":" selected"}>${ph}</option>`:"")+list.map(o=>{const n=Array.isArray(o)?o[0]:o,x=Array.isArray(o)?o[1]:0;return `<option value="${esc(n)}" data-x="${x}"${n===cur?" selected":""}>${esc(n)}${x?` (+${x} €)`:""}</option>`}).join("");
 function renderAcc(inp){const dish=inp.closest(".dish"),box=dish&&dish.querySelector(".acc-box");if(!box)return;
