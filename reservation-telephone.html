@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Réservation par téléphone · Vaudrée 2</title>
+<style>
+:root{--gold:#d6b36a;--gold-light:#f1dba5;--panel:#1b1b1b;--border:#49402d;--muted:#bcbcbc;--err:#ff9b8c;--ok:#6fcf8e;--warn:#ffb347}
+*{box-sizing:border-box}
+body{margin:0;background:#0d0d0d;color:#f4f4f4;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 60px}
+h1{color:var(--gold);font-family:Georgia,serif;font-size:1.6rem;margin:6px 0 4px}
+.small{color:var(--muted);font-size:14px;margin:0 0 14px}
+form{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px;display:grid;gap:12px}
+label{display:grid;gap:5px;font-weight:600;color:var(--gold-light);font-size:15px}
+input,select,textarea{width:100%;padding:14px;border-radius:12px;border:1px solid #555;background:#101010;color:#fff;font:inherit;font-weight:400;font-size:17px}
+textarea{min-height:90px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{padding:16px;border:0;border-radius:999px;background:linear-gradient(90deg,#d6b36a,#c19225);color:#17130b;font:inherit;font-weight:800;font-size:1.1rem;cursor:pointer}
+.btn[disabled]{opacity:.6}
+.msg{padding:12px 14px;border-radius:12px;font-weight:600}
+.ok{background:#12301d;border:1px solid var(--ok);color:#c9f2d6}.err{background:#3a1a14;border:1px solid var(--err);color:#ffd2c9}.warn{background:#3a2a0a;border:1px solid var(--warn);color:#ffe2b5}
+.hide{display:none!important}
+.last{margin-top:16px;font-size:14px;color:var(--muted)}
+.last a{color:var(--gold-light)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📞 Réservation par téléphone</h1>
+  <p class="small">Page réservée à l'équipe. La réservation arrive sur Telegram, sur le ticket de cuisine et dans l'agenda Google.</p>
+  <div class="msg err hide" id="nokey">Cette page doit être ouverte avec son lien complet (avec la clé à la fin). Demandez le lien à la direction.</div>
+
+  <form id="f" novalidate>
+    <label>Nom du client<input id="name" autocomplete="off" required></label>
+    <label>GSM du client<input id="phone" type="tel" inputmode="tel" autocomplete="off" placeholder="04.. .. .. .." required></label>
+    <div class="row">
+      <label>Date<input id="date" type="date" required></label>
+      <label>Heure<input id="time" type="time" step="900" required></label>
+    </div>
+    <div class="row">
+      <label>Personnes<input id="people" type="number" min="1" max="60" inputmode="numeric" required></label>
+      <label>E-mail (facultatif)<input id="email" type="email" autocomplete="off"></label>
+    </div>
+    <label>Remarques, allergies, occasion<textarea id="message" placeholder="Ex. anniversaire, chaise bébé, allergie aux noix…"></textarea></label>
+    <div class="msg warn hide" id="warn"></div>
+    <div class="msg err hide" id="err" role="alert" tabindex="-1"></div>
+    <div class="msg ok hide" id="ok" role="status" tabindex="-1"></div>
+    <button class="btn" id="send" type="submit">Enregistrer la réservation</button>
+  </form>
+  <p class="last">Voir toutes les réservations : <a href="https://calendar.google.com" target="_blank" rel="noopener">Google Agenda</a> (calendrier « Réservations Vaudrée 2 »).</p>
+</div>
+
+<script src="horaires.js"></script>
+<script>
+const RELAY_URL="https://script.google.com/macros/s/AKfycbzXen9dOpO1mTNLge5T1pz2hFPXmG7fR9rPAGoNKj6j9ky5Njp3qphzv7p22I6eSq6YlQ/exec";
+const $=id=>document.getElementById(id);
+const KEY=(location.hash.match(/key=([^&]+)/)||[])[1]||"";
+if(!KEY){$("nokey").classList.remove("hide");$("send").disabled=true;}
+try{$("date").value=new Date().toLocaleDateString("sv-SE",{timeZone:"Europe/Brussels"});}catch(e){}
+const show=(id,t)=>{["err","ok"].forEach(x=>$(x).classList.add("hide"));const e=$(id);e.textContent=t;e.classList.remove("hide");e.focus();};
+async function api(params){
+  const u=new URL(RELAY_URL);Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v));
+  const r=await fetch(u.toString());return r.json();
+}
+/* avertissements avant d'enregistrer : jour fermé, presque complet */
+async function verifier(){
+  const d=$("date").value,h=$("time").value,n=$("people").value,w=$("warn");
+  const msgs=[];
+  try{if(window.V&&d&&window.V.servicesFor(d).length===0)msgs.push("Le restaurant est fermé ce jour-là selon les horaires du site.");}catch(e){}
+  if(d&&h&&n){try{const c=await api({action:"capacite",date:d,heure:h,pers:n});if(c&&c.presque)msgs.push("Ce service est presque complet : vérifiez la disponibilité.");}catch(e){}}
+  const txt=msgs.length?"⚠ "+msgs.join(" "):"";
+  if(txt===(w.dataset.t||""))return;            /* rien n'a changé : on ne bouge pas la page (sinon le bouton « saute » sous le doigt) */
+  w.dataset.t=txt;w.textContent=txt;w.classList.toggle("hide",!txt);
+}
+["date","time","people"].forEach(i=>$(i).addEventListener("change",verifier));
+$("f").addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!KEY)return;
+  const v=i=>$(i).value.trim();
+  if(!v("name")||!v("phone")||!v("date")||!v("time")||!v("people"))return show("err","Remplissez le nom, le GSM, la date, l'heure et le nombre de personnes.");
+  if(v("phone").replace(/\D/g,"").length<8)return show("err","Le numéro de GSM semble incomplet.");
+  $("send").disabled=true;$("send").textContent="Enregistrement…";
+  try{
+    const r=await api({action:"reserver",key:KEY,name:v("name"),phone:v("phone"),date:v("date"),time:v("time"),people:v("people"),email:v("email"),message:v("message")});
+    if(r.ok){show("ok","✅ Réservation enregistrée pour "+v("name")+" · "+v("people")+" pers. · "+v("date")+" à "+v("time")+".");
+      ["name","phone","time","people","email","message"].forEach(i=>$(i).value="");$("warn").classList.add("hide");$("warn").dataset.t="";}
+    else if(r.erreur==="cle")show("err","Clé incorrecte : ouvrez la page avec le bon lien.");
+    else show("err","Réservation non enregistrée ("+(r.erreur||r.resultat||"erreur")+"). Réessayez ou notez-la sur papier.");
+  }catch(err){show("err","Connexion impossible. Réessayez, ou notez la réservation sur papier.");}
+  $("send").disabled=false;$("send").textContent="Enregistrer la réservation";
+});
+</script>
+</body>
+</html>
