@@ -8,8 +8,7 @@
    { type: "plat", nom: "Nom du plat", prix: 22, desc: "Description courte", du: "2026-11-02", au: "2026-11-08", service: "tous" },
 */
 window.SUGGESTIONS = [
-  // EXEMPLES À MODIFIER (valables jusqu'au 31/10, puis ils disparaissent tout seuls)
-  { type: "entree",  nom: "Velouté de potimarron",           prix: 9.5, desc: "Crème, éclats de noisettes",        du: "2026-10-23", au: "2026-10-31", service: "tous" },
-  { type: "plat",    nom: "Joue de porc braisée",            prix: 22,  desc: "Purée maison / Jus réduit",          du: "2026-10-23", au: "2026-10-31", service: "tous" },
-  { type: "dessert", nom: "Tiramisu maison",                 prix: 8,   desc: "Mascarpone / Café / Cacao",          du: "2026-10-23", au: "2026-10-31", service: "tous" }
+  { type: "plat",    nom: "Chicons au gratin traditionnel", prix: 18,  desc: "",  du: "2026-11-24", au: "2026-11-28", service: "tous" },
+  { type: "plat",    nom: "Waterzooi de poulet",             prix: 21,  desc: "",  du: "2026-11-24", au: "2026-11-28", service: "tous" }
+  // Pour ajouter une suggestion : copiez une ligne ci-dessus, changez le nom, le prix et les dates (du / au)
 ];
