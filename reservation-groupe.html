@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Réserver pour un groupe | Le Vaudrée 2</title>
+<title>Réservation précommande groupe | Le Vaudrée 2</title>
 <meta name="description" content="Vous organisez un repas de groupe au Vaudrée 2 à Liège ? Créez votre groupe : chaque invité choisit ses plats depuis chez lui, nous recevons tout regroupé.">
 <style>
 :root{--gold:#d6b36a;--gold-light:#f1dba5;--panel:#1b1b1b;--border:#49402d;--muted:#bcbcbc;--err:#ff9b8c;--ok:#6fcf8e}
@@ -14,8 +14,10 @@ body::before{content:"";position:fixed;inset:0;background:rgba(8,8,8,.84);z-inde
 .back{display:inline-block;margin:6px 0 10px;padding:10px 16px;border:1px solid var(--border);border-radius:999px;color:var(--gold-light);text-decoration:none;font-weight:600;background:rgba(0,0,0,.4)}
 h1{font-family:Georgia,serif;color:var(--gold);font-size:clamp(1.6rem,6vw,2.1rem);margin:6px 0 8px;line-height:1.2}
 .lead{color:#e9e9e9;margin:0 0 12px}
-ol.how{margin:0 0 16px;padding-left:20px;color:#ddd}
-ol.how li{margin:4px 0}
+ol.how{list-style:none;counter-reset:st;margin:0 0 16px;padding:14px 14px 6px;background:rgba(27,27,27,.9);border:1px solid var(--border);border-radius:16px;color:#eee}
+ol.how li{counter-increment:st;position:relative;margin:0 0 12px;padding-left:40px;line-height:1.4}
+ol.how li::before{content:counter(st);position:absolute;left:0;top:-1px;width:28px;height:28px;border-radius:50%;background:var(--gold);color:#17130b;font-weight:800;display:flex;align-items:center;justify-content:center}
+ol.how b{color:var(--gold-light)}
 form,.result{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px;display:grid;gap:12px}
 label{display:grid;gap:5px;font-weight:600;color:var(--gold-light);font-size:15px}
 input,select,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #555;background:#101010;color:#fff;font:inherit;font-weight:400}
@@ -36,23 +38,23 @@ textarea{min-height:80px}
 <body>
 <div class="wrap">
   <a class="back" href="accueil-qr.html">← Retour</a>
-  <h1>Un repas de groupe ?</h1>
-  <p class="lead">Vous organisez, nous simplifions. Plus besoin de collecter les choix de chacun :</p>
+  <h1>Réservation précommande groupe</h1>
+  <p class="lead">À partir de 5 personnes, c'est simple : une seule réservation, et chacun commande depuis chez lui.</p>
   <ol class="how">
-    <li>Vous créez votre groupe ci-dessous.</li>
-    <li>Vous recevez un lien à envoyer à vos invités.</li>
-    <li>Chacun choisit ses plats depuis chez lui.</li>
-    <li>Nous recevons toutes les commandes regroupées.</li>
+    <li><b>L'organisateur</b> remplit le formulaire ci-dessous (1 minute).</li>
+    <li><b>Il reçoit un lien</b> par e-mail et l'envoie à ses invités (WhatsApp, SMS…).</li>
+    <li><b>Chaque invité choisit ses plats</b> chez lui avant la date limite.</li>
+    <li><b>Nous recevons tout regroupé</b> : plus rien à collecter, plus d'oubli !</li>
   </ol>
 
   <form id="f" novalidate>
     <div class="hp" aria-hidden="true"><input id="hp" tabindex="-1" autocomplete="off"></div>
-    <label>Votre nom<input id="name" autocomplete="name" required></label>
+    <label>Nom de l'organisateur<input id="name" autocomplete="name" required></label>
     <div class="row">
-      <label>Votre GSM<input id="phone" type="tel" inputmode="tel" autocomplete="tel" required></label>
-      <label>Votre e-mail<input id="email" type="email" autocomplete="email" required></label>
+      <label>GSM de l'organisateur<input id="phone" type="tel" inputmode="tel" autocomplete="tel" required></label>
+      <label>E-mail de l'organisateur<input id="email" type="email" autocomplete="email" required></label>
     </div>
-    <p class="hint" style="margin:-4px 0 0">Le lien pour vos invités vous est envoyé par e-mail.</p>
+    <p class="hint" style="margin:-4px 0 0">Le lien pour les invités est envoyé automatiquement à cette adresse.</p>
     <div class="row">
       <label>Date du repas<input id="date" type="date" required></label>
       <label>Heure<select id="time" required><option value="">Choisir la date d'abord</option></select></label>
@@ -61,21 +63,26 @@ textarea{min-height:80px}
       <label>Nombre de personnes<input id="people" type="number" min="1" max="150" inputmode="numeric" required></label>
       <label>Commandes jusqu'au<input id="cloture" type="date" required></label>
     </div>
-    <p class="hint" id="dh" style="margin:-4px 0 0">Vos invités peuvent commander ou modifier leur choix jusqu'à cette date (incluse).</p>
+    <p class="hint" id="dh" style="margin:-4px 0 0">Les invités peuvent commander ou modifier leur choix jusqu'à cette date (incluse).</p>
     <label>Remarques (occasion, chaises bébé…)<textarea id="message"></textarea></label>
     <div class="msg err hide" id="err" role="alert" tabindex="-1"></div>
-    <button class="btn" id="send" type="submit">Créer mon groupe</button>
-    <p class="small" style="margin:0">Votre demande est enregistrée aussitôt. Pour un grand groupe, nous pouvons vous appeler afin de confirmer : 04 223 18 80.</p>
+    <button class="btn" id="send" type="submit">Créer le groupe</button>
+    <p class="small" style="margin:0">La réservation est enregistrée aussitôt. Questions : 04 223 18 80.</p>
   </form>
 
   <section class="result hide" id="res" aria-live="polite" tabindex="-1">
-    <h1 style="margin:0">Votre groupe est créé ✅</h1>
+    <h1 style="margin:0">Groupe créé ✅</h1>
     <p class="lead" id="resTxt"></p>
+    <p class="msg ok" id="mailInfo" style="margin:0;padding:10px 12px;border:1px solid var(--ok);border-radius:12px;background:#12231a"></p>
     <div class="code" id="code"></div>
     <div class="link" id="lien"></div>
-    <a class="btn" id="wa" target="_blank" rel="noopener">Envoyer par WhatsApp</a>
+    <p class="small" style="margin:0">Envoyer le lien aussi au GSM de l'organisateur :</p>
+    <a class="btn" id="sms">💬 SMS</a>
+    <a class="btn" id="wa" target="_blank" rel="noopener">🟢 WhatsApp</a>
+    <a class="btn alt" id="tg" target="_blank" rel="noopener">✈️ Telegram</a>
     <button class="btn alt" id="copy" type="button">Copier le lien</button>
-    <p class="small">Le lien vous est aussi envoyé par e-mail. Chaque invité l'ouvre, choisit ses plats et envoie. Il peut modifier son choix en renvoyant le formulaire avec le même nom.</p>
+    <button class="btn alt" id="again" type="button">➕ Nouveau groupe</button>
+    <p class="small">Chaque invité ouvre le lien, choisit ses plats et envoie. Il peut modifier son choix en renvoyant le formulaire avec le même nom.</p>
   </section>
 </div>
 
@@ -116,16 +123,25 @@ $("f").addEventListener("submit",async e=>{
     const r=await (await fetch(u.toString())).json();
     if(!r.ok)throw new Error(r.erreur||"erreur");
     $("f").classList.add("hide");
-    $("resTxt").textContent=`Groupe de ${v("people")} personnes · ${V.longDate?V.longDate(v("date")):v("date")} à ${v("time").replace(":","h")}. Vos invités commandent jusqu'au ${r.cloture.split("-").reverse().join("/")}.`;
+    const org=v("name"),dFr=v("date").split("-").reverse().join("/"),cFr=r.cloture.split("-").reverse().join("/"),h=v("time").replace(":","h");
+    $("resTxt").textContent=`${org} · groupe de ${v("people")} personnes · ${V.longDate?V.longDate(v("date")):dFr} à ${h}. Commandes jusqu'au ${cFr}.`;
+    $("mailInfo").textContent="✉️ Lien envoyé par e-mail à "+v("email");
     $("code").textContent=r.code;$("lien").textContent=r.lien;
-    const msg=`Bonjour ! Pour notre repas au Vaudrée 2 le ${v("date").split("-").reverse().join("/")} à ${v("time").replace(":","h")}, choisissez vos plats ici avant le ${r.cloture.split("-").reverse().join("/")} : ${r.lien}`;
-    $("wa").href="https://wa.me/?text="+encodeURIComponent(msg);
-    $("copy").onclick=async()=>{try{await navigator.clipboard.writeText(r.lien);$("copy").textContent="Lien copié ✓"}catch(_){window.prompt("Copiez ce lien :",r.lien)}};
+    const msg=`Bonjour ${org}, voici le lien pour la commande de votre groupe au Vaudrée 2 (repas du ${dFr} à ${h}). Envoyez-le à vos invités : chacun choisit ses plats avant le ${cFr}. ${r.lien}`;
+    let n=v("phone").replace(/[^\d+]/g,"");
+    if(n.startsWith("00"))n=n.slice(2);else if(n.startsWith("+"))n=n.slice(1);else if(n.startsWith("0"))n="32"+n.slice(1);
+    $("sms").href="sms:"+(v("phone").replace(/[^\d+]/g,""))+"?&body="+encodeURIComponent(msg);
+    $("wa").href="https://wa.me/"+n+"?text="+encodeURIComponent(msg);
+    $("tg").href="https://t.me/share/url?url="+encodeURIComponent(r.lien)+"&text="+encodeURIComponent(msg.replace(" "+r.lien,""));
+    $("copy").onclick=async()=>{try{await navigator.clipboard.writeText(msg);$("copy").textContent="Message copié ✓"}catch(_){window.prompt("Copiez ce message :",msg)}};
+    $("copy").textContent="Copier le message";
+    $("again").onclick=()=>{$("f").reset();$("f").classList.remove("hide");$("res").classList.add("hide");$("send").disabled=false;$("send").textContent="Créer le groupe";majHeures();window.scrollTo({top:0})};
+    $("f").classList.add("hide");
     $("res").classList.remove("hide");$("res").focus();window.scrollTo({top:0});
   }catch(err){
     const m={champs:"Vérifiez les champs (GSM, e-mail, date, heure).",date:"La date du repas n'est pas valable.",cloture:"La date limite des commandes est déjà passée.",limite:"Trop de demandes aujourd'hui : appelez-nous au 04 223 18 80."}[err.message];
     show(m||"La création a échoué. Réessayez ou appelez-nous au 04 223 18 80.");
-    $("send").disabled=false;$("send").textContent="Créer mon groupe";
+    $("send").disabled=false;$("send").textContent="Créer le groupe";
   }
 });
 </script>
