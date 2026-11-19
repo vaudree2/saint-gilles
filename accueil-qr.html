@@ -177,6 +177,12 @@
     .brand, .subtitle { text-shadow: 0 2px 12px rgba(0,0,0,.65); }
     .address { color: #d3cbbd; }
     @media (prefers-reduced-data: reduce) { .bg { background: #111111; } }
+    .grp{display:flex;align-items:center;justify-content:center;gap:10px;margin:-2px 0 0;padding:13px 16px;border:2px solid #ff8a1f;border-radius:16px;background:rgba(58,31,6,.88);color:#ffe2c2;font-size:15px;font-weight:600;text-align:center;text-decoration:none;line-height:1.35;animation:grpPulse 2s ease-in-out infinite}
+    .grp .ic{font-size:24px}
+    .grp strong{display:block;color:#ffb25e;font-size:16px;text-decoration:underline}
+    .grp:hover{background:rgba(255,138,31,.25)}
+    @keyframes grpPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,138,31,.55)}50%{box-shadow:0 0 0 9px rgba(255,138,31,0)}}
+    @media (prefers-reduced-motion:reduce){.grp{animation:none}}
     .afsca{display:inline-block;margin-top:18px;padding:8px 16px;border:1px solid #6b5a2a;border-radius:999px;background:rgba(0,0,0,.35);color:#f0d18b;font-size:13px;text-decoration:none;line-height:1.4}
     .afsca span{font-size:11px;letter-spacing:1px;margin-right:4px}
     .afsca:hover{background:rgba(216,180,106,.18)}
@@ -209,6 +215,8 @@
         Réserver &amp; précommander
         <span>Réservez votre table et choisissez vos plats à l’avance</span>
       </a>
+
+      <a class="grp" href="reservation-groupe.html"><span class="ic" aria-hidden="true">👥</span><span>À partir de 5 personnes ?<strong>Réservation précommande groupe : cliquez ici</strong></span></a>
 
       <a class="button" href="menu.html">
         Découvrir notre carte
