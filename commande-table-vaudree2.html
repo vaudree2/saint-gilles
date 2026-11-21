@@ -611,6 +611,21 @@ form.addEventListener("submit",async e=>{
 
 try{$("year").textContent=new Date().getFullYear()}catch(e){}
 initDates();restore();renderSuggestions();applyService();updateTotal();
+/* Reprise des informations de la réservation (lien reçu après une réservation : ?nom=&email=&tel=&date=&heure=&pers=) */
+(function(){
+  const q=new URLSearchParams(location.search);if(!["nom","email","tel","date","heure","pers"].some(k=>q.get(k)))return;
+  const set=(id,v)=>{if(v)$(id).value=String(v).slice(0,80)};
+  set("name",q.get("nom"));set("email",q.get("email"));set("phone",q.get("tel"));
+  const d=q.get("date");
+  if(d&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&d>=dateEl.min&&d<=dateEl.max){
+    dateEl.value=d;renderSlots();
+    const h=q.get("heure");if(h&&[...timeEl.options].some(o=>o.value===h))timeEl.value=h;
+  }
+  const g=q.get("pers");if(g&&[...$("guests").options].some(o=>o.value===g))$("guests").value=g;
+  applyService();renderSuggestions();updateTotal();
+  const f=$("orderForm");
+  if(f)f.insertAdjacentHTML("afterbegin",'<div class="msg ok" style="margin-bottom:12px">✅ Nous avons repris les informations de votre réservation. Il ne reste qu\u2019à choisir vos plats.</div>');
+})();
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){initDates();renderSlots();applyService();renderSuggestions()}});
 </script>
 <script>

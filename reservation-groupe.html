@@ -107,6 +107,13 @@ function majHeures(){
   if(!$("cloture").value||$("cloture").value>$("cloture").max)$("cloture").value=c;
 }
 $("date").addEventListener("change",majHeures);
+/* Reprise des informations de la réservation (?nom=&email=&tel=&date=&heure=&pers=) */
+(function(){
+  const q=new URLSearchParams(location.search),set=(id,v)=>{if(v)$(id).value=String(v).slice(0,80)};
+  set("name",q.get("nom"));set("email",q.get("email"));set("phone",q.get("tel"));set("people",q.get("pers"));
+  const d=q.get("date");
+  if(d&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&d>=today){$("date").value=d;majHeures();const h=q.get("heure");if(h&&[...$("time").options].some(o=>o.value===h))$("time").value=h;}
+})();
 $("f").addEventListener("submit",async e=>{
   e.preventDefault();$("err").classList.add("hide");
   if($("hp").value)return;

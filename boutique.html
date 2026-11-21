@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beer Shop'E by Vaudrée 2 | Bières belges, box et cadeaux</title>
+<meta name="description" content="Beer Shop'E by Vaudrée 2 à Liège : bières belges, bières pour amateurs, verres, box et cadeaux. Commandez en ligne, retrait au restaurant ou livraison à convenir.">
+<style>
+:root{--gold:#d6b36a;--gold-light:#f1dba5;--panel:#1b1b1b;--muted:#bcbcbc;--border:#49402d;--err:#ff9b8c;--ok:#6fcf8e;--hot:#ff8a1f}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#f4f4f4;background:#0b0b0b url("images/carte-bieres.jpg") center/cover fixed;line-height:1.5}
+body::before{content:"";position:fixed;inset:0;background:rgba(8,8,8,.86);z-index:0}
+.wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 14px 70px}
+header.top{position:sticky;top:0;z-index:20;background:rgba(10,10,10,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(6px)}
+.top-in{max-width:1100px;margin:0 auto;padding:8px 14px;display:flex;align-items:center;gap:10px}
+.logo{display:flex;align-items:center;gap:10px;color:var(--gold);text-decoration:none;font-family:Georgia,serif;font-weight:700;font-size:1.05rem;line-height:1.15;flex:1;min-width:0}
+.logo img{width:42px;height:42px;object-fit:contain;border-radius:50%;background:#000}
+.logo small{display:block;color:var(--gold-light);font-weight:400;font-size:.72rem;letter-spacing:.5px}
+.cartbtn{position:relative;padding:10px 16px;border-radius:999px;border:1px solid var(--gold);background:transparent;color:var(--gold-light);font:inherit;font-weight:700;cursor:pointer}
+.cartbtn b{position:absolute;top:-7px;right:-5px;min-width:22px;height:22px;border-radius:11px;background:var(--hot);color:#1b0f02;font-size:12px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.hero{padding:18px 0 6px;text-align:center}
+h1{font-family:Georgia,"Playfair Display",serif;color:var(--gold);font-size:clamp(1.7rem,6vw,2.5rem);margin:0 0 6px;line-height:1.15}
+.hero p{margin:0 auto;max-width:620px;color:#e6e6e6}
+.perks{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin:12px 0}
+.perk{background:rgba(27,27,27,.85);border:1px solid var(--border);border-radius:12px;padding:7px 12px;font-size:13px;color:#ddd;text-align:center;line-height:1.35}
+.perk b{display:block;color:var(--gold-light)}
+nav.tabs{display:flex;gap:8px;overflow-x:auto;padding:6px 0 10px;scrollbar-width:thin}
+.tab{flex:0 0 auto;padding:10px 16px;border-radius:999px;border:1px solid var(--border);background:var(--panel);color:var(--gold-light);font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
+.tab.on{background:var(--gold);color:#17130b;border-color:var(--gold)}
+.tab.promo{border-color:var(--hot);color:#ffd2a1}.tab.promo.on{background:var(--hot);color:#1b0f02}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.tools #q{grid-column:1/-1}
+.tools select{padding:10px;font-size:14px}
+@media(min-width:700px){.tools{grid-template-columns:2fr 1fr 1fr 1fr 1fr}.tools #q{grid-column:auto}}
+input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #555;background:#101010;color:#fff;font:inherit}
+textarea{min-height:70px}
+.count{color:var(--muted);font-size:14px;margin:4px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr);gap:14px}}
+@media(min-width:960px){.grid{grid-template-columns:repeat(4,1fr)}}
+.pc{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.ph{position:relative;aspect-ratio:1/1;background:#111 radial-gradient(circle,#2a2415,#0f0f0f);display:flex;align-items:center;justify-content:center;font-size:54px;cursor:pointer;border:0;padding:0;width:100%}
+.ph img{width:100%;height:100%;object-fit:contain;background:#fff}
+.badge{position:absolute;top:8px;left:8px;background:var(--hot);color:#1b0f02;font-weight:800;font-size:12px;padding:3px 8px;border-radius:999px}
+.badge.low{background:#ffe08a;left:auto;right:8px}
+.pb{padding:10px;display:flex;flex-direction:column;gap:4px;flex:1}
+.pn{font-weight:700;color:var(--gold-light);line-height:1.25;cursor:pointer;background:none;border:0;text-align:left;padding:0;font:inherit;font-weight:700}
+.pm{font-size:13px;color:var(--muted)}
+.price{margin-top:auto;font-size:1.15rem;font-weight:800;color:#fff}
+.price s{color:var(--muted);font-weight:400;font-size:.9rem;margin-right:6px}
+.add{margin-top:6px;padding:11px;border:0;border-radius:999px;background:linear-gradient(90deg,#d6b36a,#c19225);color:#17130b;font:inherit;font-weight:800;cursor:pointer}
+.add[disabled]{background:#3a3a3a;color:#aaa;cursor:not-allowed}
+.empty{padding:30px 14px;text-align:center;color:var(--muted);background:rgba(27,27,27,.8);border:1px dashed var(--border);border-radius:14px}
+.legal{margin:30px 0 0;text-align:center;font-size:13px;color:var(--muted)}
+.legal b{color:var(--gold-light)}
+.back{display:inline-block;margin:10px 0;padding:10px 16px;border:1px solid var(--border);border-radius:999px;color:var(--gold-light);text-decoration:none;font-weight:600;background:rgba(0,0,0,.4)}
+/* fenêtres */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.78);display:none;align-items:flex-end;justify-content:center}
+.ov.on{display:flex}
+@media(min-width:700px){.ov{align-items:center}}
+.box{background:#171717;border:1px solid var(--border);border-radius:18px 18px 0 0;width:100%;max-width:560px;max-height:92vh;overflow:auto;padding:16px}
+@media(min-width:700px){.box{border-radius:18px}}
+.box h2{font-family:Georgia,serif;color:var(--gold);margin:0 0 10px}
+.x{float:right;background:none;border:1px solid var(--border);color:var(--gold-light);border-radius:999px;width:38px;height:38px;font-size:18px;cursor:pointer}
+.line{display:grid;grid-template-columns:1fr auto;gap:6px 10px;padding:10px 0;border-bottom:1px solid #2c2c2c;align-items:center}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:34px;height:34px;border-radius:50%;border:1px solid var(--gold);background:transparent;color:var(--gold-light);font-size:18px;cursor:pointer}
+.tot{display:flex;justify-content:space-between;font-size:1.2rem;font-weight:800;padding:12px 0}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:999px;background:linear-gradient(90deg,#d6b36a,#c19225);color:#17130b;font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer;text-align:center}
+.btn.alt{background:transparent;border:1px solid var(--gold);color:var(--gold-light);font-weight:700;margin-top:8px}
+.btn[disabled]{opacity:.6}
+form.f{display:grid;gap:10px}
+label{display:grid;gap:5px;font-weight:600;color:var(--gold-light);font-size:15px}
+label.chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;color:#ddd;font-size:14px}
+label.chk input{width:auto;margin-top:3px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg label{border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center;cursor:pointer;display:block}
+.seg input{display:none}
+.seg label:has(input:checked){border-color:var(--gold);background:#2a2415;color:#fff}
+.msg{padding:12px 14px;border-radius:12px;font-weight:600}.err{background:#3a1a14;border:1px solid var(--err);color:#ffd2c9}.ok{background:#12231a;border:1px solid var(--ok);color:#e6f7ec}
+.hide{display:none!important}.hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+.small{color:var(--muted);font-size:13px}
+.big{width:100%;max-height:300px;object-fit:contain;background:#fff;border-radius:12px;margin-bottom:10px}
+.age{position:fixed;inset:0;z-index:100;background:#0b0b0bf2;display:flex;align-items:center;justify-content:center;padding:20px}
+.age .box{border-radius:18px;text-align:center;max-width:440px}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="age" id="age" role="dialog" aria-modal="true" aria-labelledby="ageT">
+  <div class="box">
+    <h2 id="ageT">Beer Shop'E by Vaudrée 2</h2>
+    <p>La vente d'alcool est réservée aux personnes de <b>18 ans et plus</b>.</p>
+    <p><b>Avez-vous 18 ans ou plus ?</b></p>
+    <button class="btn" id="ageOui" type="button">Oui, j'ai 18 ans ou plus</button>
+    <button class="btn alt" id="ageNon" type="button">Non</button>
+    <p class="msg err hide" id="ageMsg" style="margin-top:10px">Désolé, l'accès à la boutique est réservé aux adultes.</p>
+  </div>
+</div>
+
+<header class="top">
+  <div class="top-in">
+    <a class="logo" href="accueil-qr.html"><img src="images/logo_vaudree2.png" alt="" onerror="this.style.display='none'"><span>Beer Shop'E<small>by Vaudrée 2 · Liège</small></span></a>
+    <button class="cartbtn" id="cartBtn" type="button" aria-label="Ouvrir le panier">🛒 Panier <b id="cartN" class="hide">0</b></button>
+  </div>
+</header>
+
+<div class="wrap">
+  <a class="back" href="accueil-qr.html">← Retour</a>
+  <section class="hero">
+    <h1>Beer Shop'E by Vaudrée 2</h1>
+    <p>Bières belges, sélection pour amateurs, verres, box et idées cadeaux. Choisissez, commandez, et récupérez au restaurant.</p>
+  </section>
+  <div class="perks">
+    <div class="perk"><b>🏪 Retrait gratuit</b>au Vaudrée 2, Rue Saint-Gilles 149</div>
+    <div class="perk"><b>🚚 Livraison à convenir</b>nous vous confirmons le prix et le délai</div>
+    <div class="perk"><b>🎁 Idées cadeaux</b>box et coffrets pour toutes les occasions</div>
+  </div>
+
+  <nav class="tabs" id="tabs" aria-label="Rubriques"></nav>
+  <div class="tools">
+    <input id="q" type="search" placeholder="🔍 Rechercher une bière, une brasserie…" aria-label="Rechercher">
+    <select id="fCat" aria-label="Style"><option value="">Tous les styles</option></select>
+    <select id="fVol" aria-label="Volume"><option value="">Tous les volumes</option></select>
+    <select id="fAlc" aria-label="Taux d'alcool">
+      <option value="">Tout taux d'alcool</option><option value="0-4">Moins de 4 %</option><option value="4-6">4 à 6 %</option><option value="6-8">6 à 8 %</option><option value="8-10">8 à 10 %</option><option value="10-99">Plus de 10 %</option>
+    </select>
+    <select id="sort" aria-label="Trier">
+      <option value="ordre">Notre sélection</option><option value="pa">Prix croissant</option><option value="pd">Prix décroissant</option><option value="nom">Nom A → Z</option>
+    </select>
+  </div>
+  <div class="count" id="count" aria-live="polite"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty hide" id="empty"></div>
+
+  <p class="legal"><b>L'abus d'alcool est dangereux pour la santé. À consommer avec modération. Interdit aux moins de 18 ans.</b><br>Vaudrée 2 · Rue Saint-Gilles 149, 4000 Liège · <a href="tel:+3242231880" style="color:var(--gold-light)">04 223 18 80</a></p>
+</div>
+
+<!-- Fiche produit -->
+<div class="ov" id="ovP" role="dialog" aria-modal="true"><div class="box" id="boxP"></div></div>
+<!-- Panier -->
+<div class="ov" id="ovC" role="dialog" aria-modal="true" aria-labelledby="cT">
+  <div class="box">
+    <button class="x" id="cX" type="button" aria-label="Fermer">✕</button>
+    <h2 id="cT">Votre panier</h2>
+    <div id="cBody"></div>
+  </div>
+</div>
+
+<script>
+const RELAY="https://script.google.com/macros/s/AKfycbzXen9dOpO1mTNLge5T1pz2hFPXmG7fR9rPAGoNKj6j9ky5Njp3qphzv7p22I6eSq6YlQ/exec";
+const RUBRIQUES=[["tout","Tout"],["biere","🍺 Bières"],["amateur","🥇 Amateur"],["verre","🥂 Verres"],["box","📦 Box"],["cadeau","🎁 Cadeaux"],["promo","🔥 Promos"]];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur=n=>(Math.round(n*100)/100).toFixed(2).replace(".",",")+" €";
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let PROD=[],CART={},rub="tout",loaded=false,erreurChargement=false;
+
+/* Vérification de l'âge */
+(function(){
+  const gate=$("age");
+  if(ls.get("vaudree2-18")==="oui")gate.classList.add("hide");
+  $("ageOui").onclick=()=>{ls.set("vaudree2-18","oui");gate.classList.add("hide");};
+  $("ageNon").onclick=()=>{$("ageMsg").classList.remove("hide");};
+})();
+
+/* Panier mémorisé */
+try{CART=JSON.parse(ls.get("vaudree2-panier")||"{}")||{}}catch(e){CART={}}
+const saveCart=()=>ls.set("vaudree2-panier",JSON.stringify(CART));
+const byId=id=>PROD.find(p=>p.id===id);
+const dispo=p=>p.stock===null||p.stock===undefined?99:p.stock;
+function cartLines(){return Object.keys(CART).map(id=>({p:byId(id),q:CART[id]})).filter(x=>x.p)}
+function cartTotal(){return cartLines().reduce((t,x)=>t+x.p.prix*x.q,0)}
+function majBadge(){const n=cartLines().reduce((t,x)=>t+x.q,0),b=$("cartN");b.textContent=n;b.classList.toggle("hide",!n)}
+function addToCart(id,d=1){
+  const p=byId(id);if(!p)return;
+  const q=Math.max(0,Math.min(dispo(p),99,(CART[id]||0)+d));
+  if(q<=0)delete CART[id];else CART[id]=q;
+  saveCart();majBadge();if($("ovC").classList.contains("on"))renderCart();
+}
+
+/* Chargement du catalogue */
+async function charger(){
+  try{
+    const r=await (await fetch(RELAY+"?action=produits",{cache:"no-store"})).json();
+    if(!r.ok)throw 0;PROD=r.produits||[];loaded=true;
+  }catch(e){erreurChargement=true;}
+  Object.keys(CART).forEach(id=>{if(loaded&&!byId(id))delete CART[id]});saveCart();
+  initFiltres();render();majBadge();
+}
+function initFiltres(){
+  const cats=[...new Set(PROD.map(p=>p.categorie).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr"));
+  const vols=[...new Set(PROD.map(p=>p.volume_cl).filter(Boolean))].sort((a,b)=>a-b);
+  $("fCat").innerHTML='<option value="">Tous les styles</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join("");
+  $("fVol").innerHTML='<option value="">Tous les volumes</option>'+vols.map(v=>`<option value="${v}">${String(v).replace(".",",")} cl</option>`).join("");
+  $("tabs").innerHTML=RUBRIQUES.filter(([k])=>k==="tout"||(k==="promo"?PROD.some(p=>p.prix_barre>p.prix):PROD.some(p=>p.type===k))).map(([k,l])=>`<button type="button" class="tab ${k==="promo"?"promo":""} ${k===rub?"on":""}" data-r="${k}">${l}</button>`).join("");
+}
+$("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;rub=b.dataset.r;document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t===b));render();});
+["q","fCat","fVol","fAlc","sort"].forEach(i=>$(i).addEventListener("input",render));
+
+function filtrer(){
+  const q=$("q").value.trim().toLowerCase(),c=$("fCat").value,v=$("fVol").value,a=$("fAlc").value,s=$("sort").value;
+  let l=PROD.filter(p=>{
+    if(rub==="promo"?!(p.prix_barre>p.prix):(rub!=="tout"&&p.type!==rub))return false;
+    if(c&&p.categorie!==c)return false;if(v&&String(p.volume_cl)!==v)return false;
+    if(a){const[lo,hi]=a.split("-").map(Number);if(p.alcool===""||p.alcool<lo||p.alcool>=hi)return false;}
+    if(q&&!(`${p.nom} ${p.brasserie} ${p.categorie} ${p.description}`.toLowerCase().includes(q)))return false;
+    return true;
+  });
+  if(s==="pa")l.sort((x,y)=>x.prix-y.prix);else if(s==="pd")l.sort((x,y)=>y.prix-x.prix);else if(s==="nom")l.sort((x,y)=>x.nom.localeCompare(y.nom,"fr"));
+  return l;
+}
+const ICON={biere:"🍺",amateur:"🥇",verre:"🥂",box:"📦",cadeau:"🎁"};
+function meta(p){return [p.categorie,p.brasserie,p.volume_cl?String(p.volume_cl).replace(".",",")+" cl":"",p.alcool!==""&&p.alcool!=null?String(p.alcool).replace(".",",")+" %":""].filter(Boolean).map(esc).join(" · ")}
+function imgTag(p){return p.photo?`<img src="${esc(p.photo)}" alt="${esc(p.nom)}" loading="lazy" referrerpolicy="no-referrer">`:ICON[p.type]||"🍺"}
+function render(){
+  const g=$("grid"),em=$("empty");
+  if(erreurChargement){g.innerHTML="";em.classList.remove("hide");em.innerHTML="La boutique n'a pas pu se charger. Vérifiez votre connexion et rechargez la page, ou appelez-nous au 04 223 18 80.";$("count").textContent="";return}
+  if(!PROD.length&&loaded){g.innerHTML="";em.classList.remove("hide");em.innerHTML="<b>La boutique ouvre bientôt !</b><br>Revenez très vite, ou appelez-nous au 04 223 18 80.";$("count").textContent="";return}
+  const l=filtrer();$("count").textContent=loaded?`${l.length} produit${l.length>1?"s":""}`:"Chargement…";
+  em.classList.toggle("hide",l.length>0||!loaded);em.innerHTML="Aucun produit ne correspond. Essayez d'enlever un filtre.";
+  g.innerHTML=l.map(p=>{
+    const promo=p.prix_barre>p.prix,rem=promo?Math.round((1-p.prix/p.prix_barre)*100):0,d=dispo(p);
+    return `<article class="pc"><button class="ph" type="button" data-v="${esc(p.id)}" aria-label="Voir ${esc(p.nom)}">${imgTag(p)}${promo?`<span class="badge">-${rem} %</span>`:""}${d>0&&d<=3?`<span class="badge low">Plus que ${d}</span>`:""}</button>
+      <div class="pb"><button class="pn" type="button" data-v="${esc(p.id)}">${esc(p.nom)}</button><div class="pm">${meta(p)}</div>
+      <div class="price">${promo?`<s>${eur(p.prix_barre)}</s>`:""}${eur(p.prix)}</div>
+      <button class="add" type="button" data-a="${esc(p.id)}" ${d<=0?"disabled":""}>${d<=0?"Épuisé":"Ajouter au panier"}</button></div></article>`}).join("");
+}
+$("grid").addEventListener("click",e=>{
+  const a=e.target.closest("[data-a]");if(a){addToCart(a.dataset.a,1);a.textContent="Ajouté ✓";setTimeout(()=>render(),700);return}
+  const v=e.target.closest("[data-v]");if(v)voir(v.dataset.v);
+});
+function voir(id){
+  const p=byId(id);if(!p)return;const promo=p.prix_barre>p.prix,d=dispo(p);
+  $("boxP").innerHTML=`<button class="x" type="button" id="pX" aria-label="Fermer">✕</button><h2>${esc(p.nom)}</h2>${p.photo?`<img class="big" src="${esc(p.photo)}" alt="${esc(p.nom)}" referrerpolicy="no-referrer">`:""}
+    <p class="pm">${meta(p)}</p>${p.description?`<p>${esc(p.description)}</p>`:""}
+    <div class="price" style="font-size:1.4rem">${promo?`<s>${eur(p.prix_barre)}</s>`:""}${eur(p.prix)}</div>
+    ${d>0&&d<=3?`<p class="small">Plus que ${d} en stock.</p>`:""}
+    <button class="btn" type="button" id="pAdd" ${d<=0?"disabled":""} style="margin-top:10px">${d<=0?"Épuisé":"Ajouter au panier"}</button>`;
+  $("ovP").classList.add("on");$("pX").onclick=()=>$("ovP").classList.remove("on");
+  $("pAdd").onclick=()=>{addToCart(id,1);$("ovP").classList.remove("on");render();};
+}
+$("ovP").addEventListener("click",e=>{if(e.target===$("ovP"))$("ovP").classList.remove("on")});
+
+/* Panier + commande */
+$("cartBtn").onclick=()=>{renderCart();$("ovC").classList.add("on")};
+$("cX").onclick=()=>$("ovC").classList.remove("on");
+$("ovC").addEventListener("click",e=>{if(e.target===$("ovC"))$("ovC").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("ovC").classList.remove("on");$("ovP").classList.remove("on")}});
+function renderCart(msgErr){
+  const L=cartLines(),b=$("cBody");
+  if(!L.length){b.innerHTML='<p>Votre panier est vide.</p><button class="btn alt" type="button" id="cBack">Continuer mes achats</button>';$("cBack").onclick=()=>$("ovC").classList.remove("on");return}
+  b.innerHTML=L.map(x=>`<div class="line"><div><b>${esc(x.p.nom)}</b><div class="small">${eur(x.p.prix)} l'unité</div></div><div class="qty"><button type="button" data-d="-1" data-i="${esc(x.p.id)}" aria-label="Moins">−</button><b>${x.q}</b><button type="button" data-d="1" data-i="${esc(x.p.id)}" aria-label="Plus">+</button></div></div>`).join("")
+  +`<div class="tot"><span>Total</span><span>${eur(cartTotal())}</span></div>
+  <form class="f" id="cf" novalidate>
+    <div class="hp" aria-hidden="true"><input id="hp" tabindex="-1" autocomplete="off"></div>
+    <div class="seg"><label><input type="radio" name="mode" value="retrait" checked>🏪 Retrait<br><span class="small">gratuit</span></label><label><input type="radio" name="mode" value="livraison">🚚 Livraison<br><span class="small">prix à convenir</span></label></div>
+    <label id="lAdr" class="hide">Adresse de livraison<input id="adr" autocomplete="street-address"></label>
+    <label>Nom et prénom<input id="nom" autocomplete="name" required></label>
+    <label>GSM<input id="tel" type="tel" inputmode="tel" autocomplete="tel" required></label>
+    <label>E-mail (pour recevoir la confirmation)<input id="mail" type="email" autocomplete="email"></label>
+    <label>Jour souhaité (retrait ou livraison)<input id="jour" placeholder="Ex. : samedi après-midi"></label>
+    <label>Remarque<textarea id="msg"></textarea></label>
+    <label class="chk"><input type="checkbox" id="age18"> <span>Je confirme avoir <b>18 ans ou plus</b>.</span></label>
+    <p class="small" style="margin:0">Nous confirmons votre commande par téléphone ou e-mail. Paiement à la confirmation : virement ou sur place au retrait. Le prix de la livraison est communiqué avant tout paiement.</p>
+    <div class="msg err ${msgErr?"":"hide"}" id="cErr" role="alert">${esc(msgErr||"")}</div>
+    <button class="btn" id="cSend" type="submit">Envoyer ma commande</button>
+    <button class="btn alt" id="cBack" type="button">Continuer mes achats</button>
+  </form>`;
+  $("cBack").onclick=()=>$("ovC").classList.remove("on");
+  document.querySelectorAll('input[name="mode"]').forEach(r=>r.onchange=()=>$("lAdr").classList.toggle("hide",document.querySelector('input[name="mode"]:checked').value!=="livraison"));
+  $("cf").onsubmit=envoyer;
+}
+$("cBody").addEventListener("click",e=>{const b=e.target.closest("[data-i]");if(b)addToCart(b.dataset.i,Number(b.dataset.d))});
+function err(t){const e=$("cErr");e.textContent=t;e.classList.remove("hide");e.scrollIntoView({block:"center"})}
+async function envoyer(ev){
+  ev.preventDefault();
+  const v=i=>$(i).value.trim(),mode=document.querySelector('input[name="mode"]:checked').value;
+  if(!v("nom"))return err("Indiquez votre nom et prénom.");
+  if(v("tel").replace(/\D/g,"").length<8)return err("Le numéro de GSM semble incomplet.");
+  if(v("mail")&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v("mail")))return err("L'adresse e-mail semble incorrecte.");
+  if(mode==="livraison"&&!v("adr"))return err("Indiquez l'adresse de livraison.");
+  if(!$("age18").checked)return err("Confirmez que vous avez 18 ans ou plus.");
+  $("cSend").disabled=true;$("cSend").textContent="Envoi…";
+  try{
+    const r=await (await fetch(RELAY,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"b_commande",hp:v("hp"),nom:v("nom"),tel:v("tel"),email:v("mail"),mode:mode,adresse:v("adr"),jour:v("jour"),message:v("msg"),age:true,items:cartLines().map(x=>({id:x.p.id,q:x.q}))})})).json();
+    if(!r.ok){
+      if(r.erreur==="stock"){await charger();return renderCart(`Il ne reste que ${r.dispo} « ${r.nom} » : votre panier a été ajusté, vérifiez-le.`)}
+      if(r.erreur==="produit"){await charger();return renderCart("Un produit n'est plus disponible : votre panier a été mis à jour.")}
+      throw new Error(r.erreur||"x");
+    }
+    CART={};saveCart();majBadge();
+    $("cBody").innerHTML=`<div class="msg ok">✅ Merci ! Votre commande <b>${esc(r.num)}</b> est bien reçue (${eur(r.total)}).</div><p>Nous vous contactons très vite pour confirmer ${mode==="livraison"?"la livraison et son prix":"le jour de retrait"} et le paiement.${v("mail")?" Un e-mail de confirmation vous est envoyé dans la minute.":""}</p><button class="btn" type="button" id="cBack">Retour à la boutique</button>`;
+    $("cBack").onclick=()=>{$("ovC").classList.remove("on");charger()};
+  }catch(e){
+    $("cSend").disabled=false;$("cSend").textContent="Envoyer ma commande";
+    err("L'envoi a échoué. Réessayez ou appelez-nous au 04 223 18 80.");
+  }
+}
+charger();
+</script>
+<script data-goatcounter="https://vaudree2.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

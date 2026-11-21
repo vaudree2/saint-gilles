@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin Beer Shop'E | Vaudrée 2</title>
+<style>
+:root{--gold:#d6b36a;--gold-light:#f1dba5;--panel:#1b1b1b;--muted:#bcbcbc;--border:#49402d;--err:#ff9b8c;--ok:#6fcf8e}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#f4f4f4;background:#0d0d0d;line-height:1.45}
+.wrap{max-width:820px;margin:0 auto;padding:12px 14px 80px}
+h1{font-family:Georgia,serif;color:var(--gold);font-size:1.5rem;margin:6px 0 10px}
+h2{color:var(--gold);font-family:Georgia,serif;margin:0 0 10px;font-size:1.25rem}
+input,select,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #555;background:#101010;color:#fff;font:inherit}
+textarea{min-height:80px}
+label{display:grid;gap:5px;font-weight:600;color:var(--gold-light);font-size:14px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.btn{padding:13px 16px;border:0;border-radius:999px;background:linear-gradient(90deg,#d6b36a,#c19225);color:#17130b;font:inherit;font-weight:800;cursor:pointer;text-align:center}
+.btn.alt{background:transparent;border:1px solid var(--gold);color:var(--gold-light);font-weight:700}
+.btn.red{background:#5a1d17;color:#ffd2c9;border:1px solid var(--err)}
+.btn[disabled]{opacity:.55}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.bar .grow{flex:1;min-width:140px}
+.tabs{display:flex;gap:8px;margin:6px 0 12px}
+.tab{flex:1;padding:12px;border-radius:999px;border:1px solid var(--border);background:var(--panel);color:var(--gold-light);font:inherit;font-weight:700;cursor:pointer}
+.tab.on{background:var(--gold);color:#17130b;border-color:var(--gold)}
+.row{display:grid;grid-template-columns:56px 1fr auto;gap:10px;align-items:center;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--panel);margin-bottom:8px}
+.th{width:56px;height:56px;border-radius:10px;background:#222;object-fit:contain;display:flex;align-items:center;justify-content:center;font-size:26px}
+img.th{background:#fff}
+.nm{font-weight:700;color:var(--gold-light);cursor:pointer;background:none;border:0;padding:0;text-align:left;font:inherit;font-weight:700}
+.sm{font-size:13px;color:var(--muted)}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700}
+.on1{background:#12331f;color:#9be8b6}.off1{background:#3a2a10;color:#ffd596}.low1{background:#3a1a14;color:#ffc4b8}
+.msg{padding:12px 14px;border-radius:12px;font-weight:600;margin:8px 0}.err{background:#3a1a14;border:1px solid var(--err);color:#ffd2c9}.ok{background:#12231a;border:1px solid var(--ok);color:#e6f7ec}
+.hide{display:none!important}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:50;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:10px}
+.ov.on{display:flex}
+.box{background:#171717;border:1px solid var(--border);border-radius:16px;width:100%;max-width:560px;padding:16px;margin:auto}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form{display:grid;gap:10px}
+.prev{width:120px;height:120px;object-fit:contain;background:#fff;border-radius:10px}
+.cmd{border:1px solid var(--border);border-radius:12px;background:var(--panel);padding:12px;margin-bottom:10px}
+.cmd pre{white-space:pre-wrap;font:inherit;margin:6px 0;color:#eee}
+.chk{display:flex!important;gap:10px;align-items:center;font-weight:600}
+.chk input{width:auto}
+a{color:var(--gold-light)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section id="login" class="card">
+  <h1>Admin Beer Shop'E</h1>
+  <p class="sm">Page privée : entrez votre clé d'administration (celle que vous avez créée dans Apps Script, <b>BOUTIQUE_KEY</b>). Ne la partagez avec personne.</p>
+  <form id="lf" class="form">
+    <label>Clé d'administration<input id="key" type="password" autocomplete="current-password" required></label>
+    <label class="chk"><input type="checkbox" id="mem"> Me souvenir sur cet appareil</label>
+    <div class="msg err hide" id="lErr"></div>
+    <button class="btn" id="lBtn" type="submit">Entrer</button>
+  </form>
+</section>
+
+<section id="app" class="hide">
+  <div class="bar"><h1 class="grow" style="margin:0">Beer Shop'E · Admin</h1><a class="btn alt" href="boutique.html" target="_blank" rel="noopener">Voir la boutique</a><button class="btn alt" id="out" type="button">Quitter</button></div>
+  <div class="tabs"><button class="tab on" data-t="p" type="button">🍺 Produits</button><button class="tab" data-t="c" type="button">🧾 Commandes <span id="nNew"></span></button></div>
+
+  <div id="tP">
+    <div class="bar"><button class="btn" id="add" type="button">➕ Ajouter un produit</button><button class="btn alt" id="lot" type="button">📷 Ajouter plusieurs photos d'un coup</button><input class="grow" id="s" type="search" placeholder="🔍 Chercher…"></div>
+    <input type="file" id="lotF" accept="image/*" multiple class="hide">
+    <div class="msg ok hide" id="lotM" role="status"></div>
+    <div id="list"></div>
+  </div>
+  <div id="tC" class="hide"><div id="cmds"></div></div>
+</section>
+</div>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true">
+  <div class="box">
+    <h2 id="fT">Produit</h2>
+    <form class="form" id="pf">
+      <input type="hidden" id="id">
+      <label>Nom du produit *<input id="nom" maxlength="80" required></label>
+      <div class="g2">
+        <label>Rubrique *<select id="type"></select></label>
+        <label>Style / catégorie<input id="categorie" list="cats" placeholder="Ex. : Trappiste, IPA, Tulipe"></label>
+      </div>
+      <datalist id="cats"></datalist>
+      <div class="g2">
+        <label>Brasserie<input id="brasserie"></label>
+        <label>Volume (cl)<input id="volume_cl" inputmode="decimal"></label>
+      </div>
+      <div class="g2">
+        <label>Alcool (%)<input id="alcool" inputmode="decimal"></label>
+        <label>Stock <span class="sm">(vide = illimité)</span><input id="stock" inputmode="numeric"></label>
+      </div>
+      <div class="g2">
+        <label>Prix (€) *<input id="prix" inputmode="decimal" required></label>
+        <label>Ancien prix barré <span class="sm">(promo)</span><input id="prix_barre" inputmode="decimal"></label>
+      </div>
+      <label>Description<textarea id="description" maxlength="600"></textarea></label>
+      <div>
+        <div class="sm" style="font-weight:600;color:var(--gold-light);margin-bottom:6px">Photo</div>
+        <img class="prev hide" id="prev" alt="">
+        <input type="file" id="file" accept="image/*">
+        <input type="hidden" id="photo">
+        <div class="sm" id="pst"></div>
+      </div>
+      <div class="g2">
+        <label>Ordre d'affichage <span class="sm">(petit = en premier)</span><input id="ordre" inputmode="numeric"></label>
+        <label class="chk" style="align-self:end"><input type="checkbox" id="visible" checked> Visible dans la boutique</label>
+      </div>
+      <div class="msg err hide" id="fErr"></div>
+      <button class="btn" id="save" type="submit">Enregistrer</button>
+      <button class="btn alt" id="cancel" type="button">Annuler</button>
+      <button class="btn red hide" id="del" type="button">🗑 Supprimer ce produit</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const RELAY="https://script.google.com/macros/s/AKfycbzXen9dOpO1mTNLge5T1pz2hFPXmG7fR9rPAGoNKj6j9ky5Njp3qphzv7p22I6eSq6YlQ/exec";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur=n=>(Math.round(n*100)/100).toFixed(2).replace(".",",")+" €";
+const LAB={biere:"🍺 Bières",amateur:"🥇 Amateur",verre:"🥂 Verres",box:"📦 Box",cadeau:"🎁 Cadeaux"};
+let KEY="",PROD=[],TYPES=[],STAT=[];
+const store={get(k){try{return localStorage.getItem(k)||sessionStorage.getItem(k)}catch(e){return null}}};
+async function api(o){
+  const r=await fetch(RELAY,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({...o,key:KEY})});
+  return r.json();
+}
+function entrer(k,mem){KEY=k;try{(mem?localStorage:sessionStorage).setItem("bk",k)}catch(e){}$("login").classList.add("hide");$("app").classList.remove("hide");charger();}
+$("lf").onsubmit=async e=>{
+  e.preventDefault();$("lErr").classList.add("hide");$("lBtn").disabled=true;$("lBtn").textContent="Vérification…";
+  const k=$("key").value.trim();KEY=k;
+  try{const r=await api({action:"b_login"});
+    if(r.ok)entrer(k,$("mem").checked);
+    else{$("lErr").textContent=r.erreur==="cle"?"Clé incorrecte (ou trop d'essais : réessayez dans une heure).":"Erreur. Réessayez.";$("lErr").classList.remove("hide");}
+  }catch(x){$("lErr").textContent="Impossible de joindre le relais. Vérifiez votre connexion.";$("lErr").classList.remove("hide");}
+  $("lBtn").disabled=false;$("lBtn").textContent="Entrer";
+};
+$("out").onclick=()=>{try{localStorage.removeItem("bk");sessionStorage.removeItem("bk")}catch(e){}location.reload()};
+(async()=>{const k=store.get("bk");if(k){KEY=k;try{const r=await api({action:"b_login"});if(r.ok)return entrer(k,!!localStorage.getItem("bk"));}catch(e){}}})();
+
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t===b));$("tP").classList.toggle("hide",b.dataset.t!=="p");$("tC").classList.toggle("hide",b.dataset.t!=="c");if(b.dataset.t==="c")commandes();});
+
+async function charger(){
+  try{const r=await api({action:"b_list"});if(!r.ok)throw 0;PROD=r.produits;TYPES=r.types;STAT=r.statuts;
+    $("type").innerHTML=TYPES.map(t=>`<option value="${t}">${LAB[t]||t}</option>`).join("");
+    $("cats").innerHTML=[...new Set(PROD.map(p=>p.categorie).filter(Boolean))].map(c=>`<option value="${esc(c)}">`).join("");
+    liste();commandes(true);
+  }catch(e){$("list").innerHTML='<div class="msg err">Chargement impossible. Rechargez la page.</div>'}
+}
+function liste(){
+  const q=$("s").value.trim().toLowerCase();
+  const l=PROD.filter(p=>!q||`${p.nom} ${p.categorie} ${p.brasserie}`.toLowerCase().includes(q));
+  if(!PROD.length){$("list").innerHTML='<div class="card">Aucun produit. Touchez « ➕ Ajouter un produit ».</div>';return}
+  $("list").innerHTML=l.map(p=>`<div class="row"><${p.photo?`img class="th" src="${esc(p.photo)}" alt="" referrerpolicy="no-referrer"`:'div class="th"'}>${p.photo?"":"🍺"}${p.photo?"":"</div>"}
+   <div><button class="nm" type="button" data-e="${esc(p.id)}">${esc(p.nom)}</button><div class="sm">${LAB[p.type]||p.type}${p.categorie?" · "+esc(p.categorie):""}${p.prix_barre>p.prix?" · promo":""}</div>
+   <div class="sm" style="display:flex;align-items:center;gap:6px;margin:3px 0">Prix € <input class="pi" data-p="${esc(p.id)}" value="${String(p.prix).replace(".",",")}" inputmode="decimal" aria-label="Prix de ${esc(p.nom)}" style="width:90px;padding:6px 8px"></div>
+   <div><span class="pill ${p.visible?"on1":"off1"}">${p.visible?"Visible":"Masqué"}</span> <span class="pill ${p.stock!==null&&p.stock<=3?"low1":"on1"}">Stock : ${p.stock===null?"illimité":p.stock}</span></div></div>
+   <button class="btn alt" type="button" data-t="${esc(p.id)}" aria-label="${p.visible?"Masquer":"Afficher"}">${p.visible?"👁 Masquer":"Afficher"}</button></div>`).join("")||'<div class="card">Aucun résultat.</div>';
+}
+$("s").oninput=liste;
+$("list").addEventListener("click",async e=>{
+  const ed=e.target.closest("[data-e]");if(ed)return ouvrir(ed.dataset.e);
+  const t=e.target.closest("[data-t]");if(t){const p=PROD.find(x=>x.id===t.dataset.t);t.disabled=true;
+    const r=await api({action:"b_save",produit:{...p,visible:!p.visible}});if(r.ok)await charger();else{alert("Échec de l'enregistrement.");t.disabled=false}}
+});
+$("list").addEventListener("change",async e=>{
+  const i=e.target.closest(".pi");if(!i)return;const p=PROD.find(x=>x.id===i.dataset.p),v=parseFloat(i.value.replace(",","."));
+  if(!p||isNaN(v)||v<0){i.value=String(p.prix).replace(".",",");return}
+  i.disabled=true;const r=await api({action:"b_save",produit:{...p,prix:v}});
+  if(r.ok){p.prix=v;i.style.borderColor="#6fcf8e"}else{alert("Échec de l'enregistrement du prix.");i.value=String(p.prix).replace(".",",")}
+  i.disabled=false;
+});
+$("add").onclick=()=>ouvrir("");
+/* Ajout en lot : une photo = un produit masqué, nom tiré du nom du fichier, prix à 0 à compléter */
+$("lot").onclick=()=>$("lotF").click();
+function nomDepuis(fn){return fn.replace(/\.[^.]+$/,"").replace(/[_\-+]+/g," ").replace(/\s+/g," ").trim().replace(/(^|\s)(\S)/g,(m,a,b)=>a+b.toUpperCase())}
+$("lotF").onchange=async()=>{
+  const fs=[...$("lotF").files];if(!fs.length)return;
+  const m=$("lotM");m.classList.remove("hide","err");m.classList.add("ok");$("lot").disabled=true;
+  const deja=new Set(PROD.map(p=>p.nom.toLowerCase()));let ok=0,ign=0,ko=[];
+  for(let k=0;k<fs.length;k++){
+    const f=fs[k],nom=nomDepuis(f.name).slice(0,80);m.textContent=`Envoi ${k+1} sur ${fs.length} : ${nom}…`;
+    if(!nom||deja.has(nom.toLowerCase())){ign++;continue}
+    try{
+      const ph=await api({action:"b_photo",data:await reduire(f)});if(!ph.ok)throw 0;
+      const sv=await api({action:"b_save",produit:{nom:nom,type:"biere",prix:0,visible:false,photo:ph.url,stock:"",description:""}});if(!sv.ok)throw 0;
+      ok++;deja.add(nom.toLowerCase());
+    }catch(e){ko.push(f.name)}
+  }
+  $("lotF").value="";$("lot").disabled=false;await charger();
+  m.textContent=`Terminé : ${ok} produit${ok>1?"s":""} ajouté${ok>1?"s":""} (masqué${ok>1?"s":""}, prix à 0 €).`+(ign?` ${ign} ignoré${ign>1?"s":""} (nom déjà présent).`:"")+(ko.length?` Échec : ${ko.join(", ")}.`:"")+" Complétez maintenant les prix, puis touchez « Afficher ».";
+  if(ko.length){m.classList.remove("ok");m.classList.add("err")}
+};
+function champs(){return["id","nom","type","categorie","brasserie","volume_cl","alcool","stock","prix","prix_barre","description","photo","ordre"]}
+function ouvrir(id){
+  const p=id?PROD.find(x=>x.id===id):{type:"biere",visible:true};
+  $("fT").textContent=id?"Modifier le produit":"Nouveau produit";
+  champs().forEach(c=>{$(c).value=(p[c]===undefined||p[c]===null||p[c]===0&&c!=="prix")?"":p[c]});
+  if(!id){$("type").value="biere";$("id").value=""}
+  $("visible").checked=p.visible!==false;$("file").value="";$("pst").textContent="";$("fErr").classList.add("hide");
+  majPrev();$("del").classList.toggle("hide",!id);$("ov").classList.add("on");$("nom").focus();
+}
+function majPrev(){const u=$("photo").value;$("prev").classList.toggle("hide",!u);if(u)$("prev").src=u}
+$("cancel").onclick=()=>$("ov").classList.remove("on");
+$("file").onchange=async()=>{
+  const f=$("file").files[0];if(!f)return;
+  $("pst").textContent="Préparation de la photo…";$("save").disabled=true;
+  try{
+    const url=await reduire(f);
+    $("pst").textContent="Envoi de la photo…";
+    const r=await api({action:"b_photo",data:url});
+    if(!r.ok)throw 0;$("photo").value=r.url;majPrev();$("pst").textContent="Photo prête ✓ (pensez à enregistrer)";
+  }catch(e){$("pst").textContent="La photo n'a pas pu être envoyée. Essayez une autre image.";}
+  $("save").disabled=false;
+};
+function reduire(f){return new Promise((res,rej)=>{const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const m=900,k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",.82))};im.onerror=rej;im.src=u})}
+$("pf").onsubmit=async e=>{
+  e.preventDefault();$("fErr").classList.add("hide");
+  const o={};champs().forEach(c=>o[c]=$(c).value.trim());o.visible=$("visible").checked;
+  if(!o.nom)return fe("Le nom est obligatoire.");
+  if(o.prix===""||isNaN(parseFloat(o.prix.replace(",","."))))return fe("Indiquez un prix (ex. 2,50).");
+  $("save").disabled=true;$("save").textContent="Enregistrement…";
+  try{const r=await api({action:"b_save",produit:o});if(!r.ok)throw new Error(r.erreur);$("ov").classList.remove("on");await charger();}
+  catch(x){fe("L'enregistrement a échoué ("+x.message+"). Réessayez.")}
+  $("save").disabled=false;$("save").textContent="Enregistrer";
+};
+function fe(t){$("fErr").textContent=t;$("fErr").classList.remove("hide")}
+$("del").onclick=async()=>{
+  if(!confirm("Supprimer définitivement « "+$("nom").value+" » ?\n(Pour le cacher seulement, utilisez « Masquer ».)"))return;
+  const r=await api({action:"b_delete",id:$("id").value});if(r.ok){$("ov").classList.remove("on");charger()}else fe("Suppression impossible.");
+};
+
+async function commandes(silencieux){
+  try{const r=await api({action:"b_commandes"});if(!r.ok)throw 0;
+    const nn=r.commandes.filter(c=>c.statut==="Nouvelle").length;$("nNew").textContent=nn?"("+nn+")":"";
+    if(silencieux)return;
+    $("cmds").innerHTML=r.commandes.length?r.commandes.map(c=>`<div class="cmd"><b>${esc(c.num)}</b> · <span class="sm">${esc(c.date)}</span>
+      <div><b>${esc(c.nom)}</b> · <a href="tel:${esc(c.tel)}">${esc(c.tel)}</a>${c.email?` · <a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`:""}</div>
+      <div class="sm">${c.mode==="livraison"?"🚚 Livraison : "+esc(c.adresse):"🏪 Retrait"}${c.jour?" · 📅 "+esc(c.jour):""}</div>
+      <pre>${esc(c.lignes)}</pre><div><b>Total : ${eur(Number(c.total))}</b></div>${c.message?`<div class="sm">📝 ${esc(c.message)}</div>`:""}
+      <label style="margin-top:8px">Statut<select data-n="${esc(c.num)}">${r.statuts.map(s=>`<option ${s===c.statut?"selected":""}>${s}</option>`).join("")}</select></label>
+      ${c.statut==="Annulée"?"":'<div class="sm">Annuler remet les produits en stock.</div>'}</div>`).join(""):'<div class="card">Aucune commande pour le moment.</div>';
+  }catch(e){if(!silencieux)$("cmds").innerHTML='<div class="msg err">Chargement impossible.</div>'}
+}
+$("cmds").addEventListener("change",async e=>{const s=e.target.closest("select[data-n]");if(!s)return;
+  if(s.value==="Annulée"&&!confirm("Annuler cette commande ? Les produits seront remis en stock.")){commandes();return}
+  const r=await api({action:"b_statut",num:s.dataset.n,statut:s.value});if(!r.ok)alert("Échec.");commandes();charger();});
+</script>
+</body>
+</html>

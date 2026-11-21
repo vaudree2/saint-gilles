@@ -1676,14 +1676,14 @@
     <!-- MENU DESKTOP (caché sur mobile) -->
     <div class="nav-links" id="mainNav">
       <a href="accueil-qr.html">Menu</a>
-    
+      <a href="#reservation">Réservation</a>
       <a href="commande-table-vaudree2.html">Précommande</a>
-      
+      <a href="livraison.html">Livraison/Emporter</a>
       <a href="groupe.html">Groupes</a>
      
 <a href="evenement.html">Événements</a>
 <a href="beer-shop.html">Beer Shop</a>
-
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSc-kEHbXZboc2y2OqcDSwUFfnuhkFhrWKdjoYBxpM8kRUB2nA/viewform" target="_blank" rel="noopener noreferrer">Le Club Vaudrée 2</a>
 <a href="#contact">Contact</a>
 
       
@@ -2495,7 +2495,7 @@
       window.showPrecommande = function (fd) {
         var box = document.getElementById('preCmd'); if (!box) return;
         var t = String(fd.get('time') || ''), n = parseInt(fd.get('people'), 10) || 0, h = parseInt(t.split(':')[0], 10);
-        var raisons = [];
+        var raisons = [], qs = '?' + ['nom=' + encodeURIComponent(fd.get('name') || ''), 'email=' + encodeURIComponent(fd.get('email') || ''), 'tel=' + encodeURIComponent(fd.get('phone') || ''), 'date=' + encodeURIComponent(fd.get('date') || ''), 'heure=' + encodeURIComponent(t), 'pers=' + n].join('&');
         if (h >= 11 && h < 15) raisons.push('⏱️ <b>Peu de temps ce midi ?</b> Précommandez : vos plats sont prêts dès votre arrivée.');
         if (h >= 17) raisons.push('🎭 <b>Un spectacle ensuite ?</b> Précommandez : vous êtes servis à l\u2019heure, sans attendre.');
         raisons.push('🍽️ <b>Envie de choisir tranquillement ?</b> Composez vos plats depuis chez vous, la table vous attend.');
@@ -2503,7 +2503,7 @@
         var html = '<div style="margin-top:16px;padding:16px;border:2px solid #d6b36a;border-radius:14px;background:#fff8e6;color:#3a2f10;text-align:left;">'
           + '<div style="font-size:1.15rem;font-weight:800;margin-bottom:8px;">✨ Gagnez du temps : faites votre précommande</div>'
           + '<ul style="margin:0 0 6px;padding-left:0;list-style:none;line-height:1.5;">' + raisons.map(function (x) { return '<li style="margin:6px 0">' + x + '</li>'; }).join('') + '</ul>'
-          + '<a href="commande-table-vaudree2.html" style="' + st + 'background:#c19225;color:#17130b;">Faire ma précommande</a>';
+          + '<a href="commande-table-vaudree2.html' + qs + '" style="' + st + 'background:#c19225;color:#17130b;">Faire ma précommande</a>';
         if (n >= 5) {
           html += '<div style="margin-top:16px;padding:14px;border-radius:12px;background:#fff;border:1px solid #e3cf9a;">'
             + '<div style="font-weight:800;margin-bottom:6px;">👥 Vous êtes ' + n + ' : la précommande de groupe</div>'
@@ -2512,9 +2512,9 @@
             + '<li><b>Vous recevez un lien</b> par e-mail et l\u2019envoyez à vos invités.</li>'
             + '<li><b>Chacun choisit ses plats</b> chez lui avant la date limite.</li>'
             + '<li><b>Nous recevons tout regroupé</b> : plus rien à collecter.</li></ol>'
-            + '<a href="reservation-groupe.html" style="' + st + 'background:transparent;border:2px solid #c19225;color:#3a2f10;">Créer la précommande de groupe</a></div>';
+            + '<a href="reservation-groupe.html' + qs + '" style="' + st + 'background:transparent;border:2px solid #c19225;color:#3a2f10;">Créer la précommande de groupe</a></div>';
         }
-        html += '<div style="margin-top:10px;font-size:.85rem;opacity:.8;">Facultatif : votre réservation est déjà enregistrée.</div></div>';
+        html += '<div style="margin-top:10px;font-size:.85rem;opacity:.8;">Vos informations sont reprises automatiquement. Facultatif : votre réservation est déjà enregistrée.</div></div>';
         box.innerHTML = html; box.style.display = 'block';
         setTimeout(function () { box.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300);
       };
@@ -2537,7 +2537,7 @@
 
       attachFormUX('reservationForm', 'reservationMessage', 
         'Envoi de la réservation...', 
-        '✅ Réservation envoyée ! Nous vous contacterons pour confirmation.');
+        '✅ Réservation enregistrée ! Vous recevez un e-mail de confirmation dans une minute (pensez à regarder vos courriers indésirables).');
 
 
 
