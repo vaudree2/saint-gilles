@@ -66,7 +66,7 @@ a{color:var(--gold-light)}
   <div class="tabs"><button class="tab on" data-t="p" type="button">🍺 Produits</button><button class="tab" data-t="c" type="button">🧾 Commandes <span id="nNew"></span></button></div>
 
   <div id="tP">
-    <div class="bar"><button class="btn" id="add" type="button">➕ Ajouter un produit</button><button class="btn alt" id="lot" type="button">📷 Ajouter plusieurs photos d'un coup</button><input class="grow" id="s" type="search" placeholder="🔍 Chercher…"></div>
+    <div class="bar"><button class="btn" id="add" type="button">➕ Ajouter un produit</button><button class="btn alt" id="lot" type="button">📷 Ajouter des photos d'un coup</button><input class="grow" id="s" type="search" placeholder="🔍 Chercher…"><select id="fv" aria-label="Filtrer" style="width:auto"><option value="">Tous</option><option value="oui">Visibles</option><option value="non">Masqués</option><option value="prix0">Prix à 0 €</option></select></div><div class="sm" id="cnt" style="margin-bottom:8px"></div>
     <input type="file" id="lotF" accept="image/*" multiple class="hide">
     <div class="msg ok hide" id="lotM" role="status"></div>
     <div id="list"></div>
@@ -123,7 +123,7 @@ const RELAY="https://script.google.com/macros/s/AKfycbzXen9dOpO1mTNLge5T1pz2hFPX
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const eur=n=>(Math.round(n*100)/100).toFixed(2).replace(".",",")+" €";
-const LAB={biere:"🍺 Bières",amateur:"🥇 Amateur",verre:"🥂 Verres",box:"📦 Box",cadeau:"🎁 Cadeaux"};
+const LAB={biere:"🍺 Bières",amateur:"🥇 Amateur",vin:"🍷 Vins",alcool:"🥃 Alcools",verre:"🥂 Verres",box:"📦 Box",cadeau:"🎁 Cadeaux"};
 let KEY="",PROD=[],TYPES=[],STAT=[];
 const store={get(k){try{return localStorage.getItem(k)||sessionStorage.getItem(k)}catch(e){return null}}};
 async function api(o){
@@ -154,7 +154,9 @@ async function charger(){
 }
 function liste(){
   const q=$("s").value.trim().toLowerCase();
-  const l=PROD.filter(p=>!q||`${p.nom} ${p.categorie} ${p.brasserie}`.toLowerCase().includes(q));
+  const fv=$("fv").value,ok=p=>(!q||`${p.nom} ${p.categorie} ${p.brasserie}`.toLowerCase().includes(q))&&(!fv||(fv==="oui"?p.visible:fv==="non"?!p.visible:p.prix===0));
+  const tous=PROD.filter(ok),l=tous.slice(0,300),nv=PROD.filter(p=>p.visible).length;
+  $("cnt").textContent=PROD.length?`${tous.length} produit${tous.length>1?"s":""}${tous.length>300?" (les 300 premiers sont affichés : précisez la recherche)":""} · ${nv} visible${nv>1?"s":""} dans la boutique`:"";
   if(!PROD.length){$("list").innerHTML='<div class="card">Aucun produit. Touchez « ➕ Ajouter un produit ».</div>';return}
   $("list").innerHTML=l.map(p=>`<div class="row"><${p.photo?`img class="th" src="${esc(p.photo)}" alt="" referrerpolicy="no-referrer"`:'div class="th"'}>${p.photo?"":"🍺"}${p.photo?"":"</div>"}
    <div><button class="nm" type="button" data-e="${esc(p.id)}">${esc(p.nom)}</button><div class="sm">${LAB[p.type]||p.type}${p.categorie?" · "+esc(p.categorie):""}${p.prix_barre>p.prix?" · promo":""}</div>
@@ -162,7 +164,7 @@ function liste(){
    <div><span class="pill ${p.visible?"on1":"off1"}">${p.visible?"Visible":"Masqué"}</span> <span class="pill ${p.stock!==null&&p.stock<=3?"low1":"on1"}">Stock : ${p.stock===null?"illimité":p.stock}</span></div></div>
    <button class="btn alt" type="button" data-t="${esc(p.id)}" aria-label="${p.visible?"Masquer":"Afficher"}">${p.visible?"👁 Masquer":"Afficher"}</button></div>`).join("")||'<div class="card">Aucun résultat.</div>';
 }
-$("s").oninput=liste;
+$("s").oninput=liste;$("fv").onchange=liste;
 $("list").addEventListener("click",async e=>{
   const ed=e.target.closest("[data-e]");if(ed)return ouvrir(ed.dataset.e);
   const t=e.target.closest("[data-t]");if(t){const p=PROD.find(x=>x.id===t.dataset.t);t.disabled=true;
@@ -179,21 +181,29 @@ $("add").onclick=()=>ouvrir("");
 /* Ajout en lot : une photo = un produit masqué, nom tiré du nom du fichier, prix à 0 à compléter */
 $("lot").onclick=()=>$("lotF").click();
 function nomDepuis(fn){return fn.replace(/\.[^.]+$/,"").replace(/[_\-+]+/g," ").replace(/\s+/g," ").trim().replace(/(^|\s)(\S)/g,(m,a,b)=>a+b.toUpperCase())}
+const norm=t=>String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim();
 $("lotF").onchange=async()=>{
   const fs=[...$("lotF").files];if(!fs.length)return;
   const m=$("lotM");m.classList.remove("hide","err");m.classList.add("ok");$("lot").disabled=true;
-  const deja=new Set(PROD.map(p=>p.nom.toLowerCase()));let ok=0,ign=0,ko=[];
+  let rat=0,cre=0,ko=[];
   for(let k=0;k<fs.length;k++){
-    const f=fs[k],nom=nomDepuis(f.name).slice(0,80);m.textContent=`Envoi ${k+1} sur ${fs.length} : ${nom}…`;
-    if(!nom||deja.has(nom.toLowerCase())){ign++;continue}
+    const f=fs[k],nom=nomDepuis(f.name).slice(0,80),n=norm(nom);m.textContent=`Photo ${k+1} sur ${fs.length} : ${nom}…`;
+    if(!n){continue}
+    /* produits existants dont le nom est identique ou commence par le nom de la photo (ex. « Chimay Bleue » rattache toutes les contenances de la Chimay Bleue) */
+    const cibles=PROD.filter(p=>{const q=norm(p.nom);return q===n||q.startsWith(n+" ")}).slice(0,60);
     try{
       const ph=await api({action:"b_photo",data:await reduire(f)});if(!ph.ok)throw 0;
-      const sv=await api({action:"b_save",produit:{nom:nom,type:"biere",prix:0,visible:false,photo:ph.url,stock:"",description:""}});if(!sv.ok)throw 0;
-      ok++;deja.add(nom.toLowerCase());
+      if(cibles.length){
+        for(const p of cibles){const sv=await api({action:"b_save",produit:{...p,photo:ph.url}});if(!sv.ok)throw 0;p.photo=ph.url;}
+        rat+=cibles.length;
+      }else{
+        const sv=await api({action:"b_save",produit:{nom:nom,type:"biere",prix:0,visible:false,photo:ph.url,stock:"",description:""}});if(!sv.ok)throw 0;
+        cre++;
+      }
     }catch(e){ko.push(f.name)}
   }
   $("lotF").value="";$("lot").disabled=false;await charger();
-  m.textContent=`Terminé : ${ok} produit${ok>1?"s":""} ajouté${ok>1?"s":""} (masqué${ok>1?"s":""}, prix à 0 €).`+(ign?` ${ign} ignoré${ign>1?"s":""} (nom déjà présent).`:"")+(ko.length?` Échec : ${ko.join(", ")}.`:"")+" Complétez maintenant les prix, puis touchez « Afficher ».";
+  m.textContent=`Terminé : photo ajoutée à ${rat} produit${rat>1?"s":""} existant${rat>1?"s":""}`+(cre?`, ${cre} nouveau${cre>1?"x":""} produit${cre>1?"s":""} créé${cre>1?"s":""} (masqué${cre>1?"s":""}, prix 0 €)`:"")+"."+(ko.length?` Échec : ${ko.join(", ")}.`:"")+" Vérifiez les produits, puis touchez « Afficher » sur ceux que vous vendez.";
   if(ko.length){m.classList.remove("ok");m.classList.add("err")}
 };
 function champs(){return["id","nom","type","categorie","brasserie","volume_cl","alcool","stock","prix","prix_barre","description","photo","ordre"]}
