@@ -151,7 +151,7 @@ label.chk input{width:auto;margin-top:3px}
 
 <script>
 const RELAY="https://script.google.com/macros/s/AKfycbzXen9dOpO1mTNLge5T1pz2hFPXmG7fR9rPAGoNKj6j9ky5Njp3qphzv7p22I6eSq6YlQ/exec";
-const RUBRIQUES=[["tout","Tout"],["biere","🍺 Bières"],["amateur","🥇 Amateur"],["verre","🥂 Verres"],["box","📦 Box"],["cadeau","🎁 Cadeaux"],["promo","🔥 Promos"]];
+const RUBRIQUES=[["tout","Tout"],["biere","🍺 Bières"],["amateur","🥇 Amateur"],["vin","🍷 Vins"],["alcool","🥃 Alcools"],["verre","🥂 Verres"],["box","📦 Box"],["cadeau","🎁 Cadeaux"],["promo","🔥 Promos"]];
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const eur=n=>(Math.round(n*100)/100).toFixed(2).replace(".",",")+" €";
@@ -212,7 +212,7 @@ function filtrer(){
   if(s==="pa")l.sort((x,y)=>x.prix-y.prix);else if(s==="pd")l.sort((x,y)=>y.prix-x.prix);else if(s==="nom")l.sort((x,y)=>x.nom.localeCompare(y.nom,"fr"));
   return l;
 }
-const ICON={biere:"🍺",amateur:"🥇",verre:"🥂",box:"📦",cadeau:"🎁"};
+const ICON={biere:"🍺",amateur:"🥇",vin:"🍷",alcool:"🥃",verre:"🥂",box:"📦",cadeau:"🎁"};
 function meta(p){return [p.categorie,p.brasserie,p.volume_cl?String(p.volume_cl).replace(".",",")+" cl":"",p.alcool!==""&&p.alcool!=null?String(p.alcool).replace(".",",")+" %":""].filter(Boolean).map(esc).join(" · ")}
 function imgTag(p){return p.photo?`<img src="${esc(p.photo)}" alt="${esc(p.nom)}" loading="lazy" referrerpolicy="no-referrer">`:ICON[p.type]||"🍺"}
 function render(){
