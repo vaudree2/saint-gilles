@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paiement · Beer Shop'E by Vaudrée 2</title><meta name="robots" content="noindex">
+<style>
+:root{--gold:#d6b36a;--gold-light:#f1dba5;--panel:#1b1b1b;--border:#49402d}
+*{box-sizing:border-box}body{margin:0;background:#0d0d0d;color:#e8e8e8;font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:520px;margin:0 auto;padding:24px 16px 50px}
+h1{font-family:Georgia,serif;color:var(--gold);font-size:1.7rem;margin:10px 0}
+.box{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin:14px 0}
+.big{font-size:2rem;font-weight:800;color:var(--gold-light)}.msg{padding:12px 14px;border-radius:12px;font-weight:600}
+.ok{background:#12231a;border:1px solid #6fcf8e}.err{background:#3a1a14;border:1px solid #ff9b8c}a{color:var(--gold-light)}.sm{color:#bcbcbc;font-size:14px}
+</style></head><body><main>
+<h1>Beer Shop'E by Vaudrée 2</h1>
+<div class="box" id="b">Chargement…</div>
+<p class="sm">Paiement sécurisé par PayPal (compte PayPal ou carte bancaire). Nous ne voyons ni ne conservons vos données de carte. · <a href="conditions-beer-shop.html">Conditions de vente</a> · Une question ? <a href="tel:+3242231880">04 223 18 80</a></p>
+</main>
+<script>
+const RELAY="https://script.google.com/macros/s/AKfycbzXen9dOpO1mTNLge5T1pz2hFPXmG7fR9rPAGoNKj6j9ky5Njp3qphzv7p22I6eSq6YlQ/exec";
+const $=id=>document.getElementById(id),esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur=n=>(Math.round(n*100)/100).toFixed(2).replace(".",",")+" €";
+const post=o=>fetch(RELAY,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).then(r=>r.json());
+(async()=>{
+  const num=(new URLSearchParams(location.search).get("c")||"").trim().toUpperCase().replace(/[^A-Z0-9-]/g,"").slice(0,20),b=$("b");
+  const fin=(t,c)=>b.innerHTML=`<div class="msg ${c}">${t}</div>`;
+  if(!num)return fin("Lien incomplet. Appelez-nous au 04 223 18 80.","err");
+  try{
+    const r=await post({action:"b_pp_info",num});
+    if(!r.ok)return fin("Commande introuvable. Appelez-nous au 04 223 18 80.","err");
+    if(r.statut==="Payée")return fin("✅ Cette commande est déjà payée. Merci !","ok");
+    if(r.statut!=="Nouvelle")return fin("Cette commande ne peut plus être payée en ligne. Appelez-nous au 04 223 18 80.","err");
+    if(!r.paypal)return fin("Le paiement en ligne n'est pas disponible pour le moment. Nous vous indiquerons comment payer.","err");
+    b.innerHTML=`<p>Commande <b>${esc(r.num)}</b></p><div class="big">${eur(r.total)}</div><div id="pp" style="margin-top:14px"></div><p class="sm" id="m"></p>`;
+    await new Promise((ok,ko)=>{const s=document.createElement("script");s.src="https://www.paypal.com/sdk/js?client-id="+encodeURIComponent(r.paypal)+"&currency=EUR&intent=capture&locale=fr_BE&disable-funding=credit,paylater";s.onload=ok;s.onerror=ko;document.head.appendChild(s)});
+    paypal.Buttons({style:{layout:"vertical",shape:"pill",label:"pay"},
+      createOrder:async()=>{const x=await post({action:"b_pp_create",num});if(!x.ok)throw new Error("c");return x.id},
+      onApprove:async d=>{$("m").textContent="Validation du paiement…";const x=await post({action:"b_pp_capture",num,orderID:d.orderID});
+        if(x.ok)fin("✅ Paiement reçu, merci ! Nous préparons votre commande "+esc(num)+" et vous contactons.","ok");else $("m").textContent="Le paiement n'a pas pu être validé. Ne payez pas une 2e fois : appelez-nous au 04 223 18 80."},
+      onCancel:()=>{$("m").textContent="Paiement annulé. Vous pouvez réessayer."},
+      onError:()=>{$("m").textContent="Le paiement en ligne est indisponible. Appelez-nous au 04 223 18 80."}}).render("#pp");
+  }catch(e){fin("Erreur de chargement. Réessayez ou appelez-nous au 04 223 18 80.","err")}
+})();
+</script></body></html>
