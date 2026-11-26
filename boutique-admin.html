@@ -63,7 +63,7 @@ a{color:var(--gold-light)}
 
 <section id="app" class="hide">
   <div class="bar"><h1 class="grow" style="margin:0">Beer Shop'E · Admin</h1><a class="btn alt" href="boutique.html" target="_blank" rel="noopener">Voir la boutique</a><button class="btn alt" id="out" type="button">Quitter</button></div>
-  <div class="tabs"><button class="tab on" data-t="p" type="button">🍺 Produits</button><button class="tab" data-t="c" type="button">🧾 Commandes <span id="nNew"></span></button></div>
+  <div class="tabs"><button class="tab on" data-t="p" type="button">🍺 Produits</button><button class="tab" data-t="c" type="button">🧾 Commandes <span id="nNew"></span></button><button class="tab" data-t="d" type="button">✉️ Demandes <span id="nDem"></span></button></div>
 
   <div id="tP">
     <div class="bar"><button class="btn" id="add" type="button">➕ Ajouter un produit</button><button class="btn alt" id="lot" type="button">📷 Ajouter des photos d'un coup</button><input class="grow" id="s" type="search" placeholder="🔍 Chercher…"><select id="fv" aria-label="Filtrer" style="width:auto"><option value="">Tous</option><option value="oui">Visibles</option><option value="non">Masqués</option><option value="prix0">Prix à 0 €</option></select></div><div class="sm" id="cnt" style="margin-bottom:8px"></div>
@@ -72,6 +72,7 @@ a{color:var(--gold-light)}
     <div id="list"></div>
   </div>
   <div id="tC" class="hide"><div id="cmds"></div></div>
+  <div id="tD" class="hide"><div id="dems"></div></div>
 </section>
 </div>
 
@@ -143,7 +144,7 @@ $("lf").onsubmit=async e=>{
 $("out").onclick=()=>{try{localStorage.removeItem("bk");sessionStorage.removeItem("bk")}catch(e){}location.reload()};
 (async()=>{const k=store.get("bk");if(k){KEY=k;try{const r=await api({action:"b_login"});if(r.ok)return entrer(k,!!localStorage.getItem("bk"));}catch(e){}}})();
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t===b));$("tP").classList.toggle("hide",b.dataset.t!=="p");$("tC").classList.toggle("hide",b.dataset.t!=="c");if(b.dataset.t==="c")commandes();});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t===b));$("tP").classList.toggle("hide",b.dataset.t!=="p");$("tC").classList.toggle("hide",b.dataset.t!=="c");$("tD").classList.toggle("hide",b.dataset.t!=="d");if(b.dataset.t==="c")commandes();if(b.dataset.t==="d")demandes();});
 
 async function charger(){
   try{const r=await api({action:"b_list"});if(!r.ok)throw 0;PROD=r.produits;TYPES=r.types;STAT=r.statuts;
@@ -260,6 +261,26 @@ async function commandes(silencieux){
 $("cmds").addEventListener("change",async e=>{const s=e.target.closest("select[data-n]");if(!s)return;
   if(s.value==="Annulée"&&!confirm("Annuler cette commande ? Les produits seront remis en stock.")){commandes();return}
   const r=await api({action:"b_statut",num:s.dataset.n,statut:s.value});if(!r.ok)alert("Échec.");commandes();charger();});
+
+async function demandes(){
+  try{const r=await api({action:"b_demandes"});if(!r.ok)throw 0;
+    const nn=r.demandes.filter(d=>d.statut==="Nouvelle").length;$("nDem").textContent=nn?"("+nn+")":"";
+    $("dems").innerHTML=r.demandes.length?r.demandes.map(d=>`<div class="cmd"><b>${esc(d.num)}</b> · ${esc(d.type)} · <span class="sm">${esc(d.date)}</span>
+      <div><b>${esc(d.nom)}</b> · <a href="tel:${esc(d.tel)}">${esc(d.tel)}</a>${d.email?` · <a href="mailto:${esc(d.email)}">${esc(d.email)}</a>`:""}</div>
+      ${d.date_souhaitee||d.personnes?`<div class="sm">${d.date_souhaitee?"📅 "+esc(d.date_souhaitee):""} ${d.personnes?"👥 "+esc(d.personnes)+" pers.":""}</div>`:""}${d.materiel?`<div class="sm">🧰 ${esc(d.materiel)}</div>`:""}
+      <pre>${esc(d.details)}</pre><div class="sm">Statut : <b>${esc(d.statut)}</b></div>
+      <button class="btn alt" type="button" data-dv="${esc(d.num)}" style="margin-top:8px">💳 Client d'accord : envoyer le lien de paiement</button></div>`).join(""):'<div class="card">Aucune demande pour le moment.</div>';
+  }catch(e){$("dems").innerHTML='<div class="msg err">Chargement impossible.</div>'}
+}
+$("dems").addEventListener("click",async e=>{const b=e.target.closest("[data-dv]");if(!b)return;
+  const m=prompt("Montant à payer par le client (en €, ex. 120 ou 85,50) :");if(!m)return;
+  const note=prompt("Description courte pour l'e-mail (ex. Location de 2 pompes + 100 verres) :")||"";
+  b.disabled=true;
+  const r=await api({action:"b_devis_envoyer",num:b.dataset.dv,montant:m,note:note});b.disabled=false;
+  if(!r.ok)return alert(r.erreur==="montant"?"Montant incorrect.":"Échec. Réessayez.");
+  alert(r.mail?"✅ E-mail envoyé au client (dans la minute) avec le lien de paiement.\n\nLien : "+r.lien:"⚠️ Pas d'adresse e-mail pour ce client. Envoyez-lui ce lien par SMS ou WhatsApp :\n\n"+r.lien);
+  demandes();commandes(true);
+});
 </script>
 </body>
 </html>
