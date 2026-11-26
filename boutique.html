@@ -308,11 +308,11 @@ async function envoyer(ev){
 }
 /* ===== Rubriques à formulaire : assortiment, demande spéciale, événements ===== */
 const BUDGETS=[25,30,35,40,50,60,75,100,125,150],GOUTS=["IPA","Blonde","Brune","Ambrée","Triple","Stout","Fruitée","Blanche","Sans alcool 0.0","Sans gluten","Surprise du chef"];
-const MATERIEL=["Tireuse à bière","Fûts de bière","Verres / gobelets","Tables et bancs","Frigo / bac à glace","Autre (précisez dans votre demande)"];
+const MATERIEL=["Pompes à bière","Tireuse à bière","Fûts de bière","Verres / gobelets","Tables et bancs","Frigo / bac à glace","Autre (précisez dans votre demande)"];
 const contact=(id,mail)=>`<label>Nom et prénom<input id="${id}n" autocomplete="name" required></label><label>GSM<input id="${id}t" type="tel" autocomplete="tel" required></label><label>E-mail${mail?"":" (facultatif)"}<input id="${id}m" type="email" autocomplete="email" ${mail?"required":""}></label><div class="hp"><input id="${id}hp" tabindex="-1" autocomplete="off"></div>`;
 function renderSpec(){
   const b=$("spec");
-  if(rub==="assort")b.innerHTML=`<div class="box" style="max-width:640px;margin:10px auto;border-radius:18px"><h2>🧩 Votre assortiment sur mesure</h2><p class="small">Choisissez votre budget et vos goûts : nous composons l'assortiment pour vous. Vous recevez un e-mail avec le lien pour payer en ligne.</p>
+  if(rub==="assort")b.innerHTML=`<div class="box" style="max-width:640px;margin:10px auto;border-radius:18px"><h2>🧩 Votre assortiment sur mesure</h2><p class="small">Choisissez votre budget et vos goûts : nous composons l'assortiment pour vous. Vous payez directement en ligne, sans devis : vous recevez aussi un e-mail avec le lien de paiement.</p>
   <form class="f" id="fA" novalidate><label>Votre budget<select id="aB">${BUDGETS.map(x=>`<option value="${x}">${x} €</option>`).join("")}</select></label>
   <div><b style="color:var(--gold-light)">Vos goûts</b> <span class="small">(cochez ce que vous aimez)</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">${GOUTS.map(g=>`<label class="chk"><input type="checkbox" name="g" value="${esc(g)}"> <span>${esc(g)}</span></label>`).join("")}</div></div>
   <label>Précisions (facultatif)<textarea id="aM" rows="3" maxlength="400" placeholder="Ex. : pas de bières trop amères, plutôt des 33 cl…"></textarea></label>
@@ -322,7 +322,7 @@ function renderSpec(){
   <label>Jour souhaité (facultatif)<input id="aJ" maxlength="40" placeholder="Ex. : samedi"></label>
   <label class="chk"><input type="checkbox" id="aAge"> <span>Je confirme avoir <b>18 ans ou plus</b>.</span></label>
   <div id="aErr" class="msg err hide" role="alert"></div><button class="btn" id="aGo" type="submit">Valider mon assortiment</button></form><div id="aOk"></div></div>`;
-  else if(rub==="demande")b.innerHTML=`<div class="box" style="max-width:640px;margin:10px auto;border-radius:18px"><h2>✉️ Demande spéciale</h2><p class="small">Une bière introuvable, un cadeau particulier, une grande quantité… Décrivez-nous ce que vous cherchez, nous vous répondons.</p>
+  else if(rub==="demande")b.innerHTML=`<div class="box" style="max-width:640px;margin:10px auto;border-radius:18px"><h2>✉️ Demande spéciale</h2><p class="small">Une bière introuvable, un cadeau particulier, une grande quantité… Décrivez-nous ce que vous cherchez : nous vous répondons avec un devis, et si vous êtes d'accord, vous recevez un e-mail pour confirmer et payer en ligne.</p>
   <form class="f" id="fD" novalidate>${contact("d",false)}<label>Votre demande<textarea id="dD" rows="5" maxlength="1200" required placeholder="Décrivez votre demande…"></textarea></label><div id="dErr" class="msg err hide" role="alert"></div><button class="btn" id="dGo" type="submit">Envoyer ma demande</button></form><div id="dOk"></div></div>`;
   else b.innerHTML=`<div class="box" style="max-width:640px;margin:10px auto;border-radius:18px"><h2>🎉 Événements : devis gratuit</h2><p class="small">Anniversaire, fête de village, école, association… Louez notre matériel : devis gratuit et sans engagement.</p>
   <form class="f" id="fE" novalidate>${contact("e",false)}<label>Date de l'événement<input id="eQ" maxlength="60" placeholder="Ex. : 14 juin 2027"></label><label>Nombre de personnes (environ)<input id="eP" type="number" min="1" max="5000" inputmode="numeric"></label>
@@ -351,7 +351,7 @@ function renderSpec(){
   if($("fE"))$("fE").onsubmit=async ev=>{ev.preventDefault();$("eErr").classList.add("hide");
     const m=base("e",false);if(m)return bad("eErr",m);if(val("eD").length<5)return bad("eErr","Décrivez votre événement.");
     $("eGo").disabled=true;$("eGo").textContent="Envoi…";
-    try{const r=await post({action:"b_demande",type:"evenement",hp:val("ehp"),nom:val("en"),tel:val("et"),email:val("em"),quand:val("eQ"),personnes:val("eP"),materiel:[...document.querySelectorAll('input[name="mt"]:checked')].map(x=>x.value),details:val("eD")});if(!r.ok)throw 0;$("fE").classList.add("hide");$("eOk").innerHTML=`<div class="msg ok">✅ Merci ! Votre demande de devis <b>${esc(r.num||"")}</b> est bien reçue. Nous vous répondons rapidement, gratuitement et sans engagement.</div>`}
+    try{const r=await post({action:"b_demande",type:"evenement",hp:val("ehp"),nom:val("en"),tel:val("et"),email:val("em"),quand:val("eQ"),personnes:val("eP"),materiel:[...document.querySelectorAll('input[name="mt"]:checked')].map(x=>x.value),details:val("eD")});if(!r.ok)throw 0;$("fE").classList.add("hide");$("eOk").innerHTML=`<div class="msg ok">✅ Merci ! Votre demande de devis <b>${esc(r.num||"")}</b> est bien reçue. Nous vous répondons rapidement, gratuitement et sans engagement. Si le devis vous convient, vous recevez un e-mail pour confirmer et payer en ligne.</div>`}
     catch(e){$("eGo").disabled=false;$("eGo").textContent="Demander mon devis gratuit";bad("eErr","L'envoi a échoué. Réessayez ou appelez-nous au 04 223 18 80.")}};
 }
 
