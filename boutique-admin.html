@@ -123,7 +123,7 @@ const RELAY="https://script.google.com/macros/s/AKfycbzXen9dOpO1mTNLge5T1pz2hFPX
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const eur=n=>(Math.round(n*100)/100).toFixed(2).replace(".",",")+" €";
-const LAB={biere:"🍺 Bières",amateur:"🥇 Amateur",vin:"🍷 Vins",alcool:"🥃 Alcools",verre:"🥂 Verres",box:"📦 Box",cadeau:"🎁 Cadeaux"};
+const LAB={biere:"🍺 Bières",amateur:"🥇 Amateur",vin:"🍷 Vins",alcool:"🥃 Alcools",verre:"🥂 Verres",box:"📦 Box",panier:"🧺 Paniers cadeaux",bon:"🎟️ Bons cadeaux",cadeau:"🎁 Cadeaux"};
 let KEY="",PROD=[],TYPES=[],STAT=[];
 const store={get(k){try{return localStorage.getItem(k)||sessionStorage.getItem(k)}catch(e){return null}}};
 async function api(o){
