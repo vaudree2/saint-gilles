@@ -120,7 +120,8 @@ label.chk input{width:auto;margin-top:3px}
   </div>
 
   <nav class="tabs" id="tabs" aria-label="Rubriques"></nav>
-  <div class="tools">
+  <section id="spec" class="hide"></section>
+  <div class="tools" id="tools">
     <input id="q" type="search" placeholder="🔍 Rechercher une bière, une brasserie…" aria-label="Rechercher">
     <select id="fCat" aria-label="Style"><option value="">Tous les styles</option></select>
     <select id="fVol" aria-label="Volume"><option value="">Tous les volumes</option></select>
@@ -151,7 +152,8 @@ label.chk input{width:auto;margin-top:3px}
 
 <script>
 const RELAY="https://script.google.com/macros/s/AKfycbzXen9dOpO1mTNLge5T1pz2hFPXmG7fR9rPAGoNKj6j9ky5Njp3qphzv7p22I6eSq6YlQ/exec";
-const RUBRIQUES=[["tout","Tout"],["biere","🍺 Bières"],["amateur","🥇 Amateur"],["vin","🍷 Vins"],["alcool","🥃 Alcools"],["verre","🥂 Verres"],["box","📦 Box"],["cadeau","🎁 Cadeaux"],["promo","🔥 Promos"]];
+const RUBRIQUES=[["tout","Tout"],["biere","🍺 Bières"],["amateur","🥇 Amateur"],["vin","🍷 Vins"],["alcool","🥃 Alcools"],["verre","🥂 Verres"],["box","📦 Box"],["panier","🧺 Paniers cadeaux"],["bon","🎟️ Bons cadeaux"],["cadeau","🎁 Cadeaux"],["promo","🔥 Promos"],["assort","🧩 Assortiment"],["demande","✉️ Demande spéciale"],["event","🎉 Événements"]];
+const TOUJOURS=["amateur","verre","panier","bon","assort","demande","event"],SPEC=["assort","demande","event"];
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const eur=n=>(Math.round(n*100)/100).toFixed(2).replace(".",",")+" €";
@@ -195,7 +197,7 @@ function initFiltres(){
   const vols=[...new Set(PROD.map(p=>p.volume_cl).filter(Boolean))].sort((a,b)=>a-b);
   $("fCat").innerHTML='<option value="">Tous les styles</option>'+cats.map(c=>`<option>${esc(c)}</option>`).join("");
   $("fVol").innerHTML='<option value="">Tous les volumes</option>'+vols.map(v=>`<option value="${v}">${String(v).replace(".",",")} cl</option>`).join("");
-  $("tabs").innerHTML=RUBRIQUES.filter(([k])=>k==="tout"||(k==="promo"?PROD.some(p=>p.prix_barre>p.prix):PROD.some(p=>p.type===k))).map(([k,l])=>`<button type="button" class="tab ${k==="promo"?"promo":""} ${k===rub?"on":""}" data-r="${k}">${l}</button>`).join("");
+  $("tabs").innerHTML=RUBRIQUES.filter(([k])=>k==="tout"||TOUJOURS.includes(k)||(k==="promo"?PROD.some(p=>p.prix_barre>p.prix):PROD.some(p=>p.type===k))).map(([k,l])=>`<button type="button" class="tab ${k==="promo"?"promo":""} ${k===rub?"on":""}" data-r="${k}">${l}</button>`).join("");
 }
 $("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;rub=b.dataset.r;document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t===b));render();});
 ["q","fCat","fVol","fAlc","sort"].forEach(i=>$(i).addEventListener("input",render));
@@ -212,15 +214,19 @@ function filtrer(){
   if(s==="pa")l.sort((x,y)=>x.prix-y.prix);else if(s==="pd")l.sort((x,y)=>y.prix-x.prix);else if(s==="nom")l.sort((x,y)=>x.nom.localeCompare(y.nom,"fr"));
   return l;
 }
-const ICON={biere:"🍺",amateur:"🥇",vin:"🍷",alcool:"🥃",verre:"🥂",box:"📦",cadeau:"🎁"};
+const ICON={biere:"🍺",amateur:"🥇",vin:"🍷",alcool:"🥃",verre:"🥂",box:"📦",panier:"🧺",bon:"🎟️",cadeau:"🎁"};
 function meta(p){return [p.categorie,p.brasserie,p.volume_cl?String(p.volume_cl).replace(".",",")+" cl":"",p.alcool!==""&&p.alcool!=null?String(p.alcool).replace(".",",")+" %":""].filter(Boolean).map(esc).join(" · ")}
 function imgTag(p){return p.photo?`<img src="${esc(p.photo)}" alt="${esc(p.nom)}" loading="lazy" referrerpolicy="no-referrer">`:ICON[p.type]||"🍺"}
+const VIDE={amateur:"Notre sélection pour amateurs (vieilles bières de cave) arrive bientôt.",verre:"Nos verres arrivent bientôt.",panier:"Nos paniers cadeaux arrivent bientôt.",bon:"Nos bons cadeaux arrivent bientôt."};
 function render(){
-  const g=$("grid"),em=$("empty");
+  const g=$("grid"),em=$("empty"),sp=SPEC.includes(rub);
+  $("spec").classList.toggle("hide",!sp);["tools","count","grid"].forEach(i=>$(i).classList.toggle("hide",sp));
+  if(sp){em.classList.add("hide");if($("spec").dataset.r!==rub){$("spec").dataset.r=rub;renderSpec()}return}
+  if(rub==="panier"||rub==="bon")$("spec").innerHTML="";
   if(erreurChargement){g.innerHTML="";em.classList.remove("hide");em.innerHTML="La boutique n'a pas pu se charger. Vérifiez votre connexion et rechargez la page, ou appelez-nous au 04 223 18 80.";$("count").textContent="";return}
   if(!PROD.length&&loaded){g.innerHTML="";em.classList.remove("hide");em.innerHTML="<b>La boutique ouvre bientôt !</b><br>Revenez très vite, ou appelez-nous au 04 223 18 80.";$("count").textContent="";return}
   const l=filtrer();$("count").textContent=loaded?`${l.length} produit${l.length>1?"s":""}`:"Chargement…";
-  em.classList.toggle("hide",l.length>0||!loaded);em.innerHTML="Aucun produit ne correspond. Essayez d'enlever un filtre.";
+  em.classList.toggle("hide",l.length>0||!loaded);em.innerHTML=VIDE[rub]&&!PROD.some(p=>p.type===rub)?VIDE[rub]+"<br>Appelez-nous au 04 223 18 80 pour toute demande.":"Aucun produit ne correspond. Essayez d'enlever un filtre.";
   g.innerHTML=l.map(p=>{
     const promo=p.prix_barre>p.prix,rem=promo?Math.round((1-p.prix/p.prix_barre)*100):0,d=dispo(p);
     return `<article class="pc"><button class="ph" type="button" data-v="${esc(p.id)}" aria-label="Voir ${esc(p.nom)}">${imgTag(p)}${promo?`<span class="badge">-${rem} %</span>`:""}${d>0&&d<=3?`<span class="badge low">Plus que ${d}</span>`:""}</button>
@@ -292,12 +298,80 @@ async function envoyer(ev){
       throw new Error(r.erreur||"x");
     }
     CART={};saveCart();majBadge();
-    $("cBody").innerHTML=`<div class="msg ok">✅ Merci ! Votre commande <b>${esc(r.num)}</b> est bien reçue (${eur(r.total)}).</div><p>Nous vous contactons très vite pour confirmer ${mode==="livraison"?"la livraison et son prix":"le jour de retrait"} et le paiement.${v("mail")?" Un e-mail de confirmation vous est envoyé dans la minute.":""}</p><button class="btn" type="button" id="cBack">Retour à la boutique</button>`;
+    $("cBody").innerHTML=`<div class="msg ok">✅ Merci ! Votre commande <b>${esc(r.num)}</b> est bien reçue (${eur(r.total)}).</div><p>Nous vous contactons très vite pour confirmer ${mode==="livraison"?"la livraison et son prix":"le jour de retrait"}.${r.paypal?" Vous pouvez payer tout de suite ci-dessous (PayPal ou carte bancaire) ou plus tard, à la confirmation.":" Nous vous indiquons aussi comment payer."}${v("mail")?" Un e-mail de confirmation vous est envoyé dans la minute.":""}</p><button class="btn" type="button" id="cBack">Retour à la boutique</button>`;
     $("cBack").onclick=()=>{$("ovC").classList.remove("on");charger()};
+    if(r.paypal)payerPaypal(r);
   }catch(e){
     $("cSend").disabled=false;$("cSend").textContent="Envoyer ma commande";
     err("L'envoi a échoué. Réessayez ou appelez-nous au 04 223 18 80.");
   }
+}
+/* ===== Rubriques à formulaire : assortiment, demande spéciale, événements ===== */
+const BUDGETS=[25,30,35,40,50,60,75,100,125,150],GOUTS=["IPA","Blonde","Brune","Ambrée","Triple","Stout","Fruitée","Blanche","Sans alcool 0.0","Sans gluten","Surprise du chef"];
+const MATERIEL=["Tireuse à bière","Fûts de bière","Verres / gobelets","Tables et bancs","Frigo / bac à glace","Autre (précisez dans votre demande)"];
+const contact=(id,mail)=>`<label>Nom et prénom<input id="${id}n" autocomplete="name" required></label><label>GSM<input id="${id}t" type="tel" autocomplete="tel" required></label><label>E-mail${mail?"":" (facultatif)"}<input id="${id}m" type="email" autocomplete="email" ${mail?"required":""}></label><div class="hp"><input id="${id}hp" tabindex="-1" autocomplete="off"></div>`;
+function renderSpec(){
+  const b=$("spec");
+  if(rub==="assort")b.innerHTML=`<div class="box" style="max-width:640px;margin:10px auto;border-radius:18px"><h2>🧩 Votre assortiment sur mesure</h2><p class="small">Choisissez votre budget et vos goûts : nous composons l'assortiment pour vous. Vous recevez un e-mail avec le lien pour payer en ligne.</p>
+  <form class="f" id="fA" novalidate><label>Votre budget<select id="aB">${BUDGETS.map(x=>`<option value="${x}">${x} €</option>`).join("")}</select></label>
+  <div><b style="color:var(--gold-light)">Vos goûts</b> <span class="small">(cochez ce que vous aimez)</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">${GOUTS.map(g=>`<label class="chk"><input type="checkbox" name="g" value="${esc(g)}"> <span>${esc(g)}</span></label>`).join("")}</div></div>
+  <label>Précisions (facultatif)<textarea id="aM" rows="3" maxlength="400" placeholder="Ex. : pas de bières trop amères, plutôt des 33 cl…"></textarea></label>
+  ${contact("a",true)}
+  <div class="seg"><label><input type="radio" name="am" value="retrait" checked> 🏪 Retrait gratuit</label><label><input type="radio" name="am" value="livraison"> 🚚 Livraison à convenir</label></div>
+  <label id="aAdrL" class="hide">Adresse de livraison<input id="aAdr" autocomplete="street-address"></label>
+  <label>Jour souhaité (facultatif)<input id="aJ" maxlength="40" placeholder="Ex. : samedi"></label>
+  <label class="chk"><input type="checkbox" id="aAge"> <span>Je confirme avoir <b>18 ans ou plus</b>.</span></label>
+  <div id="aErr" class="msg err hide" role="alert"></div><button class="btn" id="aGo" type="submit">Valider mon assortiment</button></form><div id="aOk"></div></div>`;
+  else if(rub==="demande")b.innerHTML=`<div class="box" style="max-width:640px;margin:10px auto;border-radius:18px"><h2>✉️ Demande spéciale</h2><p class="small">Une bière introuvable, un cadeau particulier, une grande quantité… Décrivez-nous ce que vous cherchez, nous vous répondons.</p>
+  <form class="f" id="fD" novalidate>${contact("d",false)}<label>Votre demande<textarea id="dD" rows="5" maxlength="1200" required placeholder="Décrivez votre demande…"></textarea></label><div id="dErr" class="msg err hide" role="alert"></div><button class="btn" id="dGo" type="submit">Envoyer ma demande</button></form><div id="dOk"></div></div>`;
+  else b.innerHTML=`<div class="box" style="max-width:640px;margin:10px auto;border-radius:18px"><h2>🎉 Événements : devis gratuit</h2><p class="small">Anniversaire, fête de village, école, association… Louez notre matériel : devis gratuit et sans engagement.</p>
+  <form class="f" id="fE" novalidate>${contact("e",false)}<label>Date de l'événement<input id="eQ" maxlength="60" placeholder="Ex. : 14 juin 2027"></label><label>Nombre de personnes (environ)<input id="eP" type="number" min="1" max="5000" inputmode="numeric"></label>
+  <div><b style="color:var(--gold-light)">Matériel souhaité</b><div style="display:grid;gap:6px;margin-top:6px">${MATERIEL.map(g=>`<label class="chk"><input type="checkbox" name="mt" value="${esc(g)}"> <span>${esc(g)}</span></label>`).join("")}</div></div>
+  <label>Votre demande<textarea id="eD" rows="4" maxlength="1200" required placeholder="Lieu, type d'événement, boissons souhaitées…"></textarea></label><div id="eErr" class="msg err hide" role="alert"></div><button class="btn" id="eGo" type="submit">Demander mon devis gratuit</button></form><div id="eOk"></div></div>`;
+  const post=o=>fetch(RELAY,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)}).then(r=>r.json());
+  const val=i=>$(i).value.trim(),bad=(id,t)=>{const e=$(id);e.textContent=t;e.classList.remove("hide");e.scrollIntoView({block:"center"})};
+  const base=(p,mail)=>{if(!val(p+"n"))return"Indiquez votre nom et prénom.";if(val(p+"t").replace(/\D/g,"").length<8)return"Le numéro de GSM semble incomplet.";if((mail||val(p+"m"))&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val(p+"m")))return"L'adresse e-mail semble incorrecte.";return""};
+  if($("fA")){
+    document.querySelectorAll('input[name="am"]').forEach(r=>r.onchange=()=>$("aAdrL").classList.toggle("hide",document.querySelector('input[name="am"]:checked').value!=="livraison"));
+    $("fA").onsubmit=async ev=>{ev.preventDefault();$("aErr").classList.add("hide");
+      const g=[...document.querySelectorAll('input[name="g"]:checked')].map(x=>x.value),mode=document.querySelector('input[name="am"]:checked').value;
+      const m=base("a",true);if(m)return bad("aErr",m);if(!g.length)return bad("aErr","Cochez au moins un goût.");if(mode==="livraison"&&!val("aAdr"))return bad("aErr","Indiquez l'adresse de livraison.");if(!$("aAge").checked)return bad("aErr","Confirmez que vous avez 18 ans ou plus.");
+      $("aGo").disabled=true;$("aGo").textContent="Envoi…";
+      try{const r=await post({action:"b_assortiment",hp:val("ahp"),nom:val("an"),tel:val("at"),email:val("am"),mode,adresse:val("aAdr"),jour:val("aJ"),message:val("aM"),budget:Number(val("aB")),gouts:g,age:true});
+        if(!r.ok)throw 0;
+        $("fA").classList.add("hide");$("aOk").innerHTML=`<div class="msg ok">✅ Merci ! Votre assortiment <b>${esc(r.num)}</b> (${eur(r.total)}) est enregistré. Un e-mail de confirmation avec le lien de paiement vous est envoyé dans la minute (regardez aussi vos courriers indésirables).</div>${r.paypal?'<div id="aPay" style="margin-top:12px"></div>':""}`;
+        if(r.paypal)payerPaypal(r,$("aPay"),null);
+      }catch(e){$("aGo").disabled=false;$("aGo").textContent="Valider mon assortiment";bad("aErr","L'envoi a échoué. Réessayez ou appelez-nous au 04 223 18 80.")}};
+  }
+  if($("fD"))$("fD").onsubmit=async ev=>{ev.preventDefault();$("dErr").classList.add("hide");
+    const m=base("d",false);if(m)return bad("dErr",m);if(val("dD").length<5)return bad("dErr","Décrivez votre demande.");
+    $("dGo").disabled=true;$("dGo").textContent="Envoi…";
+    try{const r=await post({action:"b_demande",type:"speciale",hp:val("dhp"),nom:val("dn"),tel:val("dt"),email:val("dm"),details:val("dD")});if(!r.ok)throw 0;$("fD").classList.add("hide");$("dOk").innerHTML=`<div class="msg ok">✅ Merci ! Votre demande <b>${esc(r.num||"")}</b> est bien reçue. Nous vous répondons rapidement.</div>`}
+    catch(e){$("dGo").disabled=false;$("dGo").textContent="Envoyer ma demande";bad("dErr","L'envoi a échoué. Réessayez ou appelez-nous au 04 223 18 80.")}};
+  if($("fE"))$("fE").onsubmit=async ev=>{ev.preventDefault();$("eErr").classList.add("hide");
+    const m=base("e",false);if(m)return bad("eErr",m);if(val("eD").length<5)return bad("eErr","Décrivez votre événement.");
+    $("eGo").disabled=true;$("eGo").textContent="Envoi…";
+    try{const r=await post({action:"b_demande",type:"evenement",hp:val("ehp"),nom:val("en"),tel:val("et"),email:val("em"),quand:val("eQ"),personnes:val("eP"),materiel:[...document.querySelectorAll('input[name="mt"]:checked')].map(x=>x.value),details:val("eD")});if(!r.ok)throw 0;$("fE").classList.add("hide");$("eOk").innerHTML=`<div class="msg ok">✅ Merci ! Votre demande de devis <b>${esc(r.num||"")}</b> est bien reçue. Nous vous répondons rapidement, gratuitement et sans engagement.</div>`}
+    catch(e){$("eGo").disabled=false;$("eGo").textContent="Demander mon devis gratuit";bad("eErr","L'envoi a échoué. Réessayez ou appelez-nous au 04 223 18 80.")}};
+}
+
+function chargerPaypal(id){return new Promise((ok,ko)=>{if(window.paypal)return ok();const s=document.createElement("script");s.src="https://www.paypal.com/sdk/js?client-id="+encodeURIComponent(id)+"&currency=EUR&intent=capture&locale=fr_BE&disable-funding=credit,paylater";s.onload=ok;s.onerror=ko;document.head.appendChild(s)})}
+async function payerPaypal(r,parent,avant){
+  parent=parent||$("cBody");if(avant===undefined)avant=$("cBack");
+  const box=document.createElement("div");box.style.cssText="margin:14px 0";box.innerHTML='<p><b>💳 Payer maintenant ('+eur(r.total)+')</b></p><div id="ppBtn"></div><p class="small" id="ppMsg" style="margin:8px 0 0"></p>';
+  parent.insertBefore(box,avant);
+  const msg=t=>{$("ppMsg").textContent=t};
+  try{
+    await chargerPaypal(r.paypal);
+    paypal.Buttons({
+      style:{layout:"vertical",shape:"pill",label:"pay"},
+      createOrder:async()=>{const x=await (await fetch(RELAY,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"b_pp_create",num:r.num})})).json();if(!x.ok)throw new Error("create");return x.id},
+      onApprove:async d=>{msg("Validation du paiement…");const x=await (await fetch(RELAY,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"b_pp_capture",num:r.num,orderID:d.orderID})})).json();
+        if(x.ok){box.innerHTML='<div class="msg ok">✅ Paiement reçu, merci ! Nous préparons votre commande <b>'+esc(r.num)+'</b>.</div>'}else msg("Le paiement n'a pas pu être validé. Ne payez pas une 2e fois : appelez-nous au 04 223 18 80.")},
+      onCancel:()=>msg("Paiement annulé. Vous pouvez réessayer ou payer plus tard."),
+      onError:()=>msg("Le paiement en ligne est indisponible. Nous vous indiquerons comment payer.")
+    }).render("#ppBtn");
+  }catch(e){box.remove()}
 }
 charger();
 </script>
